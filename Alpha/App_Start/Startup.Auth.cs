@@ -58,11 +58,11 @@ namespace Alpha
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "726999526944-6nujg25dn3eso5ec7js71g6tgk47osfb.apps.googleusercontent.com",
+                ClientSecret = "vzUVDvOtjuimYv_xxKyE7pEE"
+            });
         }
     }
 }
