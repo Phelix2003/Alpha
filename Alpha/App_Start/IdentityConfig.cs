@@ -11,16 +11,36 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Alpha.Models;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System.Net;
+using System.Configuration;
+using System.Diagnostics;
 
 namespace Alpha
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
-            // Indiquez votre service de messagerie ici pour envoyer un e-mail.
-            return Task.FromResult(0);
+            
+            await configSendGridasync(message);
+            
         }
+
+        private async Task configSendGridasync(IdentityMessage message)
+        {
+            var client = new SendGridClient("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");
+            var to = new EmailAddress(message.Destination);
+            var from = new EmailAddress("noreply@easio.be", "Easio");
+            var subject = "Confirm your inscription on the website";
+            var plaintext = message.Body;
+            var htmlcontent = message.Body;
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plaintext, htmlcontent);
+
+            var response = await client.SendEmailAsync(msg);
+        }
+
     }
 
     public class SmsService : IIdentityMessageService
