@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -53,19 +54,24 @@ namespace Alpha
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
             //   consumerSecret: "");
+            var FBID = ConfigurationManager.AppSettings["FacebookApiId"];                
+            var FBSecret = ConfigurationManager.AppSettings["FacebookApiSecret"];
 
             app.UseFacebookAuthentication(
                //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/facebook-logins?view=aspnetcore-2.1&tabs=aspnetcore2x
-               appId: "177876443078530",
-               appSecret: "4a50de65f2c9840cc4afc313eddbc48e");
+               appId: FBID,
+               appSecret: FBSecret);
+
+            var GoogleID = ConfigurationManager.AppSettings["GoogleApiId"];
+            var GoogleSecret = ConfigurationManager.AppSettings["GoogleApiSecret"];
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
                 //https://docs.microsoft.com/en-us/aspnet/mvc/overview/security/create-an-aspnet-mvc-5-app-with-facebook-and-google-oauth2-and-openid-sign-on
                 // Identifiant Alpha-ID
 
-                ClientId = "726999526944-6nujg25dn3eso5ec7js71g6tgk47osfb.apps.googleusercontent.com",
-                ClientSecret = "vzUVDvOtjuimYv_xxKyE7pEE"
+                ClientId = GoogleID,
+                ClientSecret = GoogleSecret
             });
         }
     }

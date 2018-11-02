@@ -30,7 +30,8 @@ namespace Alpha
 
         private async Task configSendGridasync(IdentityMessage message)
         {
-            var client = new SendGridClient("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");
+            var apiKey = ConfigurationManager.AppSettings["SenGridApiKey"];
+            var client = new SendGridClient(apiKey);
             var to = new EmailAddress(message.Destination);
             var from = new EmailAddress("noreply@easio.be", "Easio");
             var subject = "Confirm your inscription on the website";
