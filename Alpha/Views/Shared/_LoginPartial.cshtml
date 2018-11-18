@@ -7,7 +7,15 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Bonjour " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Bonjour " + User.Identity.GetUserName() + "(ADMIN)!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+            else
+            {
+                @Html.ActionLink("Bonjour " + User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Se déconnecter</a></li>
     </ul>

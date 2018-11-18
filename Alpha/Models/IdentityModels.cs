@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Alpha.Models
@@ -17,6 +18,10 @@ namespace Alpha.Models
             // Ajouter les revendications personnalisées de l’utilisateur ici
             return userIdentity;
         }
+
+        //User Customization here        
+        public DateTime RegisterDate { get; set; }
+        public DateTime LastLoginDate { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -30,20 +35,7 @@ namespace Alpha.Models
 
         static ApplicationDbContext()
         {
-            // Useful for debug mode. Need to be desabled in production mode.
-            // Set the database intializer which is run once during application start
-            // This seeds the database with admin user credentials and admin role
-            // Chose one of the following option to initialize the DB.
-
-            // it will create the database if none exists as per the configuration
-            //Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
-
-            //drops an existing database and creates a new database, if your model classes (entity classes) have been changed.
-            //So, you don't have to worry about maintaining your database schema, when your model classes change.
-            //Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
-
-            //this initializer drops an existing database every time you run the application, irrespective of whether your model classes have changed or not.
-            //This will be useful when you want a fresh database every time you run the application, for example when you are developing the application.
+            // Set the class to call for initiating the DB
             Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
         }
 
@@ -58,6 +50,8 @@ namespace Alpha.Models
     {
         public ApplicationRole() : base() { }
         public ApplicationRole(string name) : base(name) { }
-        public string Description { get; set; }
+
+        // Application Role customization here
+        public string Description { get; set; } 
     }
 }
