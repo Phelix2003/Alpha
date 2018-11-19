@@ -20,8 +20,8 @@ namespace Alpha.Models
         }
 
         //User Customization here        
-        public DateTime RegisterDate { get; set; }
-        public DateTime LastLoginDate { get; set; }
+        public DateTime? RegisterDate { get; set; }
+        public DateTime? LastLoginDate { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

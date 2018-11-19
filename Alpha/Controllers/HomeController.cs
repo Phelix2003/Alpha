@@ -3,15 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Net;
+using Microsoft.AspNet.Identity.Owin;
+using System.Threading.Tasks;
+using Alpha.Models;
 
 namespace Alpha.Controllers
 {
     [RequireHttps]
     public class HomeController : Controller
     {
-
-        public ActionResult Index()
+        
+        private ApplicationUserManager _userManager;
+        public ApplicationUserManager UserManager
         {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+
+        }
+
+
+        public async Task<ActionResult> Index()
+        {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await UserManager.FindByNameAsync(User.Identity.Name);
+                if(user != null)
+                {
+                    user.LastLoginDate = DateTime.Now;
+                    await UserManager.UpdateAsync(user);
+                }
+
+            }
             return View();
         }
 
