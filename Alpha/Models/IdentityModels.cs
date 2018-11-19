@@ -19,8 +19,10 @@ namespace Alpha.Models
             return userIdentity;
         }
 
-        //User Customization here        
+        //User Customization here    
+        [Display(Name = "Registrated on")]
         public DateTime? RegisterDate { get; set; }
+        [Display(Name = "Last Connection on")]
         public DateTime? LastLoginDate { get; set; }
     }
 
