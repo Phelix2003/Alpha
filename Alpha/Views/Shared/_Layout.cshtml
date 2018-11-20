@@ -28,6 +28,8 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <li>@Html.ActionLink("Users", "Index", "UsersAdmin")</li>
+                        <li>@Html.ActionLink("Resto", "Index", "Restaurant")</li>
+
 
                     }
                 </ul>
