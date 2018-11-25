@@ -15,7 +15,7 @@ namespace Alpha.Models
         {
             bdd = new ApplicationDbContext();
         }
-
+        /*
         public async Task<Resto> CreateRestaurant(string name, string telephone)
 
         {
@@ -32,7 +32,8 @@ namespace Alpha.Models
             await bdd.SaveChangesAsync();
             return resto;
         }
-
+        */
+        /*
         public async Task<Resto> CreateRestaurant(string name, string telephone, ApplicationUser Admin)
 
         {
@@ -51,6 +52,7 @@ namespace Alpha.Models
             await bdd.SaveChangesAsync();
             return resto;
         }
+        */
 
         /*
         public async Task<bool> AddChefToRestaurant(int RestoId, ApplicationUser Chef)
@@ -69,10 +71,7 @@ namespace Alpha.Models
         }
 
     */
-        public async Task<List<Resto>> GetAllRestaurants()
-        {             
-            return await bdd.Restos.ToListAsync();
-        }
+
 
 
         public void Dispose()

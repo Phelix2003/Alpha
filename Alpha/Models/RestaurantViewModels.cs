@@ -14,7 +14,6 @@ namespace Alpha.Models
 
     public class CreateViewModel
     {
-
         [Required(ErrorMessage = "Enter a valide restaurant name")]
         [Display(Name = "Restaurant Name")]
         public string Name { get; set; }
@@ -24,6 +23,19 @@ namespace Alpha.Models
         public string PhoneNumber { get; set; }
 
         public string UserId { get; set; }
+    }
+
+    public class EditRestoViewModel
+    {
+        [Display(Name = "Restaurant Name")]
+        public string Name { get; set; }
+
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
+
+
+        public ICollection<ApplicationUser> AdministratorsList { get; set; }
+        public ICollection<ApplicationUser> ChefsList { get; set; }
 
 
     }
