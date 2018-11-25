@@ -8,7 +8,8 @@
 <p>
     @Html.ActionLink("Create New Restaurant", "Create")
 </p>
-<table cladd="table">
+
+<table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
@@ -16,7 +17,8 @@
         <th>
             @Html.DisplayNameFor(model => model.PhoneNumber)
         </th>
-        
+
+
     </tr>
 
     @foreach (var item in Model)

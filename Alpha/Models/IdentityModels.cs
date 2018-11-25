@@ -27,7 +27,7 @@ namespace Alpha.Models
         [Display(Name = "Last Connection on")]
         public DateTime? LastLoginDate { get; set; }
 
-        public virtual Resto Resto { get; set; }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -49,6 +49,12 @@ namespace Alpha.Models
         {
             return new ApplicationDbContext();
         }
+
+        // Application table definition
+        public DbSet<Resto> Restos { set; get; }
+        public DbSet<Menu> Menus { set; get; }
+        public DbSet<Item> Items { set; get; }
+
     }
 
     // Roles definition based on the application

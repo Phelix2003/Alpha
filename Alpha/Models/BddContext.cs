@@ -8,6 +8,6 @@ namespace Alpha.Models
 {
     public class BddContext : DbContext
     {
-        public DbSet<Resto> Restos { set; get; }
+
     }
 }
