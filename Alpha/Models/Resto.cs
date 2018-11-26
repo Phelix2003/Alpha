@@ -17,8 +17,8 @@ namespace Alpha.Models
         // Ajouter adresse
 
 
-        public ICollection<ApplicationUser> Administrators { get; set; }
-        public ICollection<ApplicationUser> Chefs { get; set; }
+        public virtual ICollection<ApplicationUser> Administrators { get; set; }
+        public virtual ICollection<ApplicationUser> Chefs { get; set; }
 
         public virtual Menu Menu {get; set;}
     }
@@ -29,7 +29,7 @@ namespace Alpha.Models
         public DateTime? DateOfModification { get; set; }
 
 
-        public ICollection<Item> ItemList { get; set; }
+        public virtual ICollection<Item> ItemList { get; set; }
     }
 
     public class Item

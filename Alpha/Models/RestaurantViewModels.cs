@@ -27,6 +27,7 @@ namespace Alpha.Models
 
     public class EditRestoViewModel
     {
+        public int Id { get; set; }
         [Display(Name = "Restaurant Name")]
         public string Name { get; set; }
 
@@ -37,6 +38,14 @@ namespace Alpha.Models
         public ICollection<ApplicationUser> AdministratorsList { get; set; }
         public ICollection<ApplicationUser> ChefsList { get; set; }
 
+
+    }
+
+    public class AddChefToRestaurantViewModel
+    {
+        public int RestoId { get; set; }
+
+        public ICollection<ApplicationUser> UserList { get; set; }
 
     }
 }

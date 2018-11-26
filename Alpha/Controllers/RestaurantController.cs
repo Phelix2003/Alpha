@@ -93,6 +93,7 @@ namespace Alpha.Controllers
 
             return View(new EditRestoViewModel()
             {
+                Id = resto.Id,
                 Name = resto.Name,
                 PhoneNumber = resto.PhoneNumber,
                 ChefsList = chefList,
@@ -100,10 +101,47 @@ namespace Alpha.Controllers
             });
         }
 
-
-        public async Task<bool> AddChefToRestaurant(int RestoId, ApplicationUser Chef)
+        //Post
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,PhoneNumber")] EditRestoViewModel editResto)
         {
-            //Resto restoFound = await bdd.Restos.FirstOrDefaultAsync(resto => resto.Id == RestoId);
+            if (ModelState.IsValid)
+            {
+                
+                Resto ModifiedResto = await DbManager.Restos.FindAsync(editResto.Id);
+
+                if (ModifiedResto != null)
+                {
+                    ModifiedResto.Name = editResto.Name;
+                    ModifiedResto.PhoneNumber = editResto.PhoneNumber;
+
+                    await DbManager.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+
+            }
+
+            ModelState.AddModelError("", "Something failed.");
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> AddChefToRestaurant(int RestoId)
+        {
+            ICollection<ApplicationUser> UserList = await UserManager.Users.ToListAsync();
+            return View(new AddChefToRestaurantViewModel()
+            {
+                RestoId = RestoId,
+                UserList = UserList
+            });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddChefToRestaurant()
+        {
             using (var appContext = new ApplicationDbContext())
             {
                 Resto restoFound = await appContext.Restos.FirstOrDefaultAsync(resto => resto.Id == RestoId);
@@ -112,10 +150,10 @@ namespace Alpha.Controllers
                 {
                     restoFound.Chefs.Add(Chef);
                     await appContext.SaveChangesAsync();
-                    return true;
+                    return View();
                 }
                 else
-                    return false;
+                    return View();
             }
         }
 

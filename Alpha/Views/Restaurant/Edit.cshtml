@@ -1,7 +1,105 @@
-﻿
+﻿@model Alpha.Models.EditRestoViewModel
+
+
 @{
     ViewBag.Title = "Edit Restaurant";
 }
 
-<h2>Modify</h2>
+<h2>Edit.</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Edit User Form.</h4>
+    <hr />
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.PhoneNumber, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.PhoneNumber)
+        </div>
+    </div>
+
+    <table class="table">
+        @Html.Label("List of Administrator", new { @class = "control-label col-md-2" })
+        @if (Model.AdministratorsList.Count() == 0)
+        {
+            <tr>
+                <td>
+                    No entry
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model.AdministratorsList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <table class="table">
+        @Html.Label("List of Chefs", new { @class = "control-label col-md-2" })
+        @if (Model.ChefsList.Count() == 0)
+        {
+            <tr>
+                <td>
+                    No entry                    
+                 </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model.ChefsList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
 
