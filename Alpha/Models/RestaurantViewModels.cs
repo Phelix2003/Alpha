@@ -22,6 +22,9 @@ namespace Alpha.Models
         [Display(Name ="Phone Number")]
         public string PhoneNumber { get; set; }
 
+        [Display(Name = "Restaurant Address")]
+        public string Address { get; set; }
+
         public string UserId { get; set; }
     }
 
@@ -34,6 +37,9 @@ namespace Alpha.Models
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
+        [Display(Name = "Restaurant Address")]
+        public string Address { get; set; }
+
 
         public ICollection<ApplicationUser> AdministratorsList { get; set; }
         public ICollection<ApplicationUser> ChefsList { get; set; }
@@ -41,11 +47,47 @@ namespace Alpha.Models
 
     }
 
+    public class DeleteRestoViewModel
+    {
+        public int Id { get; set; }
+    }
+
     public class AddChefToRestaurantViewModel
     {
-        public int RestoId { get; set; }
+        public String RestoName { get; set; }
 
-        public ICollection<ApplicationUser> UserList { get; set; }
+        public List<SelectUserRestoViewModel> User { get; set; }
+        public AddChefToRestaurantViewModel()
+        {
+            this.User = new List<SelectUserRestoViewModel>();
+        }
 
+        public IEnumerable<string> getSelectedIds()
+        {
+            return (from p in this.User where p.Selected select p.Id).ToList();
+        }        
+    }
+
+    public class SelectUserRestoViewModel
+    {
+        public bool Selected { get; set; }
+        public string Id { get; set; } 
+        public string UserName { get; set; }
+        public string Email { get; set; }
+
+    }
+
+    public class Prediction
+    {
+        public string description { get; set; }
+        public string id { get; set; }
+        public string place_id { get; set; }
+        public string reference { get; set; }
+        public List<string> types { get; set; }
+    }
+    public class RootObject
+    {
+        public List<Prediction> predictions { get; set; }
+        public string status { get; set; }
     }
 }

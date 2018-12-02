@@ -1,40 +1,29 @@
 ﻿@model Alpha.Models.AddChefToRestaurantViewModel
 
 @{
-    ViewBag.Title = "AddChefToRestaurant";
+    ViewBag.Title = "Add a Chef To " + Model.RestoName;
 }
 
-@using (Html.BeginForm("Create", "UsersAdmin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("AddChefToRestaurant", "Restaurant", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h2>AddChefToRestaurant</h2>
+    <h2>Add Chef To The Restaurant</h2>
     @Html.ValidationSummary("", new { @class = "text-error" })
+    @Html.HiddenFor(model => model.RestoName)
     <table class="table">
         <tr>
             <th>
-
-                @*Html.DisplayNameFor(model => model.UserList)*@
+                Select
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Email
             </th>
         </tr>
-
-        @foreach (var item in (SelectList)Model.UserList)
-        {
-            <tr>
-                <td>
-                    @Html.LabelFor(modelItem => item.UserName)
-
-                </td>
-                <td>
-                    @Html.LabelFor(modelItem => item.Email)
-                </td>
-                <td>
-                    <input type="checkbox" name="SelectedUsers" value="@item.Email" class="checkbox-inline" />
-
-
-
-                </td>
-            </tr>
-        }
+        @Html.EditorFor(model => model.User)
     </table>
+    <input type="submit" name="operation" id="submit" value="Submit Selected" />
 }
 

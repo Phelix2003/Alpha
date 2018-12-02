@@ -8,9 +8,12 @@ using Alpha.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
+using System.Configuration;
+using Newtonsoft.Json;
 
 namespace Alpha.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RestaurantController : Controller
     {
         
@@ -65,7 +68,7 @@ namespace Alpha.Controllers
             if(ModelState.IsValid)
             {
                 ApplicationUser user = await UserManager.FindByIdAsync(createViewModel.UserId);              
-                Resto resto = await CreateRestaurant(createViewModel.Name, createViewModel.PhoneNumber, user, null);
+                Resto resto = await CreateRestaurant(createViewModel.Name, createViewModel.PhoneNumber, user, null, createViewModel.Address);
                 return RedirectToAction("Index");
             }
             else
@@ -97,14 +100,15 @@ namespace Alpha.Controllers
                 Name = resto.Name,
                 PhoneNumber = resto.PhoneNumber,
                 ChefsList = chefList,
-                AdministratorsList = adminList
+                AdministratorsList = adminList,
+                Address = resto.Address
             });
         }
 
         //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,PhoneNumber")] EditRestoViewModel editResto)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,PhoneNumber,Address")] EditRestoViewModel editResto)
         {
             if (ModelState.IsValid)
             {
@@ -115,6 +119,7 @@ namespace Alpha.Controllers
                 {
                     ModifiedResto.Name = editResto.Name;
                     ModifiedResto.PhoneNumber = editResto.PhoneNumber;
+                    ModifiedResto.Address = editResto.Address;
 
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("Index");
@@ -130,35 +135,105 @@ namespace Alpha.Controllers
         public async Task<ActionResult> AddChefToRestaurant(int RestoId)
         {
             ICollection<ApplicationUser> UserList = await UserManager.Users.ToListAsync();
-            return View(new AddChefToRestaurantViewModel()
+            Resto restofound = await DbManager.Restos.FirstOrDefaultAsync(resto => resto.Id == RestoId);
+
+            if (UserList != null && restofound != null)
             {
-                RestoId = RestoId,
-                UserList = UserList
-            });
+                var model = new AddChefToRestaurantViewModel()
+                {
+                    RestoName = restofound.Name,
+                };
+
+                foreach (var user in UserList)
+                {
+                    var userViewModel = new SelectUserRestoViewModel()
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        Selected = true
+                    };
+                    if (restofound.Chefs.FirstOrDefault(m => m.Id == user.Id) == null)
+                    {
+                        userViewModel.Selected = false;
+                    }
+                    model.User.Add(userViewModel);
+                }
+               return View(model);
+            }
+            return View("Error");
+
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddChefToRestaurant()
+        public async Task<ActionResult> AddChefToRestaurant(AddChefToRestaurantViewModel model)
         {
-            using (var appContext = new ApplicationDbContext())
-            {
-                Resto restoFound = await appContext.Restos.FirstOrDefaultAsync(resto => resto.Id == RestoId);
+            var selectedIds = model.getSelectedIds();
+            Resto restoFound = await DbManager.Restos.FirstOrDefaultAsync(resto => resto.Name == model.RestoName);
 
-                if (restoFound != null)
+
+            if (restoFound != null)
+            {
+                var selectedUsers = from x in DbManager.Users
+                                    where selectedIds.Contains(x.Id)
+                                    select x;
+                foreach (var user in selectedUsers)
                 {
-                    restoFound.Chefs.Add(Chef);
-                    await appContext.SaveChangesAsync();
-                    return View();
+                    restoFound.Chefs.Add(user);
                 }
-                else
-                    return View();
+                await DbManager.SaveChangesAsync();
+
+                return RedirectToAction("Edit", new { id = restoFound.Id});
             }
+            else
+                return View("Error");
         }
 
-        public async Task<Resto> CreateRestaurant(string name, string telephone, ApplicationUser Admin, ApplicationUser Chef)
+        [HttpGet]
+        public async Task<ActionResult> Delete(int? RestoId)
+        {
+            if (RestoId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == RestoId);
+            if (resto == null)
+            {
+                return View("Error");
+            }
+            return View(new DeleteRestoViewModel() { Id = resto.Id });
+        }
 
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(DeleteRestoViewModel restaurant)
+        {
+            if (ModelState.IsValid)
+            {
+                if ( restaurant == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                var resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == restaurant.Id);
+                if (resto == null)
+                {
+                    return View("Error");
+                }
+                DbManager.Restos.Remove(resto);
+                var result = await DbManager.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+
+
+
+            public async Task<Resto> CreateRestaurant(string name, string telephone, ApplicationUser Admin, ApplicationUser Chef, string Address)
         {
 
             Resto resto = new Resto
@@ -166,7 +241,9 @@ namespace Alpha.Controllers
                 Name = name,
                 PhoneNumber = telephone,
                 Chefs = new List<ApplicationUser>(),
-                Administrators = new List<ApplicationUser>()
+                Administrators = new List<ApplicationUser>(),
+                Address = Address
+                
             };
 
             if(Admin != null)
@@ -182,6 +259,34 @@ namespace Alpha.Controllers
         public async Task<List<Resto>> GetAllRestaurants()
         {
             return await DbManager.Restos.ToListAsync();
+        }
+
+        /// <summary>  
+        /// This method is used to get the place list  
+        /// </summary>  
+        /// <param name="SearchText"></param>  
+        /// <returns></returns>  
+        [HttpGet, ActionName("GetEventVenuesList")]
+        public JsonResult GetEventVenuesList(string SearchText)
+        {
+            string placeApiUrl = ConfigurationManager.AppSettings["GooglePlaceAPIUrl"];
+
+            try
+            {
+                placeApiUrl = placeApiUrl.Replace("{0}", SearchText);
+                placeApiUrl = placeApiUrl.Replace("{1}", ConfigurationManager.AppSettings["GoogleApiSecret"]);
+
+                var result = new System.Net.WebClient().DownloadString(placeApiUrl);
+                var Jsonobject = JsonConvert.DeserializeObject<RootObject>(result);
+
+                List<Prediction> list = Jsonobject.predictions;
+
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

@@ -1,0 +1,18 @@
+﻿@model Alpha.Models.SelectUserRestoViewModel
+
+<tr>
+    <td>
+        @Html.CheckBoxFor(model => model.Selected)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.UserName)
+
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Email)
+    </td>
+    <td>
+        @Html.HiddenFor(model => model.Id)
+    </td>
+</tr>
+
