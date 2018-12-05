@@ -40,6 +40,11 @@ namespace Alpha.Models
         [Display(Name = "Restaurant Address")]
         public string Address { get; set; }
 
+        public string street_number { get; set; }
+        public string route { get; set; }
+        public string locality { get; set; }
+        public string country { get; set; }
+
 
         public ICollection<ApplicationUser> AdministratorsList { get; set; }
         public ICollection<ApplicationUser> ChefsList { get; set; }
@@ -74,20 +79,7 @@ namespace Alpha.Models
         public string Id { get; set; } 
         public string UserName { get; set; }
         public string Email { get; set; }
-
     }
 
-    public class Prediction
-    {
-        public string description { get; set; }
-        public string id { get; set; }
-        public string place_id { get; set; }
-        public string reference { get; set; }
-        public List<string> types { get; set; }
-    }
-    public class RootObject
-    {
-        public List<Prediction> predictions { get; set; }
-        public string status { get; set; }
-    }
+ 
 }

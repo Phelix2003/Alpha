@@ -9,6 +9,7 @@
 
 <h2>Edit.</h2>
 
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -36,8 +37,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Address, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Address, new { @class = "form-control", id = "TextBoxVenueLocation" })
+                @Html.TextBoxFor(m => m.Address, new { @class = "form-control", id = "user_input_autocomplete_address", placeholder = "Votre adresse..." })
                 @Html.ValidationMessageFor(model => model.Address)
+
+                @Html.HiddenFor(m => m.street_number, new { id = "street_number" })
+                @Html.HiddenFor(m => m.route, new { id = "route" })
+                @Html.HiddenFor(m => m.locality, new { id = "locality" })
+                @Html.HiddenFor(m => m.country, new { id = "country" })
             </div>
         </div>
 
@@ -106,48 +112,16 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-<script type="text/javascript">
 
-    $(function () {
-        $("#TextBoxVenueLocation").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "@Url.Action("GetEventVenuesList", "Home")",
-                    data: { SearchText: request.term },
-                    dataType: "json",
-                    type: "GET",
-                    success: function (data) {
-                        if (data.length == 0) {
-                            $('#EventVenueId').val("");
-                            $('#VenueLocationMesssage').show();
-                            return false;
-                        }
-                        else {
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.description,
-                                    value: item.place_id
-                                }
-                            }));
-                        }
-                    },
-                    error: function (x, y, z) {
-                        alert('error');
-                    }
-                });
-            },
-            messages: {
-                noResults: "", results: ""
-            },
-            select: function (event, ui) {
-                $('#TextBoxVenueLocation').val(ui.item.label);
-                $('#EventVenueId').val(ui.item.value);
-                return false;
-            }
-        }).autocomplete("widget").addClass("CitiesAutocomplete");
-    });
-</script>
 @section Scripts {
+
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAi17AlqVCbL-1bBZDq2wK9oNGAGVMfM2U">
+    </script>
+    <!-- Custom JS code to bind to Autocomplete API -->
+    <!-- find it here: https://github.com/lewagon/google-place-autocomplete/blob/gh-pages/autocomplete.js -->
+    <!-- We'll detail this file in the article -->
+    <script type="text/javascript" src="~/Scripts/autocomplete.js"></script>
 
     @Scripts.Render("~/bundles/jqueryval")
 }

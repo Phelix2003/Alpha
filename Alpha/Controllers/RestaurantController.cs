@@ -108,7 +108,7 @@ namespace Alpha.Controllers
         //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,PhoneNumber,Address")] EditRestoViewModel editResto)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,PhoneNumber,Address,street_number,route,locality,country")] EditRestoViewModel editResto)
         {
             if (ModelState.IsValid)
             {
@@ -259,34 +259,6 @@ namespace Alpha.Controllers
         public async Task<List<Resto>> GetAllRestaurants()
         {
             return await DbManager.Restos.ToListAsync();
-        }
-
-        /// <summary>  
-        /// This method is used to get the place list  
-        /// </summary>  
-        /// <param name="SearchText"></param>  
-        /// <returns></returns>  
-        [HttpGet, ActionName("GetEventVenuesList")]
-        public JsonResult GetEventVenuesList(string SearchText)
-        {
-            string placeApiUrl = ConfigurationManager.AppSettings["GooglePlaceAPIUrl"];
-
-            try
-            {
-                placeApiUrl = placeApiUrl.Replace("{0}", SearchText);
-                placeApiUrl = placeApiUrl.Replace("{1}", ConfigurationManager.AppSettings["GoogleApiSecret"]);
-
-                var result = new System.Net.WebClient().DownloadString(placeApiUrl);
-                var Jsonobject = JsonConvert.DeserializeObject<RootObject>(result);
-
-                List<Prediction> list = Jsonobject.predictions;
-
-                return Json(list, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                return Json(ex.Message, JsonRequestBehavior.AllowGet);
-            }
         }
 
     }
