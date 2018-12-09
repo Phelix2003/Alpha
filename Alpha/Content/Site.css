@@ -28,26 +28,4 @@ table {
     border-spacing: 10px 10px;
 }
 
-.CitiesAutocomplete {
-    list-style: none;
-    background: #fbfbfb;
-    border: 1px solid #5f5f5f !important;
-    width: 350px !important;
-    position: absolute;
-    z-index: 10000;
-    border-top: none;
-    min-height: 25px;
-    max-height: 250px;
-    overflow: auto;
-    cursor: pointer;
-    padding: 4px 0;
-}
-
-.CitiesAutocomplete li {
-    padding: 2px 6px;
-}
-
-.CitiesAutocomplete li:hover {
-    background-color: #9eeffe;
-}  
 
