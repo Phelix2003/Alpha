@@ -1,0 +1,52 @@
+﻿@model Alpha.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(m => m.UserName)
+        </dt>
+        @*Add a table header for the Address info:*@
+        <dt>
+            @Html.DisplayNameFor(m => m.DisplayAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.UserName)
+        </dd>
+        <dd>
+            @Html.DisplayFor(m => m.DisplayAddress)
+        </dd>
+    </dl>
+</div>
+<h4>List of roles for this user</h4>
+@if (ViewBag.RoleNames.Count == 0)
+{
+    <hr />
+    <p>No roles found for this user.</p>
+}
+
+<table class="table">
+
+    @foreach (var item in ViewBag.RoleNames)
+    {
+        <tr>
+            <td>
+                @item
+            </td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+

@@ -169,6 +169,12 @@ namespace Alpha
                 var roleresult = roleManager.Create(role);
             }
 
+            // For testing : Populate DB with sevral roles
+            ApplicationRole role1 = new ApplicationRole("Sale");
+            ApplicationRole role2 = new ApplicationRole("Support");
+            roleManager.Create(role1);
+            roleManager.Create(role2);
+
             var user = userManager.FindByName(name);
             if (user == null)
             {
