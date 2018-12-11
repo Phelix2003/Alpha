@@ -385,7 +385,7 @@ namespace Alpha.Controllers
                 }
                 var user = new ApplicationUser
                 {
-                    UserName = model.Email, Email = model.Email
+                    UserName = model.Email, Email = model.Email , RegisterDate = DateTime.Now
                 };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
