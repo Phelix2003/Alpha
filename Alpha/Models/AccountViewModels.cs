@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Web.Mvc;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CompareAttribute = System.ComponentModel.DataAnnotations.CompareAttribute;
 
 namespace Alpha.Models
 {
@@ -79,6 +81,15 @@ namespace Alpha.Models
         [Display(Name = "Confirmer le mot de passe ")]
         [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
+
+        // Add the new address properties:
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+
+        // Use a sensible display name for views:
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
     }
 
     public class ResetPasswordViewModel
@@ -99,6 +110,15 @@ namespace Alpha.Models
         [Compare("Password", ErrorMessage = "Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
 
+        // Add the new address properties:
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+
+        // Use a sensible display name for views:
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+
         public string Code { get; set; }
     }
 
@@ -109,4 +129,27 @@ namespace Alpha.Models
         [Display(Name = "E-mail")]
         public string Email { get; set; }
     }
+
+    public class EditUserViewModel
+    {
+        public string Id { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [Display(Name = "Email")]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        // Add the Address Info:
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+
+        // Use a sensible display name for views:
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+
+        public IEnumerable<SelectListItem> RolesList { get; set; }
+    }
+
+
 }
