@@ -38,7 +38,7 @@ namespace Alpha.Models
         public int ItemId { get; set; }
         public string Name { get; set; }
         public bool IsAvailable { get; set; }
-        public double UnitPrice { get; set; } 
+        public decimal UnitPrice { get; set; } 
 
         //Photos to be add
     }
