@@ -1,32 +1,34 @@
-﻿@model Alpha.Models.CreateItemViewModel
+﻿@model Alpha.Models.EditItemViewModel
 
 @{
-    /**/
-
-    ViewBag.Title = "CreateItem";
+    ViewBag.Title = "EditItem";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create a new article</h2>
+<h2>EditItem</h2>
 
-@using (Html.BeginForm("CreateItem", "Menu", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("EditItem", "Menu", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
-
+<div class="form-horizontal">
+    <h4>Edit User Form.</h4>
     <hr />
-    @Html.ValidationSummary("", new { @class = "text-error" })
-    @ViewBag.Message
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.ItemId)
+
     <div class="form-group">
-        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.UnitPrice, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(model => model.UnitPrice, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UnitPrice)
         </div>
     </div>
     <div class="form-group">
@@ -35,9 +37,11 @@
             @Html.CheckBoxFor(m => m.IsAvailable, new { @class = "checkbox-inline" })
         </div>
     </div>
-
-
-
+    <div class="form-group">
+        <div class="col-md-10">
+            <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = Model.ItemId })" alt="No picture" />
+        </div>
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Image, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -45,14 +49,18 @@
         </div>
     </div>
 
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Create" />
+            <input type="submit" value="Save" class="btn btn-default" />
         </div>
     </div>
+</div>
 }
 
-
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
