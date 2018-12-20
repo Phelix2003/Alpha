@@ -1,4 +1,4 @@
-﻿@model Alpha.Models.MenuViewModels
+﻿@model Alpha.Models.MenuViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -28,20 +28,25 @@
         </th>
     </tr>
 
-    @foreach (var item in )
+    @foreach (var item in Model.ItemList)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { RestoId = item.Id })
-            </td>
-        </tr>
+    <tr>
+        <td>
+            <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UnitPrice)
+        </td>
+
+
+        <td>
+            @Html.ActionLink("Edit", "EditItem", new { id = item.ItemId }) |
+            @Html.ActionLink("Delete", "DeleteItem", new { RestoId = item.ItemId })
+        </td>
+    </tr>
     }
 </table>
 

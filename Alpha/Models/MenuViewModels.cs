@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Alpha.Models
 {
-    public class MenuViewModels
+    public class MenuViewModel
     {
         public int MenuId { get; set; }
         [Required(ErrorMessage = "Introduisez un num de menu valide")]
@@ -16,14 +16,16 @@ namespace Alpha.Models
         [Display(Name = "Date de denière modification du Menu")]
         public DateTime? DateOfModification { get; set; }
 
+        public string restoName { get; set; }
+        public int restoId { get; set; }
+
+        public virtual Resto resto { get; set; }
 
         public virtual ICollection<Item> ItemList { get; set; }
-
     }
 
     public class CreateItemViewModel
     {
-
         public int ItemId { get; set; }
         [Required(ErrorMessage = "Enter a valide restaurant name")]
         [Display(Name = "Article Name")]
@@ -42,7 +44,6 @@ namespace Alpha.Models
 
     public class EditItemViewModel
     {
-
         public int ItemId { get; set; }
         [Required(ErrorMessage = "Enter a valide restaurant name")]
         [Display(Name = "Article Name")]
@@ -57,7 +58,5 @@ namespace Alpha.Models
 
         [Display(Name = "Article image")]
         public HttpPostedFileBase Image { get; set; }
-
-
     }
 }

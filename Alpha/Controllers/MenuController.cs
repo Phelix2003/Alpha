@@ -45,7 +45,7 @@ namespace Alpha.Controllers
             else
             {
                 Menu menu = await DbManager.Menus.FirstOrDefaultAsync(r => r.MenuId == MenuId);
-                MenuViewModels menuView = new MenuViewModels()
+                MenuViewModel menuView = new MenuViewModel()
                 {
                     Name = menu.Name,
                     DateOfModification = menu.DateOfModification,
@@ -53,6 +53,58 @@ namespace Alpha.Controllers
                 };
                 return View(menuView);
             }
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> CreateMenu(int RestoId)
+        {
+            Resto resto = await DbManager.Restos.FindAsync(RestoId);
+            if ( resto != null)
+            {
+                MenuViewModel menuView = new MenuViewModel()
+                {
+                    restoName = resto.Name,
+                    restoId = resto.Id,
+                    resto = resto
+                };
+                return View(menuView);
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("CreateMenu")]
+        public async Task<ActionResult> CreateMenu(MenuViewModel menuView)
+        {
+            if(ModelState.IsValid)
+            {
+                Resto resto = await DbManager.Restos.FirstOrDefaultAsync(m => m.Id == menuView.restoId);
+                if (resto != null)
+                {
+                    Menu menu = new Menu()
+                    {
+                        Name = menuView.Name,
+                        resto = resto,
+                        DateOfModification = DateTime.Now,
+                    };
+                    DbManager.Menus.Add(menu);
+                    await DbManager.SaveChangesAsync();
+                    return View("EditMenu");                        
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+            }
+
+
+            return View("CreateMenu", new {RestoId = menuView.restoId});
+
         }
 
 
