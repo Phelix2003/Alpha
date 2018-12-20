@@ -8,6 +8,16 @@ namespace Alpha.Models
 {
     public class MenuViewModels
     {
+        public int MenuId { get; set; }
+        [Required(ErrorMessage = "Introduisez un num de menu valide")]
+        [Display(Name = "Nom du menu")]
+        public string Name { get; set; }
+
+        [Display(Name = "Date de denière modification du Menu")]
+        public DateTime? DateOfModification { get; set; }
+
+
+        public virtual ICollection<Item> ItemList { get; set; }
 
     }
 

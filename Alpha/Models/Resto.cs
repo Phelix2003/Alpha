@@ -27,6 +27,7 @@ namespace Alpha.Models
     public class Menu
     {        
         public int MenuId { get; set; }
+        public string Name { get; set; }
         public DateTime? DateOfModification { get; set; }
 
 
@@ -44,6 +45,8 @@ namespace Alpha.Models
         public byte[] Image { get; set; }
 
         //To do: add drag and drop feature on the front end --> https://www.dropzonejs.com/
+
+        public virtual Menu Menu { get; set; }
 
     }
 

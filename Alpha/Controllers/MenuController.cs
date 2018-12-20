@@ -19,14 +19,9 @@ using System.Data.Entity;
 
 namespace Alpha.Controllers
 {
+    [Authorize]
     public class MenuController : Controller
     {
-        // GET: Menu
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         private ApplicationDbContext _dbManager;
         public ApplicationDbContext DbManager
         {
@@ -39,6 +34,29 @@ namespace Alpha.Controllers
                 _dbManager = value;
             }
         }
+
+        // GET: Menu
+        public async Task<ActionResult> Index(int? MenuId)
+        {
+            if(MenuId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                Menu menu = await DbManager.Menus.FirstOrDefaultAsync(r => r.MenuId == MenuId);
+                MenuViewModels menuView = new MenuViewModels()
+                {
+                    Name = menu.Name,
+                    DateOfModification = menu.DateOfModification,
+                    ItemList = menu.ItemList
+                };
+                return View(menuView);
+            }
+        }
+
+
+
 
         [HttpGet]
         public ActionResult CreateItem(CreateItemViewModel itemViewModel)

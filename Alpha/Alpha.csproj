@@ -339,6 +339,7 @@
     <Content Include="Views\UsersAdmin\Delete.cshtml" />
     <Content Include="Views\Menu\CreateItem.cshtml" />
     <Content Include="Views\Menu\EditItem.cshtml" />
+    <Content Include="Views\Menu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

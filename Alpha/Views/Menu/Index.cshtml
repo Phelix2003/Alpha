@@ -1,0 +1,47 @@
+﻿@model Alpha.Models.MenuViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<p>
+    @Html.ActionLink("Create New Restaurant", "Create")
+</p>
+
+@Html.HiddenFor(m => m.MenuId)
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(m => m.Name)
+        </th>
+        <th>
+            @Html.TextBoxFor(m => m.Name)
+        </th>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(m => m.DateOfModification)
+        </th>
+        <th>
+            @Html.DisplayFor(m => m.DateOfModification)
+        </th>
+    </tr>
+
+    @foreach (var item in )
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { RestoId = item.Id })
+            </td>
+        </tr>
+    }
+</table>
+
