@@ -36,15 +36,15 @@ namespace Alpha.Controllers
         }
 
         // GET: Menu
-        public async Task<ActionResult> Index(int? MenuId)
+        public async Task<ActionResult> Index(int? Id)
         {
-            if(MenuId == null)
+            if(Id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             else
             {
-                Menu menu = await DbManager.Menus.FirstOrDefaultAsync(r => r.MenuId == MenuId);
+                Menu menu = await DbManager.Menus.FirstOrDefaultAsync(r => r.MenuId == Id);
                 MenuViewModel menuView = new MenuViewModel()
                 {
                     Name = menu.Name,
@@ -57,9 +57,9 @@ namespace Alpha.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult> CreateMenu(int RestoId)
+        public async Task<ActionResult> CreateMenu(int? Id)
         {
-            Resto resto = await DbManager.Restos.FindAsync(RestoId);
+            Resto resto = await DbManager.Restos.FindAsync(Id);
             if ( resto != null)
             {
                 MenuViewModel menuView = new MenuViewModel()
@@ -89,11 +89,15 @@ namespace Alpha.Controllers
                     Menu menu = new Menu()
                     {
                         Name = menuView.Name,
-                        resto = resto,
                         DateOfModification = DateTime.Now,
                     };
                     DbManager.Menus.Add(menu);
+
+
+                    resto.Menu= menu;
+
                     await DbManager.SaveChangesAsync();
+
                     return View("EditMenu");                        
                 }
                 else

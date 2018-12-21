@@ -26,12 +26,9 @@ namespace Alpha.Models
 
     public class Menu
     {
-        [ForeignKey("Resto")]
         public int MenuId { get; set; }
         public string Name { get; set; }
         public DateTime? DateOfModification { get; set; }
-
-        public virtual Resto resto { get; set; }
 
         public virtual ICollection<Item> ItemList { get; set; }
 

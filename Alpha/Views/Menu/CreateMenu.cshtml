@@ -8,13 +8,13 @@
 <h2>CreateMenu</h2>
 
 <h2>Create</h2>
-@using (Html.BeginForm("Create", "Menu", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("CreateMenu", "Menu", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Création d'un nouveau Menu pour @Model.restoName . </h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-error" })
-    @Html.HiddenFor(m => m.MenuId)
+    @Html.HiddenFor(m => m.restoId)
     <div class="form-group">
         @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">

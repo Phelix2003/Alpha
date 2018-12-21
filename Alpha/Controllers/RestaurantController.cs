@@ -101,7 +101,8 @@ namespace Alpha.Controllers
                 PhoneNumber = resto.PhoneNumber,
                 ChefsList = chefList,
                 AdministratorsList = adminList,
-                Address = resto.Address
+                Address = resto.Address,
+                menu = resto.Menu
             });
         }
 

@@ -40,6 +40,8 @@ namespace Alpha.Models
         [Display(Name = "Restaurant Address")]
         public string Address { get; set; }
 
+        public Menu menu {get; set; }
+
 
         public ICollection<ApplicationUser> AdministratorsList { get; set; }
         public ICollection<ApplicationUser> ChefsList { get; set; }
