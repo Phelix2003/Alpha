@@ -89,7 +89,8 @@ namespace Alpha.Controllers
                     Menu menu = new Menu()
                     {
                         Name = menuView.Name,
-                        DateOfModification = DateTime.Now,
+                        DateOfModification = DateTime.Now
+                        
                     };
                     DbManager.Menus.Add(menu);
 
@@ -98,7 +99,7 @@ namespace Alpha.Controllers
 
                     await DbManager.SaveChangesAsync();
 
-                    return View("EditMenu");                        
+                    return RedirectToAction("Edit", "Restaurant", new { id = menuView.restoId });                        
                 }
                 else
                 {
@@ -107,7 +108,7 @@ namespace Alpha.Controllers
             }
 
 
-            return View("CreateMenu", new {RestoId = menuView.restoId});
+            return View(menuView);
 
         }
 
@@ -115,13 +116,23 @@ namespace Alpha.Controllers
 
 
         [HttpGet]
-        public ActionResult CreateItem(CreateItemViewModel itemViewModel)
+        public async Task<ActionResult> CreateItem(int Id)
         {
-            if(itemViewModel.ItemId == 0)
+            Menu menu = await DbManager.Menus.FirstOrDefaultAsync(m => m.MenuId == Id);
+            if (menu != null)
             {
-                itemViewModel.IsAvailable = true;
+                CreateItemViewModel itemViewModel = new CreateItemViewModel()
+                {
+                    IsAvailable = true,
+                    MenuId = Id
+                };
+                return View(itemViewModel);
             }
-            return View(itemViewModel);
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
         }
 
         [HttpPost]
@@ -131,33 +142,51 @@ namespace Alpha.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (itemViewModel.Image != null)
+                Menu menu = await DbManager.Menus.FirstAsync(m => m.MenuId == itemViewModel.MenuId);
+                if (menu != null)
                 {
-                    Item item = new Item()
+                    if (itemViewModel.Image != null)
                     {
-                        IsAvailable = itemViewModel.IsAvailable,
-                        Name = itemViewModel.Name,
-                        UnitPrice = Convert.ToDecimal(itemViewModel.UnitPrice, new CultureInfo("en-US")),
-                        Image = ProcessFileToImage(itemViewModel.Image)
-                    };
+                        Item item = new Item()
+                        {
+                            IsAvailable = itemViewModel.IsAvailable,
+                            Name = itemViewModel.Name,
+                            UnitPrice = Convert.ToDecimal(itemViewModel.UnitPrice, new CultureInfo("en-US")),
+                            Image = ProcessFileToImage(itemViewModel.Image)
+                        };
 
-                    if (item.Image == null)
-                    {
-                        ViewBag.Message = "Le format de l'image n'est pas correct";
-                        return View(itemViewModel);
+                        if (item.Image == null)
+                        {
+                            ViewBag.Message = "Le format de l'image n'est pas correct";
+                            return View(itemViewModel);
+                        }
+                        else
+                        {
+                            ViewBag.Message = "File uploaded successfully";
+                        }
+
+                        DbManager.Items.Add(item);
+                        menu.ItemList.Add(item);
+                        await DbManager.SaveChangesAsync();
+                        ViewBag.Message = "File uploaded successfully";
+                        Resto resto = await DbManager.Restos.FirstOrDefaultAsync(m =>m.Menu.MenuId == itemViewModel.MenuId);
+                        if (resto != null)
+                        {
+                            return RedirectToAction("Edit", "Restaurant", new { id = resto.Id });
+                        }
+                        else
+                        {
+                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                        }
                     }
                     else
                     {
-                        ViewBag.Message = "File uploaded successfully";
+                        ViewBag.Message = "Introduisez une image";
                     }
-
-                    DbManager.Items.Add(item);
-                    await DbManager.SaveChangesAsync();
-                    ViewBag.Message = "File uploaded successfully";
                 }
                 else
                 {
-                    ViewBag.Message = "Introduisez une image";
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
             }
             return View(itemViewModel);

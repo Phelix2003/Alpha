@@ -80,7 +80,7 @@ namespace Alpha.Controllers
         //Get 
         [HttpGet]
         public async Task<ActionResult> Edit(int? id)
-        {
+       {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -133,7 +133,7 @@ namespace Alpha.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> AddChefToRestaurant(int RestoId)
+        public async Task<ActionResult> AddChefToRestaurant(int RestoId, bool ChefOrNotAdmin)
         {
             ICollection<ApplicationUser> UserList = await UserManager.Users.ToListAsync();
             Resto restofound = await DbManager.Restos.FirstOrDefaultAsync(resto => resto.Id == RestoId);
@@ -143,6 +143,7 @@ namespace Alpha.Controllers
                 var model = new AddChefToRestaurantViewModel()
                 {
                     RestoName = restofound.Name,
+                    chefOrNotAdmin = ChefOrNotAdmin
                 };
 
                 foreach (var user in UserList)
@@ -154,7 +155,11 @@ namespace Alpha.Controllers
                         Email = user.Email,
                         Selected = true
                     };
-                    if (restofound.Chefs.FirstOrDefault(m => m.Id == user.Id) == null)
+                    if (restofound.Chefs.FirstOrDefault(m => m.Id == user.Id) == null && ChefOrNotAdmin)
+                    {
+                        userViewModel.Selected = false;
+                    }
+                    if (restofound.Administrators.FirstOrDefault(m => m.Id == user.Id) == null && !ChefOrNotAdmin)
                     {
                         userViewModel.Selected = false;
                     }
@@ -180,9 +185,25 @@ namespace Alpha.Controllers
                 var selectedUsers = from x in DbManager.Users
                                     where selectedIds.Contains(x.Id)
                                     select x;
+                if (model.chefOrNotAdmin)
+                {
+                    restoFound.Chefs.Clear();
+                }
+                else
+                {
+                    restoFound.Administrators.Clear();
+                }
+
                 foreach (var user in selectedUsers)
                 {
-                    restoFound.Chefs.Add(user);
+                    if (model.chefOrNotAdmin)
+                    {
+                        restoFound.Chefs.Add(user);
+                    }
+                    else
+                    {
+                        restoFound.Administrators.Add(user);
+                    }
                 }
                 await DbManager.SaveChangesAsync();
 
@@ -204,7 +225,7 @@ namespace Alpha.Controllers
             {
                 return View("Error");
             }
-            return View(new DeleteRestoViewModel() { Id = resto.Id });
+            return View(new DeleteRestoViewModel() { Id = resto.Id, Name = resto.Name });
         }
 
         [HttpPost]
@@ -243,8 +264,7 @@ namespace Alpha.Controllers
                 PhoneNumber = telephone,
                 Chefs = new List<ApplicationUser>(),
                 Administrators = new List<ApplicationUser>(),
-                Address = Address
-                
+                Address = Address               
             };
 
             if(Admin != null)

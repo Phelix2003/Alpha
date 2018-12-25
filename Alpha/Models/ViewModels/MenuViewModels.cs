@@ -38,6 +38,8 @@ namespace Alpha.Models
         [RegularExpression(@"^[0-9]+(\.[0-9]{1,2})$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
         public string UnitPrice { get; set; }
 
+        public int MenuId { get; set; }
+
         [Display(Name = "Article image")]
         public HttpPostedFileBase Image { get; set; }
     }

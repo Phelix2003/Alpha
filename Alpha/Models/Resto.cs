@@ -7,7 +7,7 @@ using Alpha.Models;
 
 namespace Alpha.Models
 {
-
+    [Table("Resto")]
     public class Resto
     {
         public int Id { get; set; }
@@ -24,12 +24,14 @@ namespace Alpha.Models
         public virtual Menu Menu {get; set;}
     }
 
+    [Table("Menu")]
     public class Menu
     {
         public int MenuId { get; set; }
         public string Name { get; set; }
         public DateTime? DateOfModification { get; set; }
 
+        public virtual Resto resto { get; set; }
         public virtual ICollection<Item> ItemList { get; set; }
 
     }

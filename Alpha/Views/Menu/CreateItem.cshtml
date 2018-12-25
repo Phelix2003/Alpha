@@ -12,7 +12,7 @@
 @using (Html.BeginForm("CreateItem", "Menu", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-
+    @Html.HiddenFor(m => m.MenuId)
 
     <hr />
     @Html.ValidationSummary("", new { @class = "text-error" })

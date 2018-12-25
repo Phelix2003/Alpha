@@ -56,23 +56,56 @@ namespace Alpha.Models
             }
         }
 
-
+        public virtual ICollection<Resto> Resto_Admin { get; set; }
+        public virtual ICollection<Resto> Resto_Chefs { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
            : base("LocalConnection", throwIfV1Schema: false)
-//            : base("AzureConnection", throwIfV1Schema: false)
-            
-        {
-        }
-
-        static ApplicationDbContext()
+//            : base("AzureConnection", throwIfV1Schema: false)            
         {
             // Set the class to call for initiating the DB
             Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
         }
+
+        //static ApplicationDbContext()
+        //{
+
+        //}
+
+        protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Resto>()
+                        .HasMany<ApplicationUser>(s => s.Administrators)
+                        .WithMany(c => c.Resto_Admin)
+                        .Map(cs =>
+                        {
+                            cs.MapLeftKey("Resto_Admin");
+                            cs.MapRightKey("Admin");
+                            cs.ToTable("RestosAdmins");
+                        });
+
+            modelBuilder.Entity<Resto>()
+            .HasMany<ApplicationUser>(s => s.Chefs)
+            .WithMany(c => c.Resto_Chefs)
+            .Map(cs =>
+            {
+                cs.MapLeftKey("Resto_Chefs");
+                cs.MapRightKey("Chef");
+                cs.ToTable("RestosChefs");
+            });
+
+            // Configure Student & StudentAddress entity
+            modelBuilder.Entity<Resto>()
+                        .HasOptional(s => s.Menu) // Mark Address property optional in Student entity
+                        .WithRequired(ad => ad.resto); // mark Student property as required in StudentAddress entity. Cannot save StudentAddress without Student
+
+
+        }
+
 
         public static ApplicationDbContext Create()
         {
@@ -82,8 +115,8 @@ namespace Alpha.Models
         // Application table definition
         public DbSet<Resto> Restos { set; get; }
         public DbSet<Menu> Menus { set; get; }
-        public DbSet<Item> Items { set; get; }
-        
+        public DbSet<Item> Items { set; get; }      
+     
 
     }
 

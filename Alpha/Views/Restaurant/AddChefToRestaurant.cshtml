@@ -1,7 +1,15 @@
 ﻿@model Alpha.Models.AddChefToRestaurantViewModel
 
-@{
-    ViewBag.Title = "Add a Chef To " + Model.RestoName;
+@{ 
+    if (Model.chefOrNotAdmin)
+    {
+        ViewBag.Title = "Add a Chef To " + Model.RestoName;
+    }
+    else
+    {
+        ViewBag.Title = "Add a Admin To " + Model.RestoName;
+
+    }
 }
 
 @using (Html.BeginForm("AddChefToRestaurant", "Restaurant", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -10,6 +18,7 @@
     <h2>Add Chef To The Restaurant</h2>
     @Html.ValidationSummary("", new { @class = "text-error" })
     @Html.HiddenFor(model => model.RestoName)
+    @Html.HiddenFor(model => model.chefOrNotAdmin)
     <table class="table">
         <tr>
             <th>

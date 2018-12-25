@@ -40,6 +40,7 @@ namespace Alpha.Models
         [Display(Name = "Restaurant Address")]
         public string Address { get; set; }
 
+
         public Menu menu {get; set; }
 
 
@@ -52,6 +53,7 @@ namespace Alpha.Models
     public class DeleteRestoViewModel
     {
         public int Id { get; set; }
+        public string Name { get; set; }
     }
 
     public class AddChefToRestaurantViewModel
@@ -59,6 +61,9 @@ namespace Alpha.Models
         public String RestoName { get; set; }
 
         public List<SelectUserRestoViewModel> User { get; set; }
+
+        public bool chefOrNotAdmin { get; set; }
+
         public AddChefToRestaurantViewModel()
         {
             this.User = new List<SelectUserRestoViewModel>();
