@@ -77,6 +77,14 @@ namespace Alpha.Models
 
         protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder)
         {
+            // CONFIGURATION OF THE RELATIONS 
+
+
+
+            // RESTO -- CHEFs / ADMINS 
+            //Relations of Restaurants with Admin and Chefs 
+            // Many to mnay relation without Cascade delete 
+            // Need for fluent configuration because of multiple many relation from Restaurant
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Resto>()
                         .HasMany<ApplicationUser>(s => s.Administrators)
@@ -98,10 +106,19 @@ namespace Alpha.Models
                 cs.ToTable("RestosChefs");
             });
 
-            // Configure Student & StudentAddress entity
+
+            // RESTO - MENU
+            //Relation one to one Menu and restaurant.
+            // Cascade delete enabled. 
             modelBuilder.Entity<Resto>()
-                        .HasOptional(s => s.Menu) // Mark Address property optional in Student entity
-                        .WithRequired(ad => ad.resto); // mark Student property as required in StudentAddress entity. Cannot save StudentAddress without Student
+                        .HasOptional(s => s.Menu) 
+                        .WithRequired(ad => ad.resto)
+                        .WillCascadeOnDelete(true); 
+
+            // MENU - Items 
+            // Configuration by convention
+            // Cascade delete enable (automatic)
+
 
 
         }

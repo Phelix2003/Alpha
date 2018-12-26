@@ -13,139 +13,138 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h3>General</h3>
-    <hr />
-    @Html.ValidationSummary(true)
-    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal">
+        <h3>General</h3>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Name)
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.PhoneNumber, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.PhoneNumber)
+        <div class="form-group">
+            @Html.LabelFor(model => model.PhoneNumber, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PhoneNumber)
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Address, new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Address, new { @class = "form-control", id = "TextBoxVenueLocation" })
-            @Html.ValidationMessageFor(model => model.Address)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Address, new { @class = "form-control", id = "TextBoxVenueLocation" })
+                @Html.ValidationMessageFor(model => model.Address)
+            </div>
         </div>
-    </div>
-    <h3>Utilisateurs</h3>
-    <hr />
-    <table class="table">
-        @Html.Label("List of Administrator", new { @class = "control-label col-md-2" })
-        @Html.ActionLink("Add Administrator", "AddChefToRestaurant", new { RestoId = Model.Id, ChefOrNotAdmin = false })
-        @if (Model.AdministratorsList.Count() == 0)
-        {
-            <tr>
-                <td>
-                    No entry
-                </td>
-            </tr>
-        }
-        else
-        {
-            foreach (var item in Model.AdministratorsList)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    </td>
-                </tr>
-            }
-        }
-    </table>
-    <hr />
-    <table class="table">
-        @Html.Label("List of Chefs", new { @class = "control-label col-md-2" }) |
-        @Html.ActionLink("Add Chefs", "AddChefToRestaurant", new { RestoId = Model.Id, ChefOrNotAdmin = true })
-        @if (Model.ChefsList.Count() == 0)
-        {
-            <tr>
-                <td>
-                    No entry
-                </td>
-            </tr>
-        }
-        else
-        {
-            foreach (var item in Model.ChefsList)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    </td>
-                </tr>
-            }
-        }
-    </table>
-
-    <h3>Menus</h3>
-    <hr />
-    @if (Model.menu == null)
-    {
-        @Html.ActionLink("Ajouter un menu", "CreateMenu", "Menu", new { Id = Model.Id }, null)
-    }
-    else
-    {
-        @Html.ActionLink("Ajouter un article", "CreateItem", "Menu", new { Id = Model.menu.MenuId }, null)
-
-    }
-
-    <table class="table">
-        <tr>
-            <th>
-            </th>
-            <th>
-                @Html.Label("Nom de l'article", new { @class = "control-label col-md-2" })
-            </th>
-            <th>
-                @Html.Label("Prix", new { @class = "control-label col-md-2" })
-            </th>
-
-        </tr>
-        @if (Model.menu != null)
-        {
-            foreach (var item in Model.menu.ItemList)
-            {
-                <tr>
-                    <td>
-                        <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UnitPrice)
-                    </td>
-                </tr>
-            }
-        }
-
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
-    </table>
-</div>
+        <h3>Utilisateurs</h3>
+        <hr />
+        <table class="table">
+            @Html.Label("List of Administrator", new { @class = "control-label col-md-2" })
+            @Html.ActionLink("Add Administrator", "AddChefToRestaurant", new { RestoId = Model.Id, ChefOrNotAdmin = false })
+            @if (Model.AdministratorsList.Count() == 0)
+            {
+                <tr>
+                    <td>
+                        No entry
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.AdministratorsList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+        <hr />
+        <table class="table">
+            @Html.Label("List of Chefs", new { @class = "control-label col-md-2" }) |
+            @Html.ActionLink("Add Chefs", "AddChefToRestaurant", new { RestoId = Model.Id, ChefOrNotAdmin = true })
+            @if (Model.ChefsList.Count() == 0)
+            {
+                <tr>
+                    <td>
+                        No entry
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.ChefsList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+
+        <h3>Menus</h3>
+        <hr />
+        @if (Model.menu == null)
+        {
+            @Html.ActionLink("Ajouter un menu", "CreateMenu", "Menu", new { Id = Model.Id }, null)
+        }
+        else
+        {
+            @Html.ActionLink("Ajouter un article", "CreateItem", "Menu", new { Id = Model.menu.MenuId }, null)
+
+        }
+
+        <table class="table">
+            <tr>
+                <th>
+                </th>
+                <th>
+                    @Html.Label("Nom de l'article", new { @class = "control-label col-md-4" })
+                </th>
+                <th>
+                    @Html.Label("Prix", new { @class = "control-label col-md-4" })
+                </th>
+
+            </tr>
+            @if (Model.menu != null)
+            {
+                foreach (var item in Model.menu.ItemList)
+                {
+                    <tr>
+                        <td>
+                            <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitPrice)
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
 }
 
 <div>
@@ -154,44 +153,6 @@
 
 <script type="text/javascript">
 
-    $(function () {
-        $("#TextBoxVenueLocation").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "@Url.Action("GetEventVenuesList", "Home")",
-                    data: { SearchText: request.term },
-                    dataType: "json",
-                    type: "GET",
-                    success: function (data) {
-                        if (data.length == 0) {
-                            $('#EventVenueId').val("");
-                            $('#VenueLocationMesssage').show();
-                            return false;
-                        }
-                        else {
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.description,
-                                    value: item.place_id
-                                }
-                            }));
-                        }
-                    },
-                    error: function (x, y, z) {
-                        alert('error');
-                    }
-                });
-            },
-            messages: {
-                noResults: "", results: ""
-            },
-            select: function (event, ui) {
-                $('#TextBoxVenueLocation').val(ui.item.label);
-                $('#EventVenueId').val(ui.item.value);
-                return false;
-            }
-        }).autocomplete("widget").addClass("CitiesAutocomplete");
-    });
 </script>
 @section Scripts {
 

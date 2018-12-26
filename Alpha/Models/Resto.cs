@@ -15,7 +15,7 @@ namespace Alpha.Models
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
 
-        // Ajouter adresse
+        //TODO Ajouter adresse détaillées 
 
 
         public virtual ICollection<ApplicationUser> Administrators { get; set; }
@@ -32,6 +32,7 @@ namespace Alpha.Models
         public DateTime? DateOfModification { get; set; }
 
         public virtual Resto resto { get; set; }
+
         public virtual ICollection<Item> ItemList { get; set; }
 
     }
@@ -45,12 +46,10 @@ namespace Alpha.Models
 
         //Photos to be add
         public byte[] Image { get; set; }
-
         //To do: add drag and drop feature on the front end --> https://www.dropzonejs.com/
-
+        
+        //one to one relation by convention
+        public int MenuId { get; set; }
         public virtual Menu Menu { get; set; }
-
     }
-
-
 }
