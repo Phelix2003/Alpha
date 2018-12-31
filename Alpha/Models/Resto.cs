@@ -13,9 +13,11 @@ namespace Alpha.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
-        public string Address { get; set; }
+        public string Address { get; set; }   //TODO Ajouter adresse détaillées 
 
-        //TODO Ajouter adresse détaillées 
+        public virtual ICollection<SlotTime> OpeningTimes {get; set;}
+
+
 
 
         public virtual ICollection<ApplicationUser> Administrators { get; set; }
@@ -37,6 +39,7 @@ namespace Alpha.Models
 
     }
 
+    [Table("MenuItems")]
     public class Item
     {        
         public int ItemId { get; set; }
@@ -51,5 +54,18 @@ namespace Alpha.Models
         //one to one relation by convention
         public int MenuId { get; set; }
         public virtual Menu Menu { get; set; }
+    }
+
+    [Table("RestoSlotTimes")]
+    public class SlotTime
+    {
+        public int SlotTimeId { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
+        public TimeSpan OpenTime { get; set; }
+        public TimeSpan CloseTime { get; set; }
+
+
+        public int RestoId { get; set; }
+        public virtual Resto Resto { get; set; }
     }
 }

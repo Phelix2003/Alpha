@@ -47,7 +47,82 @@ namespace Alpha.Models
         public ICollection<ApplicationUser> AdministratorsList { get; set; }
         public ICollection<ApplicationUser> ChefsList { get; set; }
 
+        //public SlotTimeList SlotTimeList { get;}
 
+        public ICollection<SlotTime> OpeningTimes { get; set; }
+    }
+
+    public class AddSlotTimeToRestaurantView
+    {
+
+        public AddSlotTimeToRestaurantView()
+        {
+            SlotTimeList = new SlotTimeList();
+        }
+
+        public int RestoId { get; set; }
+        public int OpenTimeId { get; set; }
+        public int CloseTimeId { get; set; }
+
+        public string RestoName { get; set; }
+        public DayOfWeek Day { get; set; }
+
+        public SlotTimeList SlotTimeList { get;}
+    }
+
+        public class SlotTimeList
+    {
+
+        public List<TimeSpanView> timeSpanViews = new List<TimeSpanView>
+        {
+            new TimeSpanView(1, new TimeSpan(11,30,0)),
+            new TimeSpanView(2, new TimeSpan(12,00,0)),
+            new TimeSpanView(3, new TimeSpan(12,30,0)),
+            new TimeSpanView(4, new TimeSpan(13,00,0)),
+            new TimeSpanView(5, new TimeSpan(13,30,0)),
+            new TimeSpanView(6, new TimeSpan(14,00,0)),
+            new TimeSpanView(7, new TimeSpan(14,30,0)),
+            new TimeSpanView(8, new TimeSpan(15,00,0)),
+            new TimeSpanView(9, new TimeSpan(15,30,0)),
+            new TimeSpanView(10, new TimeSpan(16,00,0)),
+            new TimeSpanView(11, new TimeSpan(16,30,0)),
+            new TimeSpanView(12, new TimeSpan(17,00,0)),
+            new TimeSpanView(13, new TimeSpan(17,30,0)),
+            new TimeSpanView(14, new TimeSpan(18,00,0)),
+            new TimeSpanView(15, new TimeSpan(18,30,0)),
+            new TimeSpanView(16, new TimeSpan(19,00,0)),
+            new TimeSpanView(17, new TimeSpan(19,30,0)),
+            new TimeSpanView(18, new TimeSpan(20,00,0)),
+            new TimeSpanView(19, new TimeSpan(20,30,0)),
+            new TimeSpanView(20, new TimeSpan(21,00,0)),
+            new TimeSpanView(21, new TimeSpan(21,30,0)),
+            new TimeSpanView(22, new TimeSpan(22,00,0)),
+            new TimeSpanView(23, new TimeSpan(22,30,0)),
+            new TimeSpanView(24, new TimeSpan(23,00,0)),
+            new TimeSpanView(25, new TimeSpan(23,30,0)),
+            new TimeSpanView(26, new TimeSpan(00,00,0))
+        };
+
+    }
+
+    public class TimeSpanView
+    {
+        public TimeSpanView(int id, TimeSpan timeSpan)
+        {
+            Id = id;
+            TimeSpan = timeSpan;           
+
+        }
+
+        public int Id { get; set; }
+        public TimeSpan TimeSpan { get; set; }
+        public string TimeSpanText
+        {
+            get
+            {
+                return TimeSpan.ToString(@"hh\:mm");
+            }
+        }
     }
 
     public class DeleteRestoViewModel
@@ -84,6 +159,7 @@ namespace Alpha.Models
 
     }
 
+    /*
     public class Prediction
     {
         public string description { get; set; }
@@ -97,4 +173,5 @@ namespace Alpha.Models
         public List<Prediction> predictions { get; set; }
         public string status { get; set; }
     }
+    */
 }

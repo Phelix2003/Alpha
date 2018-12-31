@@ -1,0 +1,45 @@
+﻿@model Alpha.Models.AddSlotTimeToRestaurantView
+
+@{
+    ViewBag.Title = "AddSlotTimeToRestaurant";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*TODO to update in modal view https://www.codeproject.com/Tips/826002/Bootstrap-Modal-Dialog-Loading-Content-from-MVC-Pa*@
+<h2> Ajouter une heure d'ouverture au restaurant @Model.RestoName pour le @Model.Day.ToString() </h2>
+
+@using (Html.BeginForm("AddSlotTimeToRestaurant", "Restaurant", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.HiddenFor(m => m.RestoId)
+    @Html.HiddenFor(m => m.Day)
+    <table class="table">
+        <tr>
+            <th>
+                Ouverture
+            </th>
+            <th>
+                Fermeture
+            </th>
+
+        </tr>
+        <tr>
+            <td>
+                @Html.DropDownListFor(m => m.OpenTimeId, new SelectList(Model.SlotTimeList.timeSpanViews, "Id", "TimeSpanText"))
+                @Html.ValidationMessageFor(m => m.OpenTimeId)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.CloseTimeId, new SelectList(Model.SlotTimeList.timeSpanViews, "Id", "TimeSpanText"))
+                @Html.ValidationMessageFor(m => m.CloseTimeId)
+            </td>
+        </tr>
+    </table>
+    <input type="submit" name="operation" id="submit" value="Submit Selected" />
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+

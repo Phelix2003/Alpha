@@ -102,18 +102,25 @@ namespace Alpha.Controllers
                 ChefsList = chefList,
                 AdministratorsList = adminList,
                 Address = resto.Address,
-                menu = resto.Menu
+                menu = resto.Menu,
+                OpeningTimes = resto.OpeningTimes                
             });
         }
 
         //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,PhoneNumber,Address")] EditRestoViewModel editResto)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,PhoneNumber,Address,SelectedSlotTimeId_1_Start,SelectedSlotTimeId_2_Start,SelectedSlotTimeId_1_Stop,SelectedSlotTimeId_2_Stop")] EditRestoViewModel editResto)
         {
+            var resto = await DbManager.Restos.FirstAsync(r => r.Id == editResto.Id);
+            if (resto == null)
+            {
+                return HttpNotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                
+
                 Resto ModifiedResto = await DbManager.Restos.FindAsync(editResto.Id);
 
                 if (ModifiedResto != null)
@@ -125,12 +132,64 @@ namespace Alpha.Controllers
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
+                
 
             }
 
             ModelState.AddModelError("", "Something failed.");
-            return View();
+            editResto.AdministratorsList = resto.Administrators.ToList();
+            editResto.menu = resto.Menu;
+            editResto.ChefsList = resto.Chefs.ToList();
+            return View(editResto);
         }
+
+        public async Task<ActionResult> AddSlotTimeToRestaurant(int RestoId, DayOfWeek dayOfWeek)
+        {
+            // TODO https://www.codeproject.com/Tips/826002/Bootstrap-Modal-Dialog-Loading-Content-from-MVC-Pa
+            var resto = await DbManager.Restos.FirstAsync(r => r.Id == RestoId);
+            if (resto != null)
+            {
+                return View(new AddSlotTimeToRestaurantView() {RestoId = RestoId, RestoName = resto.Name, Day = dayOfWeek});
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddSlotTimeToRestaurant(AddSlotTimeToRestaurantView model)
+        {
+            var resto = await DbManager.Restos.FirstAsync(r => r.Id == model.RestoId);
+            if(resto != null)
+            {
+                if(model.OpenTimeId < model.CloseTimeId)
+                {
+                    SlotTime slotTime = new SlotTime()
+                    {
+                        DayOfWeek = model.Day,
+                        OpenTime = model.SlotTimeList.timeSpanViews.FirstOrDefault(m => m.Id == model.OpenTimeId).TimeSpan,
+                        CloseTime = model.SlotTimeList.timeSpanViews.FirstOrDefault(m => m.Id == model.CloseTimeId).TimeSpan
+                    };
+                    resto.OpeningTimes.Add(slotTime);
+                    await DbManager.SaveChangesAsync();
+                    return RedirectToAction("edit", new { id = model.RestoId });
+                }
+                else
+                {
+                    ModelState.AddModelError("SelectedSlotTimeId_1_Stop", "L'heure de fermeture doit être après l'heure d'ouverture");
+                    return View();
+
+                }
+                    
+
+
+
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+
+        }
+
 
         [HttpGet]
         public async Task<ActionResult> AddChefToRestaurant(int RestoId, bool ChefOrNotAdmin)
@@ -282,6 +341,7 @@ namespace Alpha.Controllers
             return await DbManager.Restos.ToListAsync();
         }
 
+        /*
         /// <summary>  
         /// This method is used to get the place list  
         /// </summary>  
@@ -309,6 +369,7 @@ namespace Alpha.Controllers
                 return Json(ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+        */
 
     }
 }
