@@ -113,7 +113,16 @@ namespace Alpha.Models
             modelBuilder.Entity<Resto>()
                         .HasOptional(s => s.Menu) 
                         .WithRequired(ad => ad.resto)
-                        .WillCascadeOnDelete(true); 
+                        .WillCascadeOnDelete(true);
+
+            // RESTO - MENU
+            // Relatin One to Many
+            modelBuilder.Entity<Resto>()
+                .HasMany(r => r.OpeningTimes)
+                .WithOptional()
+                .HasForeignKey(ot => ot.RestoId);
+
+                
 
             // MENU - Items 
             // Configuration by convention

@@ -7,11 +7,13 @@
 
 @*TODO to update in modal view https://www.codeproject.com/Tips/826002/Bootstrap-Modal-Dialog-Loading-Content-from-MVC-Pa*@
 <h2> Ajouter une heure d'ouverture au restaurant @Model.RestoName pour le @Model.Day.ToString() </h2>
+@Html.ValidationMessageFor(m => m.SlotTimeList)
 
 @using (Html.BeginForm("AddSlotTimeToRestaurant", "Restaurant", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.HiddenFor(m => m.RestoId)
     @Html.HiddenFor(m => m.Day)
+
     <table class="table">
         <tr>
             <th>

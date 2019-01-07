@@ -175,8 +175,8 @@ namespace Alpha.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("SelectedSlotTimeId_1_Stop", "L'heure de fermeture doit être après l'heure d'ouverture");
-                    return View();
+                    ModelState.AddModelError("SlotTimeList", "L'heure de fermeture doit être après l'heure d'ouverture");
+                    return View(model);
                 }               
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -192,7 +192,7 @@ namespace Alpha.Controllers
 
                 if(slotTime != null)
                 {
-                    resto.OpeningTimes.Remove(slotTime);
+                    DbManager.Entry(slotTime).State = EntityState.Deleted;
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("edit", new { id = RestoId });
                 }
