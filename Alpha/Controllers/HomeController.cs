@@ -13,7 +13,20 @@ namespace Alpha.Controllers
     [RequireHttps]
     public class HomeController : Controller
     {
-        
+        private ApplicationDbContext _dbManager;
+        public ApplicationDbContext DbManager
+        {
+            get
+            {
+                return _dbManager ?? HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+            }
+            private set
+            {
+                _dbManager = value;
+            }
+        }
+
+
         private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager
         {
@@ -42,7 +55,10 @@ namespace Alpha.Controllers
                 }
 
             }
-            return View();
+
+            List<Resto> restoList = DbManager.Restos.ToList();
+
+            return View(restoList);
         }
 
         public ActionResult About()

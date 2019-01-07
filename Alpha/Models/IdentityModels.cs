@@ -141,7 +141,8 @@ namespace Alpha.Models
         // Application table definition
         public DbSet<Resto> Restos { set; get; }
         public DbSet<Menu> Menus { set; get; }
-        public DbSet<Item> Items { set; get; }      
+        public DbSet<Item> Items { set; get; }  
+        public DbSet<Order> Orders { set; get; }
      
 
     }

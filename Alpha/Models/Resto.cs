@@ -7,7 +7,7 @@ using Alpha.Models;
 
 namespace Alpha.Models
 {
-    [Table("Resto")]
+    [Table("Restos")]
     public class Resto
     {
         public int Id { get; set; }
