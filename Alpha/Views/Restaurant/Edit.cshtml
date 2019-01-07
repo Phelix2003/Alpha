@@ -98,7 +98,7 @@
                 <td>
                     @item.CloseTime.ToString()
                 </td>
-                <td></td>
+                <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId})</td>
             </tr>
         }
 
