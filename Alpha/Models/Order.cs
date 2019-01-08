@@ -12,11 +12,14 @@ namespace Alpha.Models
     {
         public int Id { get; set; }
 
-        public DateTime OrderTime { get; set; }
+        public DateTime OrderOpenTime { get; set; }
+        public DateTime? OrderClosedTime { get; set; }
         public bool IsOrderCompleted { get; set; }
 
         public virtual ApplicationUser OrderOwner { get; set; }
         public virtual Resto Resto { get; set; }
-        public virtual ICollection<Item> OrderList { get; set; }
+
+        //A vérifier si dans une collection on peut ajouter plusieurs fois le même élément... 
+        public virtual ICollection<Item> ItemList { get; set; }
     }
 }

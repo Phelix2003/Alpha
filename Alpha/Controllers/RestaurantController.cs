@@ -192,7 +192,8 @@ namespace Alpha.Controllers
 
                 if(slotTime != null)
                 {
-                    DbManager.Entry(slotTime).State = EntityState.Deleted;
+                    //DbManager.Entry(slotTime).State = EntityState.Deleted;
+                    DbManager.SlotTimes.Remove(slotTime);
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("edit", new { id = RestoId });
                 }

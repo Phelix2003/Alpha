@@ -23,6 +23,8 @@ namespace Alpha.Models
         public virtual ICollection<ApplicationUser> Administrators { get; set; }
         public virtual ICollection<ApplicationUser> Chefs { get; set; }
 
+        public virtual ICollection<Order> OrderIntake { get; set; }
+
         public virtual Menu Menu {get; set;}
     }
 
@@ -41,7 +43,7 @@ namespace Alpha.Models
 
     [Table("MenuItems")]
     public class Item
-    {        
+    {
         public int ItemId { get; set; }
         public string Name { get; set; }
         public bool IsAvailable { get; set; }
@@ -50,10 +52,12 @@ namespace Alpha.Models
         //Photos to be add
         public byte[] Image { get; set; }
         //To do: add drag and drop feature on the front end --> https://www.dropzonejs.com/
-        
+
         //one to one relation by convention
         public int MenuId { get; set; }
         public virtual Menu Menu { get; set; }
+
+        public virtual ICollection<Order> OrderList { get; set; }
     }
 
     [Table("RestoSlotTimes")]

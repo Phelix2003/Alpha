@@ -58,6 +58,8 @@ namespace Alpha.Models
 
         public virtual ICollection<Resto> Resto_Admin { get; set; }
         public virtual ICollection<Resto> Resto_Chefs { get; set; }
+
+        public virtual Order PlacedOrder { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -108,7 +110,7 @@ namespace Alpha.Models
 
 
             // RESTO - MENU
-            //Relation one to one Menu and restaurant.
+            // Relation one to one Menu and restaurant.
             // Cascade delete enabled. 
             modelBuilder.Entity<Resto>()
                         .HasOptional(s => s.Menu) 
@@ -122,14 +124,32 @@ namespace Alpha.Models
                 .WithOptional()
                 .HasForeignKey(ot => ot.RestoId);
 
-                
+            // USER - ORDER
+            // Relation one to one User and Order.
+            // Cascade delete enabled. 
+            modelBuilder.Entity<ApplicationUser>()
+                        .HasOptional(s => s.PlacedOrder)
+                        .WithRequired(ad => ad.OrderOwner)
+                        .WillCascadeOnDelete(true);
 
             // MENU - Items 
             // Configuration by convention
             // Cascade delete enable (automatic)
 
+            // ORDER -- ITEMS 
+            // Relations of Items with Orders 
+            // Many to mnay relation without Cascade delete 
 
-
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Order>()
+                        .HasMany<Item>(s => s.ItemList)
+                        .WithMany(c => c.OrderList)
+                        .Map(cs =>
+                        {
+                            cs.MapLeftKey("ItemList");
+                            cs.MapRightKey("OrderList");
+                            cs.ToTable("OrdersItems");
+                        });
         }
 
 
@@ -142,6 +162,7 @@ namespace Alpha.Models
         public DbSet<Resto> Restos { set; get; }
         public DbSet<Menu> Menus { set; get; }
         public DbSet<Item> Items { set; get; }  
+        public DbSet<SlotTime> SlotTimes { set; get; }
         public DbSet<Order> Orders { set; get; }
      
 

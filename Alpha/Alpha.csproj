@@ -216,6 +216,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RestaurantController.cs" />
     <Compile Include="Controllers\UsersAdminController.cs" />
     <Compile Include="Global.asax.cs">
@@ -226,6 +227,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ViewModels\ManageViewModels.cs" />
     <Compile Include="Models\ViewModels\MenuViewModels.cs" />
+    <Compile Include="Models\ViewModels\OrderViewModels.cs" />
     <Compile Include="Models\ViewModels\RestaurantViewModels.cs" />
     <Compile Include="Models\Resto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -341,6 +343,7 @@
     <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="Views\Menu\CreateMenu.cshtml" />
     <Content Include="Views\Restaurant\AddSlotTimeToRestaurant.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
