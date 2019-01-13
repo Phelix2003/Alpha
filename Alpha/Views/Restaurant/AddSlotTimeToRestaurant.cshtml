@@ -22,6 +22,9 @@
             <th>
                 Fermeture
             </th>
+            <th>
+                Nombre de commande par heure acceptées pendant cette plage horraire.
+            </th>
 
         </tr>
         <tr>
@@ -31,6 +34,10 @@
             </td>
             <td>
                 @Html.DropDownListFor(m => m.CloseTimeId, new SelectList(Model.SlotTimeList.timeSpanViews, "Id", "TimeSpanText"))
+                @Html.ValidationMessageFor(m => m.CloseTimeId)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.NbrOrdersPerHour, new SelectList(Model.NbrOrdersPerHoursList))
                 @Html.ValidationMessageFor(m => m.CloseTimeId)
             </td>
         </tr>

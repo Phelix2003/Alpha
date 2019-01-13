@@ -53,6 +53,9 @@
             <th>
                 Fermeture
             </th>
+            <th>
+                Nombre de commande par heure
+            </th>
             <th></th>
         </tr>
         <tr>
@@ -65,18 +68,21 @@
         </tr>
         @foreach (var item in Model.OpeningTimes.Where(x => x.DayOfWeek == DayOfWeek.Monday).ToList())
         {
-            <tr>
-                <th>
-                </th>
+        <tr>
+            <th>
+            </th>
 
-                <td>
-                    @item.OpenTime.ToString()
-                </td>
-                <td>
-                    @item.CloseTime.ToString()
-                </td>
-                <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
-            </tr>
+            <td>
+                @item.OpenTime.ToString()
+            </td>
+            <td>
+                @item.CloseTime.ToString()
+            </td>
+            <td>
+                @item.NbAuthorizedOrderPerHour.ToString()
+            </td>
+            <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
+        </tr>
         }
         <tr>
             <th>
@@ -88,18 +94,21 @@
         </tr>
         @foreach (var item in Model.OpeningTimes.Where(x => x.DayOfWeek == DayOfWeek.Tuesday).ToList())
         {
-            <tr>
-                <th>
-                </th>
+        <tr>
+            <th>
+            </th>
 
-                <td>
-                    @item.OpenTime.ToString()
-                </td>
-                <td>
-                    @item.CloseTime.ToString()
-                </td>
-                <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
-            </tr>
+            <td>
+                @item.OpenTime.ToString()
+            </td>
+            <td>
+                @item.CloseTime.ToString()
+            </td>
+            <td>
+                @item.NbAuthorizedOrderPerHour.ToString()
+            </td>
+            <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
+        </tr>
         }
         <tr>
             <th>
@@ -111,18 +120,21 @@
         </tr>
         @foreach (var item in Model.OpeningTimes.Where(x => x.DayOfWeek == DayOfWeek.Wednesday).ToList())
         {
-            <tr>
-                <th>
-                </th>
+        <tr>
+            <th>
+            </th>
 
-                <td>
-                    @item.OpenTime.ToString()
-                </td>
-                <td>
-                    @item.CloseTime.ToString()
-                </td>
-                <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
-            </tr>
+            <td>
+                @item.OpenTime.ToString()
+            </td>
+            <td>
+                @item.CloseTime.ToString()
+            </td>
+            <td>
+                @item.NbAuthorizedOrderPerHour.ToString()
+            </td>
+            <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
+        </tr>
         }
         <tr>
             <th>
@@ -134,18 +146,21 @@
         </tr>
         @foreach (var item in Model.OpeningTimes.Where(x => x.DayOfWeek == DayOfWeek.Thursday).ToList())
         {
-            <tr>
-                <th>
-                </th>
+        <tr>
+            <th>
+            </th>
 
-                <td>
-                    @item.OpenTime.ToString()
-                </td>
-                <td>
-                    @item.CloseTime.ToString()
-                </td>
-                <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
-            </tr>
+            <td>
+                @item.OpenTime.ToString()
+            </td>
+            <td>
+                @item.CloseTime.ToString()
+            </td>
+            <td>
+                @item.NbAuthorizedOrderPerHour.ToString()
+            </td>
+            <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
+        </tr>
         }
         <tr>
             <th>
@@ -157,18 +172,21 @@
         </tr>
         @foreach (var item in Model.OpeningTimes.Where(x => x.DayOfWeek == DayOfWeek.Friday).ToList())
         {
-            <tr>
-                <th>
-                </th>
+        <tr>
+            <th>
+            </th>
 
-                <td>
-                    @item.OpenTime.ToString()
-                </td>
-                <td>
-                    @item.CloseTime.ToString()
-                </td>
-                <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
-            </tr>
+            <td>
+                @item.OpenTime.ToString()
+            </td>
+            <td>
+                @item.CloseTime.ToString()
+            </td>
+            <td>
+                @item.NbAuthorizedOrderPerHour.ToString()
+            </td>
+            <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
+        </tr>
         }
         <tr>
             <th>
@@ -180,18 +198,21 @@
         </tr>
         @foreach (var item in Model.OpeningTimes.Where(x => x.DayOfWeek == DayOfWeek.Saturday).ToList())
         {
-            <tr>
-                <th>
-                </th>
+        <tr>
+            <th>
+            </th>
 
-                <td>
-                    @item.OpenTime.ToString()
-                </td>
-                <td>
-                    @item.CloseTime.ToString()
-                </td>
-                <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
-            </tr>
+            <td>
+                @item.OpenTime.ToString()
+            </td>
+            <td>
+                @item.CloseTime.ToString()
+            </td>
+            <td>
+                @item.NbAuthorizedOrderPerHour.ToString()
+            </td>
+            <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
+        </tr>
         }
         <tr>
             <th>
@@ -203,18 +224,21 @@
         </tr>
         @foreach (var item in Model.OpeningTimes.Where(x => x.DayOfWeek == DayOfWeek.Sunday).ToList())
         {
-            <tr>
-                <th>
-                </th>
+        <tr>
+            <th>
+            </th>
 
-                <td>
-                    @item.OpenTime.ToString()
-                </td>
-                <td>
-                    @item.CloseTime.ToString()
-                </td>
-                <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
-            </tr>
+            <td>
+                @item.OpenTime.ToString()
+            </td>
+            <td>
+                @item.CloseTime.ToString()
+            </td>
+            <td>
+                @item.NbAuthorizedOrderPerHour.ToString()
+            </td>
+            <td>@Html.ActionLink("Remove", "RemoveSlotTimeToRestaurant", new { RestoId = Model.Id, SlotId = item.SlotTimeId })</td>
+        </tr>
         }
 
 

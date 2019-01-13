@@ -151,6 +151,7 @@ namespace Alpha.Controllers
                         {
                             IsAvailable = itemViewModel.IsAvailable,
                             Name = itemViewModel.Name,
+                            Description = itemViewModel.Description,
                             UnitPrice = Convert.ToDecimal(itemViewModel.UnitPrice, new CultureInfo("en-US")),
                             Image = ProcessFileToImage(itemViewModel.Image)
                         };

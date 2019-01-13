@@ -30,6 +30,11 @@ namespace Alpha.Models
         [Required(ErrorMessage = "Enter a valide restaurant name")]
         [Display(Name = "Article Name")]
         public string Name { get; set; }
+
+        
+        [Display(Name = "Article Description")]
+        public string Description { get; set; }
+
         [Display(Name = "Should this article be available?")]
         public bool IsAvailable { get; set; }
 

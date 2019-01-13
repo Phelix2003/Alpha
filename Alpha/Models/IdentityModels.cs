@@ -142,7 +142,7 @@ namespace Alpha.Models
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Order>()
-                        .HasMany<Item>(s => s.ItemList)
+                        .HasMany<Item>(s => s.OrderItemList)
                         .WithMany(c => c.OrderList)
                         .Map(cs =>
                         {

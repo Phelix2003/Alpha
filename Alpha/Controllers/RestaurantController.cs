@@ -167,7 +167,8 @@ namespace Alpha.Controllers
                     {
                         DayOfWeek = model.Day,
                         OpenTime = model.SlotTimeList.timeSpanViews.FirstOrDefault(m => m.Id == model.OpenTimeId).TimeSpan,
-                        CloseTime = model.SlotTimeList.timeSpanViews.FirstOrDefault(m => m.Id == model.CloseTimeId).TimeSpan
+                        CloseTime = model.SlotTimeList.timeSpanViews.FirstOrDefault(m => m.Id == model.CloseTimeId).TimeSpan,
+                        NbAuthorizedOrderPerHour = model.NbrOrdersPerHour
                     };
                     resto.OpeningTimes.Add(slotTime);
                     await DbManager.SaveChangesAsync();
@@ -192,7 +193,6 @@ namespace Alpha.Controllers
 
                 if(slotTime != null)
                 {
-                    //DbManager.Entry(slotTime).State = EntityState.Deleted;
                     DbManager.SlotTimes.Remove(slotTime);
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("edit", new { id = RestoId });

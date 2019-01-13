@@ -1,31 +1,35 @@
-﻿
+﻿@model Alpha.Models.ViewModels.OrderViewModels
 
 @{
     ViewBag.Title = "Index";
 }
 
+
 <div class="jumbotron">
-    <h1>Choisissez un restaurant</h1>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-        </tr>
+    <h1>Votre commande au @Model.Resto_Name</h1>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink(item.Name.ToString(), "Edit", "Restaurant", new { id = item.Id }, null)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
+    TODO Ajouter Image resto ICI
 
-            </tr>
+    <hr />
+    <h2> Menu </h2>
+
+    <div class="container">
+        <div class="col-sm-6">
+            @foreach (var item in Model.ListOfProposedItems)
+            {
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name.ToString()</h5>
+                        <p class="card-text">@item.Description.ToString()</p>
+                        <a href="@Url.Action("AddItemToOrder", "Order", new { ItemId = item.ItemId, OrderId = Model.OrderId })" class="btn btn-primary">Ajouter</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 
 
+</div>
+
+    

@@ -19,7 +19,7 @@
         {
             <tr>
                 <td>
-                    @Html.ActionLink(item.Name.ToString(), "Edit", "Restaurant", new { id = item.Id },null)
+                    @Html.ActionLink(item.Name.ToString(), "Index", "Order", new { RestoId = item.Id },null)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Address)

@@ -58,6 +58,7 @@ namespace Alpha.Models
         public AddSlotTimeToRestaurantView()
         {
             SlotTimeList = new SlotTimeList();
+            NbrOrdersPerHoursList = new List<int>(new int[] { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 });            
         }
 
         public int RestoId { get; set; }
@@ -68,6 +69,9 @@ namespace Alpha.Models
         public DayOfWeek Day { get; set; }
 
         public SlotTimeList SlotTimeList { get;}
+
+        public List<int> NbrOrdersPerHoursList { get; set; }
+        public int NbrOrdersPerHour{ get; set; }
     }
 
         public class SlotTimeList

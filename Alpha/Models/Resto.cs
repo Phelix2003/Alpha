@@ -13,7 +13,9 @@ namespace Alpha.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
+        public string Description { get; set; } // TODO ajouter l'édition du champ dans les vues 
         public string Address { get; set; }   //TODO Ajouter adresse détaillées 
+        public byte[] Image { get; set; } // TODO ajouter dans l
 
         public virtual ICollection<SlotTime> OpeningTimes {get; set;}
 
@@ -48,8 +50,10 @@ namespace Alpha.Models
         public string Name { get; set; }
         public bool IsAvailable { get; set; }
         public decimal UnitPrice { get; set; }
+        public string Description { get; set; }
 
-        //Photos to be add
+        public List<string> Size = 
+
         public byte[] Image { get; set; }
         //To do: add drag and drop feature on the front end --> https://www.dropzonejs.com/
 
@@ -67,6 +71,7 @@ namespace Alpha.Models
         public DayOfWeek DayOfWeek { get; set; }
         public TimeSpan OpenTime { get; set; }
         public TimeSpan CloseTime { get; set; }
+        public int NbAuthorizedOrderPerHour { get; set; }
 
 
         public int RestoId { get; set; }
