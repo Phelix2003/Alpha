@@ -136,20 +136,24 @@ namespace Alpha.Models
             // Configuration by convention
             // Cascade delete enable (automatic)
 
-            // ORDER -- ITEMS 
-            // Relations of Items with Orders 
-            // Many to mnay relation without Cascade delete 
 
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Order>()
-                        .HasMany<Item>(s => s.OrderItemList)
-                        .WithMany(c => c.OrderList)
-                        .Map(cs =>
-                        {
-                            cs.MapLeftKey("ItemList");
-                            cs.MapRightKey("OrderList");
-                            cs.ToTable("OrdersItems");
-                        });
+
+            // ORDER -- ORDEREDITEMS 
+            // Relations of Order to ORderedItems
+            // One to mnay relation without Cascade delete 
+
+            modelBuilder.Entity<OrderedItem>()
+                        .HasRequired<Order>(s => s.CurrentOrder)
+                        .WithMany(g => g.OrderedItems)
+                        .HasForeignKey<int>(s => s.CurrentOrderId);
+
+            // ORDEREDITEMS -- ITEMS 
+            // ONE to Many
+
+            modelBuilder.Entity<OrderedItem>()
+                .HasRequired<Item>(s => s.Item)
+                .WithMany(g => g.OrderedItemList)
+                .HasForeignKey<int>(s => s.ItemId);
         }
 
 

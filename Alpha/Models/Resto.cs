@@ -46,13 +46,24 @@ namespace Alpha.Models
     [Table("MenuItems")]
     public class Item
     {
+        public Item()
+        {
+            Size = new List<string> { "S", "M", "L", "XL", "XXL" };
+        }
+
         public int ItemId { get; set; }
         public string Name { get; set; }
         public bool IsAvailable { get; set; }
         public decimal UnitPrice { get; set; }
         public string Description { get; set; }
 
-        public List<string> Size = 
+        public bool HasSize { get; set; }
+        public List<string> Size { get; }
+        public bool CanBeSalt { get; set; }
+        public bool CanBeHotCold { get; set; }
+        public bool CanHaveMeat { get; set; }
+        public bool CanHaveSauce { get; set; }
+
 
         public byte[] Image { get; set; }
         //To do: add drag and drop feature on the front end --> https://www.dropzonejs.com/
@@ -61,7 +72,7 @@ namespace Alpha.Models
         public int MenuId { get; set; }
         public virtual Menu Menu { get; set; }
 
-        public virtual ICollection<Order> OrderList { get; set; }
+        public virtual ICollection<OrderedItem> OrderedItemList { get; set; }
     }
 
     [Table("RestoSlotTimes")]
