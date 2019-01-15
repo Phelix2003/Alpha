@@ -48,7 +48,6 @@ namespace Alpha.Models
     {
         public Item()
         {
-            Size = new List<string> { "S", "M", "L", "XL", "XXL" };
         }
 
         public int ItemId { get; set; }
@@ -56,13 +55,16 @@ namespace Alpha.Models
         public bool IsAvailable { get; set; }
         public decimal UnitPrice { get; set; }
         public string Description { get; set; }
+        public TypeOfFood TypeOfFood { get; set; }
+
 
         public bool HasSize { get; set; }
-        public List<string> Size { get; }
+        public List<MealSize> AvailableSizes { get; set; }
         public bool CanBeSalt { get; set; }
         public bool CanBeHotCold { get; set; }
         public bool CanHaveMeat { get; set; }
         public bool CanHaveSauce { get; set; }
+
 
 
         public byte[] Image { get; set; }
@@ -75,7 +77,25 @@ namespace Alpha.Models
         public virtual ICollection<OrderedItem> OrderedItemList { get; set; }
     }
 
-    [Table("RestoSlotTimes")]
+
+    public enum TypeOfFood
+    {
+        Frites = 0,
+        Sauce = 1,
+        Snack = 2,
+        Menu = 3
+    }
+
+    public enum MealSize
+    {
+        S = 0,
+        M = 1,
+        L = 2,
+        XL = 3,
+        XXL = 4
+    }
+
+        [Table("RestoSlotTimes")]
     public class SlotTime
     {
         public int SlotTimeId { get; set; }

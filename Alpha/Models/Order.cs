@@ -27,18 +27,23 @@ namespace Alpha.Models
     [Table("OrderedItems")]
     public class OrderedItem
     {
+        public OrderedItem(Order order)
+        {
+            this.
+
+        }
         public int Id { get; set; }
 
         //Link to the Item
-        public virtual int ItemId { get; set; }
-        public virtual Item Item { get; set; }
+        //public virtual int ItemId { get; set; }
+        //public virtual Item Item { get; set; }
 
         // Link to the ORDER
         public virtual int CurrentOrderId { get; set; }
-        public virtual Order CurrentOrder { get; set }
+        public virtual Order CurrentOrder { get; set; }
 
 
-        string SelectedSize { get; set; }
+        MealSize SelectedSize { get; set; }
         bool SelectedSalt { get; set; }
         bool SeelctedHotNotCold { get; set; }
         string SelectedMeat { get; set; }
