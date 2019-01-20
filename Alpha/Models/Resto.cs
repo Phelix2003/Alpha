@@ -56,12 +56,13 @@ namespace Alpha.Models
         public decimal UnitPrice { get; set; }
         public string Description { get; set; }
         public TypeOfFood TypeOfFood { get; set; }
+        // public Brand Brand {get; set; } // TODO to be implemented
 
 
         public bool HasSize { get; set; }
-        public List<MealSize> AvailableSizes { get; set; }
+        public List<SizedMeal> AvailableSizes { get; set; }
         public bool CanBeSalt { get; set; }
-        public bool CanBeHotCold { get; set; }
+        public bool CanBeHotNotCold { get; set; }
         public bool CanHaveMeat { get; set; }
         public bool CanHaveSauce { get; set; }
 
@@ -78,12 +79,25 @@ namespace Alpha.Models
     }
 
 
+    [Table("MenuSizedMeal")]
+    public class SizedMeal
+    {
+        
+        public int Id { get; set; }
+        public MealSize MealSize { get; set; }
+        public decimal Price { get; set; }
+
+        public int ItemId { get; set; }
+        public virtual Item Item { get; set; }
+    }
+
     public enum TypeOfFood
     {
         Frites = 0,
         Sauce = 1,
         Snack = 2,
-        Menu = 3
+        Meal = 3,
+        Menu = 4
     }
 
     public enum MealSize

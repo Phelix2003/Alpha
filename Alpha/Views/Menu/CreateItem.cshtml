@@ -31,6 +31,35 @@
     </div>
 
     <div class="form-group">
+        @Html.LabelFor(m => m.SelectedTypeOfFood, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.SelectedTypeOfFood, new SelectList(Model.TypeOfFoods))
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.HasSize, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(m => m.HasSize, new { @class = "checkbox-inline", @id = "HasSizeChkBx"})
+        </div>
+    </div>
+
+    <div class="form-group" id="SizedMeal" style="display:none">
+        <table  class="table">
+            <tr>
+                <th>
+                    Choisissez les tailles disponnibles
+                </th>
+                <th>
+                    Prix
+                </th>
+            </tr>
+            @Html.EditorFor(m => m.SelectedSizedMeals)
+        </table>
+    </div>
+
+
+    <div class="form-group" id="NotSizedMeal">
         @Html.LabelFor(m => m.UnitPrice, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
@@ -71,6 +100,20 @@
             if (this.files[0].size > 15000000) {
                 alert("Oups. La taille de l'image ne doit pas dépasser 15Mb. Essayer une autre.");
                 this.value = "";
+            };
+        };
+
+        var sizedMeal = document.getElementById("HasSizeChkBx");
+        sizedMeal.onchange = function () {
+            console.log("went in the function");
+            var disp = document.getElementById("HasSizeChkBx");
+            if (disp.checked === true) {
+                document.getElementById('SizedMeal').style.display = "block";
+                document.getElementById('NotSizedMeal').style.display = "none";
+            }
+            else {
+                document.getElementById('SizedMeal').style.display = "none";
+                document.getElementById('NotSizedMeal').style.display = "block";
             };
         };
     </script>

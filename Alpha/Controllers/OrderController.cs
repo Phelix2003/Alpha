@@ -53,6 +53,10 @@ namespace Alpha.Controllers
             {
                 string UserId = User.Identity.GetUserId();
                 ApplicationUser user = await UserManager.FindByIdAsync(UserId);
+                if(user == null)
+                {
+                    return RedirectToAction("LogOff","Account");
+                }
                 Order order = await DbManager.Orders.FirstOrDefaultAsync(r => r.OrderOwner.Id == user.Id);
 
                 if (order == null)
@@ -69,8 +73,9 @@ namespace Alpha.Controllers
                     DbManager.Orders.Add(order);
                     await DbManager.SaveChangesAsync();
 
+                    ICollection<ItemView> itemsView = CreateItemsViewFromOrder(order);
                     return View(new OrderViewModels {
-                        ListOfProposedItems = order.Resto.Menu.ItemList,
+                        ListOfProposedItems = itemsView,
                         RestoId = order.Resto.Id,
                         Resto_Description = order.Resto.Description,
                         Resto_Name = order.Resto.Name,
@@ -90,7 +95,7 @@ namespace Alpha.Controllers
                     {
                         // This user has started an order previously but did add anithing in it.
                         // in case of an order has been created but not startd (no article in the list) then the order is recreated with a fresh new one;
-                        if (order.OrderItemList.Count == 0 ||  order.OrderItemList == null)
+                        if (order.OrderedItems.Count == 0 ||  order.OrderedItems == null)
                         {
                             order.IsOrderCompleted = false;
                             order.OrderOpenTime = DateTime.Now;
@@ -98,9 +103,11 @@ namespace Alpha.Controllers
                             order.Resto = resto;
 
                             await DbManager.SaveChangesAsync();
+                            ICollection<ItemView> itemsView = CreateItemsViewFromOrder(order);
+
                             return View(new OrderViewModels
                             {
-                                ListOfProposedItems = order.Resto.Menu.ItemList,
+                                ListOfProposedItems = itemsView,
                                 RestoId = order.Resto.Id,
                                 Resto_Description = order.Resto.Description,
                                 Resto_Name = order.Resto.Name,
@@ -114,9 +121,10 @@ namespace Alpha.Controllers
                             // If the restaurant is the same of the order ... Continue progressing in the order
                             if (order.Resto.Id == RestoId)
                             {
+                                ICollection<ItemView> itemsView = CreateItemsViewFromOrder(order);
                                 return View(new OrderViewModels
                                 {
-                                    ListOfProposedItems = order.Resto.Menu.ItemList,
+                                    ListOfProposedItems =itemsView,
                                     RestoId = order.Resto.Id,
                                     Resto_Description = order.Resto.Description,
                                     Resto_Name = order.Resto.Name,
@@ -127,7 +135,7 @@ namespace Alpha.Controllers
                             else
                             // Otherwise propose to the user to cancel ongoin order to start  a new one.
                             {
-                                return RedirectToAction("DeleteExestingOrder", new { id = order.Id });
+                                return RedirectToAction("DeleteExestingOrder", new { OrderId = order.Id });
                             }
 
                         }
@@ -147,9 +155,39 @@ namespace Alpha.Controllers
 
             if (order != null && item != null)
             {
-                order.OrderItemList.Add(item);
-                await DbManager.SaveChangesAsync();
+                OrderedItem orderedItem = null;
+                // Check if this item is already present in the current order. (with the same configuration)
+                if (order.OrderedItems != null)
+                {
+                    foreach (var element in order.OrderedItems)
+                    {
+                        if (element.ItemId == ItemId)
+                        {
+                            orderedItem = element;
+                        }
+                    }
+                }                 
 
+                if (orderedItem != null)
+                { 
+                    //If the same Items as already been ordered before. add 1 to quantity
+                    orderedItem.Quantity++;
+                }
+                else
+                {
+                    //If this items has not been ordered before then created a new orderedItem 
+                    orderedItem = new OrderedItem
+                    {
+                        Quantity = 1
+                    };
+
+                    orderedItem.Item = item;
+                    orderedItem.CurrentOrder = order;                    
+                                 
+                }
+
+                order.OrderedItems.Add(orderedItem);
+                await DbManager.SaveChangesAsync();
                 return RedirectToAction("Index", new { RestoId = order.Resto.Id });
             }
 
@@ -159,6 +197,40 @@ namespace Alpha.Controllers
         public async Task<ActionResult> ViewOngoinOrder(int OrderId)
         {
             return View();
+        }
+
+        public async Task<ActionResult> DeleteExestingOrder (int OrderId)
+        {
+            Order order = await DbManager.Orders.FirstOrDefaultAsync(m => m.Id == OrderId);
+
+            if(order != null)
+            {
+                return View(order);
+            }                       
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+        public ICollection<ItemView> CreateItemsViewFromOrder(Order order)
+        {
+            ICollection<ItemView> itemsView = new List<ItemView>();
+            foreach (var item in order.Resto.Menu.ItemList)
+            {
+                ItemView itemView = new ItemView(item);
+
+                // TODO This part need to be optimized; 
+                List<OrderedItem> orderedItems = new List<OrderedItem>();
+                foreach(var element in order.OrderedItems)
+                {
+                    if (item.ItemId == element.ItemId)
+                    {
+                        orderedItems.Add(element);
+                    }
+
+                }
+                itemView.Quantity = orderedItems.Select(i => i.Quantity).Sum();
+                itemsView.Add(itemView);
+            }
+            return itemsView;
         }
 
 

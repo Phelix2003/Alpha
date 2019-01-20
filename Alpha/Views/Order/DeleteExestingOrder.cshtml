@@ -1,0 +1,21 @@
+﻿@model Alpha.Models.Order
+@{
+    ViewBag.Title = "DeleteExestingOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Vous avez une commande en cours au restaurant @Model.Resto.Name. Voulez-vous l'effacer?</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Abandoner cette commande" class="btn btn-default" /> |
+        @Html.ActionLink("Retour à la commande", "Index")
+    </div>
+}
+
+
+
+

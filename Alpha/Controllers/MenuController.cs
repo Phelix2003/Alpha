@@ -124,7 +124,7 @@ namespace Alpha.Controllers
                 CreateItemViewModel itemViewModel = new CreateItemViewModel()
                 {
                     IsAvailable = true,
-                    MenuId = Id
+                    MenuId = Id                   
                 };
                 return View(itemViewModel);
             }
@@ -151,9 +151,10 @@ namespace Alpha.Controllers
                         {
                             IsAvailable = itemViewModel.IsAvailable,
                             Name = itemViewModel.Name,
-                            Description = itemViewModel.Description,
+                            Description = itemViewModel.Description ?? "",
                             UnitPrice = Convert.ToDecimal(itemViewModel.UnitPrice, new CultureInfo("en-US")),
-                            Image = ProcessFileToImage(itemViewModel.Image)
+                            Image = ProcessFileToImage(itemViewModel.Image),
+                            TypeOfFood = itemViewModel.SelectedTypeOfFood
                         };
 
                         if (item.Image == null)

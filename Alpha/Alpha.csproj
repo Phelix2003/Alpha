@@ -344,6 +344,8 @@
     <Content Include="Views\Menu\CreateMenu.cshtml" />
     <Content Include="Views\Restaurant\AddSlotTimeToRestaurant.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\DeleteExestingOrder.cshtml" />
+    <Content Include="Views\Menu\EditorTemplates\SelectedSizedMealViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

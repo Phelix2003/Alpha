@@ -20,7 +20,7 @@
                 <div class="card" style="width: 18rem;">
                     <img class="card-img-top" src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="Card image cap">
                     <div class="card-body">
-                        <h5 class="card-title">@item.Name.ToString()</h5>
+                        <h2 class="card-title">@item.Name.ToString()</h2> <h4>@if (item.Quantity != 0){ <text>(</text> @item.Quantity <text>)</text> } </h4>
                         <p class="card-text">@item.Description.ToString()</p>
                         <a href="@Url.Action("AddItemToOrder", "Order", new { ItemId = item.ItemId, OrderId = Model.OrderId })" class="btn btn-primary">Ajouter</a>
                     </div>
@@ -28,8 +28,6 @@
             }
         </div>
     </div>
-
-
 </div>
 
     

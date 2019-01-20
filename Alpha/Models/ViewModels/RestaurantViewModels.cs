@@ -137,12 +137,6 @@ namespace Alpha.Models
 
     public class AddChefToRestaurantViewModel
     {
-        public String RestoName { get; set; }
-
-        public List<SelectUserRestoViewModel> User { get; set; }
-
-        public bool chefOrNotAdmin { get; set; }
-
         public AddChefToRestaurantViewModel()
         {
             this.User = new List<SelectUserRestoViewModel>();
@@ -151,7 +145,15 @@ namespace Alpha.Models
         public IEnumerable<string> getSelectedIds()
         {
             return (from p in this.User where p.Selected select p.Id).ToList();
-        }        
+        }
+
+        public String RestoName { get; set; }
+
+        public List<SelectUserRestoViewModel> User { get; set; }
+
+        public bool chefOrNotAdmin { get; set; }
+
+       
     }
 
     public class SelectUserRestoViewModel

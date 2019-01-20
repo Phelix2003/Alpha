@@ -1,0 +1,13 @@
+﻿@model Alpha.Models.SelectedSizedMealViewModel
+
+<tr>
+    <td>
+        @Html.CheckBoxFor(m => m.Selected)
+        @Model.SizedMeal.MealSize
+
+    </td>
+    <td>
+        @Html.TextBoxFor(m => m.PriceText)
+    </td>
+</tr>
+

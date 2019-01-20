@@ -334,21 +334,26 @@
         </tr>
         @if (Model.menu != null)
         {
-            foreach (var item in Model.menu.ItemList)
+            if (Model.menu.ItemList != null)
             {
-                <tr>
-                    <td>
-                        <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UnitPrice)
-                        @Html.ValidationMessageFor(modelItem => item.UnitPrice)
-                    </td>
-                </tr>
+                foreach (var item in Model.menu.ItemList)
+                {
+                    <tr>
+                        <td>
+                            <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitPrice)
+                            @Html.ValidationMessageFor(modelItem => item.UnitPrice)
+                        </td>
+                    </tr>
+                }
+
             }
+
         }
     </table>
 

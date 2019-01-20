@@ -154,6 +154,14 @@ namespace Alpha.Models
                 .HasRequired<Item>(s => s.Item)
                 .WithMany(g => g.OrderedItemList)
                 .HasForeignKey<int>(s => s.ItemId);
+
+            // Item -- SizedMeal
+            // ONE to Many
+
+            modelBuilder.Entity<SizedMeal>()
+                .HasRequired<Item>(s => s.Item)
+                .WithMany(g => g.AvailableSizes)
+                .HasForeignKey<int>(s => s.ItemId);
         }
 
 
@@ -168,7 +176,7 @@ namespace Alpha.Models
         public DbSet<Item> Items { set; get; }  
         public DbSet<SlotTime> SlotTimes { set; get; }
         public DbSet<Order> Orders { set; get; }
-     
+        public DbSet<OrderedItem> OrderedItems { get; set; }     
 
     }
 
