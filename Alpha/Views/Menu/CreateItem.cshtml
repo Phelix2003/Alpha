@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create a new article</h2>
+<h2>Ajouter un article</h2>
 
 @using (Html.BeginForm("CreateItem", "Menu", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
@@ -33,19 +33,20 @@
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedTypeOfFood, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.SelectedTypeOfFood, new SelectList(Model.TypeOfFoods))
+            @Html.DropDownListFor(m => m.SelectedTypeOfFood, new SelectList(Model.TypeOfFoods), new { @id = "TypeOfFood" })
         </div>
     </div>
 
     <div class="form-group">
         @Html.LabelFor(m => m.HasSize, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.CheckBoxFor(m => m.HasSize, new { @class = "checkbox-inline", @id = "HasSizeChkBx"})
+            @Html.CheckBoxFor(m => m.HasSize, new { @class = "checkbox-inline", @id = "HasSizeChkBx" })
         </div>
     </div>
 
     <div class="form-group" id="SizedMeal" style="display:none">
-        <table  class="table">
+        @Html.ValidationMessageFor(model => model.SelectedSizedMeals)
+        <table class="table">
             <tr>
                 <th>
                     Choisissez les tailles disponnibles
@@ -65,14 +66,31 @@
             @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
         </div>
     </div>
+    <div class="form-group" id="SauceCBArea" style="display:block">
+        @Html.LabelFor(m => m.CanHaveSauce, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(m => m.CanHaveSauce, new { @class = "checkbox-inline" })
+        </div>
+
+    </div>
+    <div class="form-group" id="MeatCBArea" style="display:none">
+        @Html.LabelFor(m => m.CanHaveMeat, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(m => m.CanHaveMeat, new { @class = "checkbox-inline" })
+        </div>
+    </div>
+    <div class="form-group" id="HotColdCBArea" style="display:none">
+        @Html.LabelFor(m => m.CanBeHotNotCold, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(m => m.CanBeHotNotCold, new { @class = "checkbox-inline" })
+        </div>
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.IsAvailable, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.CheckBoxFor(m => m.IsAvailable, new { @class = "checkbox-inline" })
         </div>
     </div>
-
-
 
     <div class="form-group">
         @Html.LabelFor(m => m.Image, new { @class = "col-md-2 control-label" })
@@ -115,6 +133,46 @@
                 document.getElementById('SizedMeal').style.display = "none";
                 document.getElementById('NotSizedMeal').style.display = "block";
             };
+        };
+
+        var typeOfFood = document.getElementById("TypeOfFood");
+        typeOfFood.onchange = function () {
+            var disp = document.getElementById("TypeOfFood");
+            console.log("went in the function Type of food");
+            console.log(disp.value);
+            switch (disp.value) {
+                case "Frites":
+                    document.getElementById('SauceCBArea').style.display = "block";
+                    document.getElementById('MeatCBArea').style.display = "none";
+                    document.getElementById('HotColdCBArea').style.display = "none";
+                    break;
+                case "Sauce":
+                    document.getElementById('SauceCBArea').style.display = "none";
+                    document.getElementById('MeatCBArea').style.display = "none";
+                    document.getElementById('HotColdCBArea').style.display = "none";
+                    break;
+                case "Menu":
+                    document.getElementById('SauceCBArea').style.display = "none";
+                    document.getElementById('MeatCBArea').style.display = "none";
+                    document.getElementById('HotColdCBArea').style.display = "none";
+                    break;
+                case "Meal":
+                    document.getElementById('SauceCBArea').style.display = "block";
+                    document.getElementById('MeatCBArea').style.display = "block";
+                    document.getElementById('HotColdCBArea').style.display = "none";
+                    break;
+                case "Snack":
+                    document.getElementById('SauceCBArea').style.display = "none";
+                    document.getElementById('MeatCBArea').style.display = "none";
+                    document.getElementById('HotColdCBArea').style.display = "block";
+                    break;
+                case "Drink":
+                    document.getElementById('SauceCBArea').style.display = "none";
+                    document.getElementById('MeatCBArea').style.display = "none";
+                    document.getElementById('HotColdCBArea').style.display = "none";
+                    break;
+                default:
+            }
         };
     </script>
 }

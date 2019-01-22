@@ -124,7 +124,7 @@ namespace Alpha.Controllers
                 CreateItemViewModel itemViewModel = new CreateItemViewModel()
                 {
                     IsAvailable = true,
-                    MenuId = Id                   
+                    MenuId = Id                 
                 };
                 return View(itemViewModel);
             }
@@ -147,6 +147,38 @@ namespace Alpha.Controllers
                 {
                     if (itemViewModel.Image != null)
                     {
+                        // Check for input validation
+
+                        if(itemViewModel.SelectedTypeOfFood == TypeOfFood.Frites)
+                        {
+                            if(itemViewModel.HasSize == false)
+                            {
+                                decimal UnitPrice;
+                                if (decimal.TryParse(itemViewModel.UnitPrice, out UnitPrice))
+                                {
+                                    if (UnitPrice <0 || UnitPrice >= 100)
+                                    {
+                                        ModelState.AddModelError("UnitPrice", "Introduisé un prix valide entre 0 et 100 EUR");
+                                        return View(itemViewModel);
+                                    }
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("UnitPrice", "Introduisé un nombre valide");
+                                    return View(itemViewModel);
+                                }
+                            }
+                            else
+                            {
+                                if(itemViewModel.SelectedSizedMeals.Count(r => r.Selected == true)==0)
+                                {
+                                    ModelState.AddModelError("SelectedSizedMeals", "Vous devez choisir au moins une taille");
+                                    return View(itemViewModel);
+                                }
+                            }
+
+                        }
+
                         Item item = new Item()
                         {
                             IsAvailable = itemViewModel.IsAvailable,

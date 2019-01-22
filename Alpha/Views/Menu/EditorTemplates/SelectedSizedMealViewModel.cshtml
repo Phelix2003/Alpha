@@ -4,7 +4,8 @@
     <td>
         @Html.CheckBoxFor(m => m.Selected)
         @Model.SizedMeal.MealSize
-
+        @Html.HiddenFor(m => m.SizedMeal.MealSize)
+        @Html.HiddenFor(m => m.SizedMeal.Id)
     </td>
     <td>
         @Html.TextBoxFor(m => m.PriceText)

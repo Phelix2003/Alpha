@@ -59,12 +59,10 @@ namespace Alpha.Models
         [Display(Name = "Article Description")]
         public string Description { get; set; }
 
-        [Display(Name = "Should this article be available?")]
+        [Display(Name = "Rendre disponnible?")]
         public bool IsAvailable { get; set; }
 
-        [Display(Name = "Article price")]
-        [Required(ErrorMessage = "Expenses is required.")]
-        [RegularExpression(@"^[0-9]+(\.[0-9]{1,2})$", ErrorMessage = "Valid Decimal number with maximum 2 decimal places.")]
+        [Display(Name = "Prix")]
         public string UnitPrice { get; set; }
 
         [Display(Name = "Sélectionner le type d'article")]
@@ -76,9 +74,16 @@ namespace Alpha.Models
 
         [Display(Name = "Cet article dispose de plusieurs tailles?")]
         public bool HasSize { get; set; }
+
         public bool CanBeSalt { get; set; }
+
+        [Display(Name = "Peut-il être mangé chaud ou froid?")]
         public bool CanBeHotNotCold { get; set; }
+
+        [Display(Name = "Une viande peut être associée")]
         public bool CanHaveMeat { get; set; }
+
+        [Display(Name = "Une sauce peut être associée")]
         public bool CanHaveSauce { get; set; }
 
         public int MenuId { get; set; }

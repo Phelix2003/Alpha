@@ -97,7 +97,8 @@ namespace Alpha.Models
         Sauce = 1,
         Snack = 2,
         Meal = 3,
-        Menu = 4
+        Menu = 4,
+        Boisson = 5
     }
 
     public enum MealSize
