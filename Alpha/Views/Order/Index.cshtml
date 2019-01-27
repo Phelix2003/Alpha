@@ -12,21 +12,25 @@
 
     <hr />
     <h2> Menu </h2>
-
+    @{int col = 0;}
     <div class="container">
-        <div class="col-sm-6">
-            @foreach (var item in Model.ListOfProposedItems)
-            {
+        @foreach (var item in Model.ListOfProposedItems)
+        {
+        <div class="row">
+            <div class="col-sm">
                 <div class="card" style="width: 18rem;">
                     <img class="card-img-top" src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="Card image cap">
                     <div class="card-body">
-                        <h2 class="card-title">@item.Name.ToString()</h2> <h4>@if (item.Quantity != 0){ <text>(</text> @item.Quantity <text>)</text> } </h4>
+                        <h2 class="card-title">@item.Name.ToString()</h2> <h4>@if (item.Quantity != 0)
+                        {<text>(</text> @item.Quantity <text>)</text>} </h4>
                         <p class="card-text">@item.Description.ToString()</p>
                         <a href="@Url.Action("AddItemToOrder", "Order", new { ItemId = item.ItemId, OrderId = Model.OrderId })" class="btn btn-primary">Ajouter</a>
                     </div>
                 </div>
-            }
+            </div>
+
         </div>
+        }
     </div>
 </div>
 

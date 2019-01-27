@@ -213,7 +213,7 @@ namespace Alpha.Controllers
         public ICollection<ItemView> CreateItemsViewFromOrder(Order order)
         {
             ICollection<ItemView> itemsView = new List<ItemView>();
-            foreach (var item in order.Resto.Menu.ItemList)
+            foreach (var item in order.Resto.Menu.ItemList.Where(r => r.DeletedOn == null))
             {
                 ItemView itemView = new ItemView(item);
 
@@ -225,7 +225,6 @@ namespace Alpha.Controllers
                     {
                         orderedItems.Add(element);
                     }
-
                 }
                 itemView.Quantity = orderedItems.Select(i => i.Quantity).Sum();
                 itemsView.Add(itemView);
