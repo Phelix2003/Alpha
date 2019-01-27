@@ -63,7 +63,7 @@
     <div class="form-group" id="NotSizedMeal">
         @Html.LabelFor(m => m.UnitPrice, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.UnitPrice, new { @class = "form-control" })   <div id="MeatPrice" style="display:none"> (hors prix viande) </div>
         </div>
     </div>
     <div class="form-group" id="SauceCBArea" style="display:block">
@@ -76,7 +76,7 @@
     <div class="form-group" id="MeatCBArea" style="display:none">
         @Html.LabelFor(m => m.CanHaveMeat, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.CheckBoxFor(m => m.CanHaveMeat, new { @class = "checkbox-inline" })
+            @Html.CheckBoxFor(m => m.CanHaveMeat, new { @class = "checkbox-inline", @id = "CanChoiceMeat" })
         </div>
     </div>
     <div class="form-group" id="HotColdCBArea" style="display:none">
@@ -130,7 +130,6 @@
         document.onchange = function () { Refresh_All() };
 
         function Refresh_All() {
-            console.log("went in the function");
             var disp = document.getElementById("HasSizeChkBx");
             if (disp.checked === true) {
                 document.getElementById('SizedMeal').style.display = "block";
@@ -141,9 +140,15 @@
                 document.getElementById('NotSizedMeal').style.display = "block";
             };
 
+            var disp = document.getElementById("CanChoiceMeat");
+            if (disp.checked === true) {
+                document.getElementById('MeatPrice').style.display = "block";
+            }
+            else {
+                document.getElementById('MeatPrice').style.display = "none";
+            };
+
             var disp = document.getElementById("TypeOfFood");
-            console.log("went in the function Type of food");
-            console.log(disp.value);
             switch (disp.value) {
                 case "Frites":
                     document.getElementById('SauceCBArea').style.display = "block";
@@ -153,10 +158,10 @@
                 case "Sauce":
                     document.getElementById('SauceCBArea').style.display = "none";
                     document.getElementById('MeatCBArea').style.display = "none";
-                    document.getElementById('HotColdCBArea').style.display = "none";
+                    document.getElementById('HotColdCBArea').style.display = "block";
                     break;
                 case "Menu":
-                    document.getElementById('SauceCBArea').style.display = "none";
+                    document.getElementById('SauceCBArea').style.display = "block";
                     document.getElementById('MeatCBArea').style.display = "none";
                     document.getElementById('HotColdCBArea').style.display = "none";
                     break;

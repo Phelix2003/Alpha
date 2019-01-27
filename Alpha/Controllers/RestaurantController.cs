@@ -85,7 +85,7 @@ namespace Alpha.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var resto = await DbManager.Restos.FirstAsync(r => r.Id == id);
+            var resto = await DbManager.Restos.Include("Menu").FirstAsync(r => r.Id == id);
             if (resto == null)
             {
                 return HttpNotFound();
@@ -103,7 +103,8 @@ namespace Alpha.Controllers
                 AdministratorsList = adminList,
                 Address = resto.Address,
                 menu = resto.Menu,
-                OpeningTimes = resto.OpeningTimes                
+                OpeningTimes = resto.OpeningTimes,
+                
             });
         }
 

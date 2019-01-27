@@ -330,27 +330,247 @@
             <th>
                 @Html.Label("Prix", new { @class = "control-label col-md-4" })
             </th>
+            <th></th>
 
         </tr>
         @if (Model.menu != null)
         {
             if (Model.menu.ItemList != null)
             {
-                foreach (var item in Model.menu.ItemList)
+                foreach (var item in Model.menu.ItemList.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Frites))
                 {
-                    <tr>
-                        <td>
-                            <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UnitPrice)
-                            @Html.ValidationMessageFor(modelItem => item.UnitPrice)
-                        </td>
-                    </tr>
+                    if (item.DeletedOn == null)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+                            </td>
+                            <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @if (!item.HasSize)
+                                {
+                                    <div class="pull-right">
+                                        @Html.DisplayFor(modelItem => item.UnitPrice) <text> € </text>
+                                    </div>
+                                }
+                                else
+                                {
+                                    foreach (var size in item.AvailableSizes)
+                                    {
+                                    <div class="pull-right">
+
+                                        @(size.MealSize.ToString()) <text> : </text> @(size.Price.ToString()) <text> € </text>
+                                    </div>
+                                    <br />                                           
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Remove", "DeleteItem", "Menu", new { ItemId = item.ItemId, restoId = Model.Id }, null)
+
+                            </td>
+                        </tr>
+                    }
                 }
+
+                foreach (var item in Model.menu.ItemList.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Sauce))
+                {
+                    if (item.DeletedOn == null)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+                            </td>
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.Name) 
+
+
+                            </td>
+                            <td>
+                                @if (!item.HasSize)
+                                {
+                                    <div class="pull-right">
+                                        @Html.DisplayFor(modelItem => item.UnitPrice) <text> € </text>
+                                    </div>
+                                }
+                                else
+                                {
+                                    foreach (var size in item.AvailableSizes)
+                                    {
+                                        <div class="pull-right">
+                                            @(size.MealSize.ToString()) <text> : </text> @(size.Price.ToString()) <text> € </text>
+                                        </div>
+                                        <br />
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Remove", "DeleteItem", "Menu", new { ItemId = item.ItemId, restoId = Model.Id }, null)
+
+                            </td>
+                        </tr>
+                    }
+
+                }
+
+                foreach (var item in Model.menu.ItemList.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Snack))
+                {
+                    if (item.DeletedOn == null)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @if (!item.HasSize)
+                                {
+                                    <div class="pull-right">
+                                        @Html.DisplayFor(modelItem => item.UnitPrice) <text> € </text>
+                                    </div> }
+                                else
+                                {
+                                    foreach (var size in item.AvailableSizes)
+                                    {
+                                        <div class="pull-right">
+                                            @(size.MealSize.ToString()) <text> : </text> @(size.Price.ToString()) <text> € </text>
+                                        </div>
+                                        <br />
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Remove", "DeleteItem", "Menu", new { ItemId = item.ItemId, restoId = Model.Id }, null)
+
+                            </td>
+                        </tr>
+                    }
+
+                }
+
+                foreach (var item in Model.menu.ItemList.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Meal))
+                {
+                    if (item.DeletedOn == null)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)                              
+                            </td>
+                            <td>
+                                @if (!item.HasSize)
+                                {
+                                    <div class="pull-right">
+                                        @Html.DisplayFor(modelItem => item.UnitPrice) <text> € </text>
+                                    </div>
+                                }
+                                else
+                                {
+                                    foreach (var size in item.AvailableSizes)
+                                    {
+                                        <div class="pull-right">
+                                            @(size.MealSize.ToString()) <text> : </text> @(size.Price.ToString()) <text> € </text>
+                                        </div>
+                                        <br />
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Remove", "DeleteItem", "Menu", new { ItemId = item.ItemId, restoId = Model.Id }, null)
+
+                            </td>
+                        </tr>
+                    }
+
+                }
+
+                foreach (var item in Model.menu.ItemList.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Boisson))
+                {
+                    if (item.DeletedOn == null)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name) 
+                            </td>
+                            <td>
+                                @if (!item.HasSize)
+                                {
+                                    <div class="pull-right">
+                                        @Html.DisplayFor(modelItem => item.UnitPrice) <text> € </text>
+                                    </div>
+                                }
+                                else
+                                {
+                                    foreach (var size in item.AvailableSizes)
+                                    {
+                                        <div class="pull-right">
+                                            @(size.MealSize.ToString()) <text> : </text> @(size.Price.ToString()) <text> € </text>
+                                        </div>
+                                        <br />
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Remove", "DeleteItem", "Menu", new { ItemId = item.ItemId, restoId = Model.Id }, null)
+
+                            </td>
+                        </tr>
+                    }
+
+                }
+                foreach (var item in Model.menu.ItemList.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Menu))
+                {
+                    if (item.DeletedOn == null)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="No picture" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @if (!item.HasSize)
+                                {
+                                    <div class="pull-right">
+                                        @Html.DisplayFor(modelItem => item.UnitPrice) <text> € </text>
+                                    </div>
+                                }
+                                else
+                                {
+                                    foreach (var size in item.AvailableSizes)
+                                    {
+                                        <div class="pull-right">
+                                            @(size.MealSize.ToString()) <text> : </text> @(size.Price.ToString()) <text> € </text>
+                                        </div>
+                                        <br />
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Remove", "DeleteItem", "Menu", new { ItemId = item.ItemId, restoId = Model.Id }, null)
+
+                            </td>
+                        </tr>
+                    }
+
+                }
+
 
             }
 

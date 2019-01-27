@@ -56,6 +56,7 @@ namespace Alpha.Controllers
 
             }
 
+
             List<Resto> restoList = DbManager.Restos.ToList();
 
             return View(restoList);

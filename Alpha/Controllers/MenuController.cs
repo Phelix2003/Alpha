@@ -154,9 +154,12 @@ namespace Alpha.Controllers
                             Description = itemViewModel.Description ?? "",
                             Image = ProcessFileToImage(itemViewModel.Image),
                             TypeOfFood = itemViewModel.SelectedTypeOfFood,
-                            AvailableSizes = new List<SizedMeal>()
+                            AvailableSizes = new List<SizedMeal>(),
+                            HasSize = itemViewModel.HasSize,
+                            CanBeHotNotCold = itemViewModel.CanBeHotNotCold
                             
                         };
+
 
                         // Check for input validation
                         decimal UnitPrice;
@@ -166,61 +169,57 @@ namespace Alpha.Controllers
                         CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
 
                         //Item Price Validation / processing for size and not sized food. 
-                        // Sizable food : Frites / Meal 
-                        if (itemViewModel.SelectedTypeOfFood == TypeOfFood.Frites
-                            || itemViewModel.SelectedTypeOfFood == TypeOfFood.Meal)
+
+                        if(itemViewModel.HasSize == false)
                         {
-                            // Item Price Processing 
-                            if(itemViewModel.HasSize == false)
+                            // "one size" case processing
+                            if (decimal.TryParse(itemViewModel.UnitPrice, style, culture,  out UnitPrice))
                             {
-                                // "one size" case processing
-                                if (decimal.TryParse(itemViewModel.UnitPrice, style, culture,  out UnitPrice))
+                                if (UnitPrice <0 || UnitPrice >= 100)
                                 {
-                                    if (UnitPrice <0 || UnitPrice >= 100)
-                                    {
-                                        ModelState.AddModelError("UnitPrice", "Introduisez un prix valide entre 0 et 100 EUR");
-                                        return View(itemViewModel);
-                                    }
-                                }
-                                else
-                                {
-                                    ModelState.AddModelError("UnitPrice", "Introduisez un nombre valide");
+                                    ModelState.AddModelError("UnitPrice", "Introduisez un prix valide entre 0 et 100 EUR");
                                     return View(itemViewModel);
                                 }
-                                // Data has been validated. 
-                                item.UnitPrice = UnitPrice;
                             }
                             else
                             {
-                                // "Multiple size" case processing.
-                                if(itemViewModel.SelectedSizedMeals.Count(r => r.Selected == true)==0)
+                                ModelState.AddModelError("UnitPrice", "Introduisez un nombre valide");
+                                return View(itemViewModel);
+                            }
+                            // Data has been validated. 
+                            item.UnitPrice = UnitPrice;
+                        }
+                        else
+                        {
+                            // "Multiple size" case processing.
+                            if(itemViewModel.SelectedSizedMeals.Count(r => r.Selected == true)==0)
+                            {
+                                ModelState.AddModelError("SelectedSizedMeals", "Vous devez choisir au moins une taille");
+                                return View(itemViewModel);
+                            }
+                            foreach (var s_item in itemViewModel.SelectedSizedMeals)
+                            {
+                                if(s_item.Selected)
                                 {
-                                    ModelState.AddModelError("SelectedSizedMeals", "Vous devez choisir au moins une taille");
-                                    return View(itemViewModel);
-                                }
-                                foreach (var s_item in itemViewModel.SelectedSizedMeals)
-                                {
-                                    if(s_item.Selected)
+                                    if (decimal.TryParse(s_item.PriceText, style, culture, out UnitPrice))
                                     {
-                                        if (decimal.TryParse(s_item.PriceText, style, culture, out UnitPrice))
+                                        if (UnitPrice < 0 || UnitPrice >= 100)
                                         {
-                                            if (UnitPrice < 0 || UnitPrice >= 100)
-                                            {
-                                                ModelState.AddModelError("MultiplePrice", "Introduisez un prix valide entre 0 et 100 EUR");
-                                                return View(itemViewModel);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            ModelState.AddModelError("MultiplePrice", "Introduisez un nombre valide");
+                                            ModelState.AddModelError("MultiplePrice", "Introduisez un prix valide entre 0 et 100 EUR");
                                             return View(itemViewModel);
                                         }
-                                        // Data has been validated. 
-                                        item.AvailableSizes.Add(new SizedMeal { Price = UnitPrice, MealSize = s_item.SizedMeal.MealSize });
                                     }
+                                    else
+                                    {
+                                        ModelState.AddModelError("MultiplePrice", "Introduisez un nombre valide");
+                                        return View(itemViewModel);
+                                    }
+                                    // Data has been validated. 
+                                    item.AvailableSizes.Add(new SizedMeal { Price = UnitPrice, MealSize = s_item.SizedMeal.MealSize });
                                 }
                             }
                         }
+                        
                         if (item.Image == null)
                         {
                             ViewBag.Message = "Le format de l'image n'est pas correct";
@@ -231,7 +230,6 @@ namespace Alpha.Controllers
                             ViewBag.Message = "File uploaded successfully";
                         }
 
-                        DbManager.Items.Add(item);
                         menu.ItemList.Add(item);
                         await DbManager.SaveChangesAsync();
                         ViewBag.Message = "File uploaded successfully";
@@ -310,6 +308,18 @@ namespace Alpha.Controllers
             return View("EditItem", new { id = itemViewModel.ItemId });
         }
 
+        public async Task<ActionResult> DeleteItem(int itemId, int restoId)
+        {
+            Item item = await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == itemId);
+
+            if(item != null)
+            {
+                item.DeletedOn = DateTime.Now;
+                await DbManager.SaveChangesAsync();
+                return RedirectToAction("Edit", "Restaurant", new { id = restoId });
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
 
 
         private byte[] imageToByteArray(Image imageIn)

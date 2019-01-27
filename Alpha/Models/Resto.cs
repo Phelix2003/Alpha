@@ -48,19 +48,23 @@ namespace Alpha.Models
     {
         public Item()
         {
+            DeletedOn = null;
         }
 
         public int ItemId { get; set; }
         public string Name { get; set; }
         public bool IsAvailable { get; set; }
+        public DateTime? DeletedOn { get; set; }
+
         public decimal UnitPrice { get; set; }
         public string Description { get; set; }
         public TypeOfFood TypeOfFood { get; set; }
-        // public Brand Brand {get; set; } // TODO to be implemented
+        public string Brand { get; set; }
+        // public Brand Brand {get; set; } // TODO to be implemented with link to supplier table
 
 
         public bool HasSize { get; set; }
-        public List<SizedMeal> AvailableSizes { get; set; }
+        public virtual List<SizedMeal> AvailableSizes { get; set; }
         public bool CanBeSalt { get; set; }
         public bool CanBeHotNotCold { get; set; }
         public bool CanHaveMeat { get; set; }
@@ -73,6 +77,7 @@ namespace Alpha.Models
 
         //one to one relation by convention
         public int MenuId { get; set; }
+
         public virtual Menu Menu { get; set; }
 
         public virtual ICollection<OrderedItem> OrderedItemList { get; set; }
