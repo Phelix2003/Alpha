@@ -23,7 +23,8 @@ namespace Alpha.Models
 
         //User Customization here    
         [Display(Name = "Registrated on")]
-        public DateTime? RegisterDate { get; set; }
+        public DateTime? RegisterDate { get;
+            set; }
         [Display(Name = "Last Connection on")]
         public DateTime? LastLoginDate { get; set; }
 
@@ -59,7 +60,8 @@ namespace Alpha.Models
         public virtual ICollection<Resto> Resto_Admin { get; set; }
         public virtual ICollection<Resto> Resto_Chefs { get; set; }
 
-        public virtual Order PlacedOrder { get; set; }
+        public virtual Order PlacedOrder {
+            get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -166,7 +168,8 @@ namespace Alpha.Models
 
 
         public static ApplicationDbContext Create()
-        {
+
+       {
             return new ApplicationDbContext();
         }
 

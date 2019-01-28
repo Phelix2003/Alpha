@@ -346,6 +346,10 @@
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\DeleteExestingOrder.cshtml" />
     <Content Include="Views\Menu\EditorTemplates\SelectedSizedMealViewModel.cshtml" />
+    <Content Include="Views\Order\AddItemStep1Salt.cshtml" />
+    <Content Include="Views\Order\AddItemStep2HotCold.cshtml" />
+    <Content Include="Views\Order\AddItemStep3Sauce.cshtml" />
+    <Content Include="Views\Order\AddItemStep4Meat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

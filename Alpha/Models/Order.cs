@@ -27,6 +27,25 @@ namespace Alpha.Models
     [Table("OrderedItems")]
     public class OrderedItem
     {
+        public OrderedItem() {}
+
+        public bool Compare(OrderedItem ToCompare)
+        {
+            if (ItemId == ToCompare.ItemId &&
+                SelectedSauce == ToCompare.SelectedSauce &&
+                SelectedSalt == ToCompare.SelectedSalt &&
+                SelectedMeat == ToCompare.SelectedMeat &&
+                SelectedSize == ToCompare.SelectedSize)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
         public int Id { get; set; }
 
         //Link to the Item
@@ -40,7 +59,7 @@ namespace Alpha.Models
         public int Quantity { get; set; }
         public MealSize SelectedSize { get; set; }
         public bool SelectedSalt { get; set; }
-        public bool SeelctedHotNotCold { get; set; }
+        public bool SelectedHotNotCold { get; set; }
         public string SelectedMeat { get; set; }
         public string SelectedSauce { get; set; }
         public string SelectedCustom { get; set; }

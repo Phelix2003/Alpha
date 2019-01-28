@@ -1,0 +1,16 @@
+﻿@model Alpha.Models.ViewModels.OrderedItemView
+
+@{
+    ViewBag.Title = "AddItemStep1Salt";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Vos @Model.ItemName ?</h2>
+
+@using (Html.BeginForm("AddItemStep1Salt", "Order", FormMethod.Post, new {@class= "center-block", role = "form"}))
+{
+    <button type="submit" name="Button" value="Salt" class="btn btn-primary btn-lg">Avec sel</button>
+    <button type="submit" name="Button" value="NoSalt" class="btn btn-secondary btn-lg">Sans sel</button>
+}
+
+

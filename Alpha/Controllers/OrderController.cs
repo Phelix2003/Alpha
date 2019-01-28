@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 
 namespace Alpha.Controllers
 {
+
+
     [Authorize]
     public class OrderController : Controller
     {
@@ -44,7 +46,10 @@ namespace Alpha.Controllers
 
         }
 
+
+
         // GET: Order
+        // Start of Ordered Item creation STEP by STEP
         public async Task<ActionResult> Index(int RestoId)
         {
             Resto resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == RestoId);
@@ -153,46 +158,211 @@ namespace Alpha.Controllers
             Order order = await DbManager.Orders.FirstOrDefaultAsync(m => m.Id == OrderId);
             Item item = await DbManager.Items.FirstOrDefaultAsync(m => m.ItemId == ItemId);
 
-            if (order != null && item != null)
-            {
-                OrderedItem orderedItem = null;
-                // Check if this item is already present in the current order. (with the same configuration)
-                if (order.OrderedItems != null)
-                {
-                    foreach (var element in order.OrderedItems)
-                    {
-                        if (element.ItemId == ItemId)
-                        {
-                            orderedItem = element;
-                        }
-                    }
-                }                 
 
-                if (orderedItem != null)
-                { 
-                    //If the same Items as already been ordered before. add 1 to quantity
-                    orderedItem.Quantity++;
+
+            if (order != null && item != null)
+            {                
+                int MenuId = item.Menu.MenuId;
+                Menu menu = await DbManager.Menus.FirstOrDefaultAsync(m => m.MenuId == MenuId);
+                OrderedItemView.Current.CanSelectHotCold = item.CanBeHotNotCold;
+                OrderedItemView.Current.ItemId = item.ItemId;
+                OrderedItemView.Current.ItemName = item.Name;
+                OrderedItemView.Current.OrderId = order.Id;
+                OrderedItemView.Current.TypeOfFood = item.TypeOfFood;
+                OrderedItemView.Current.CanSelectSalt = item.CanBeSalt;
+                OrderedItemView.Current.SelectedSalt = true;
+                OrderedItemView.Current.SelcedtHotNotCold = true;
+                OrderedItemView.Current.CanSelectMeat = item.CanHaveMeat;
+                OrderedItemView.Current.ListOfMeatsView = menu.ItemList.Where(r => r.TypeOfFood == TypeOfFood.Snack).Where(r => r.DeletedOn == null);
+                OrderedItemView.Current.CanSlectSauce = item.CanHaveSauce;
+                OrderedItemView.Current.ListofSauceView = menu.ItemList.Where(r => r.TypeOfFood == TypeOfFood.Sauce).Where(r => r.DeletedOn == null);
+
+                //= new OrderedItemView
+                return RedirectToAction("AddItemStep1Salt");
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+        public ActionResult AddItemStep1Salt()
+        {
+            if (OrderedItemView.Current.CanSelectSalt)
+            {
+                return View(OrderedItemView.Current);
+            }
+            else
+            {
+                return RedirectToAction("AddItemStep2HotCold");
+            }
+        }
+
+
+        [HttpPost]
+        [ActionName("AddItemStep1Salt")]
+        public ActionResult AddItemStep1SaltPost(string Button)
+        {
+            if(Button == "Salt")
+            {
+                OrderedItemView.Current.SelectedSalt = true;
+            }
+            else
+            {
+                OrderedItemView.Current.SelectedSalt = false;
+            }
+            
+            return RedirectToAction("AddItemStep2HotCold");
+        }
+
+        public ActionResult AddItemStep2HotCold()
+        {
+            if (OrderedItemView.Current.CanSelectHotCold)
+            {
+                return View(OrderedItemView.Current);
+            }
+            else
+            {
+                return RedirectToAction("AddItemStep3Sauce");
+            }
+        }
+
+
+        [HttpPost]
+        [ActionName("AddItemStep2HotCold")]
+        public ActionResult AddItemStep2HotCold(string Button)
+        {
+            if (Button == "Hot")
+            {
+                OrderedItemView.Current.SelcedtHotNotCold = true;
+            }
+            else
+            {
+                OrderedItemView.Current.SelcedtHotNotCold = false;
+            }
+            return RedirectToAction("AddItemStep3Sauce");
+        }
+
+        public ActionResult AddItemStep3Sauce()
+        {
+            if (OrderedItemView.Current.CanSlectSauce)
+            {
+                if(OrderedItemView.Current.ListofSauceView.Count()!=0)
+                {
+                    return View(OrderedItemView.Current);
                 }
                 else
                 {
-                    //If this items has not been ordered before then created a new orderedItem 
-                    orderedItem = new OrderedItem
-                    {
-                        Quantity = 1
-                    };
+                    // TODO to integrate log in azure
+                    System.Diagnostics.Debug.WriteLine("ERROR in Order-AddItemStepXSauce - for ItemId " + OrderedItemView.Current.ItemId + " - No Sauce are defined for this Item");
+                    OrderedItemView.Current.SelectedSauceId = null;
+                    return RedirectToAction("AddItemStep4Meat");
+                };
+            }
+            else
+            {
+                return RedirectToAction("AddItemStep4Meat");
+            }
+        }
 
-                    orderedItem.Item = item;
-                    orderedItem.CurrentOrder = order;                    
-                                 
+
+        [HttpPost]
+        [ActionName("AddItemStep3Sauce")]
+        public ActionResult AddItemStep3Sauce(int SauceId)
+        {
+            OrderedItemView.Current.SelectedSauceId = SauceId;            
+            return RedirectToAction("AddItemStep4Meat");
+        }
+
+        public ActionResult AddItemStep4Meat()
+        {
+            if (OrderedItemView.Current.CanSelectMeat)
+            {
+                if (OrderedItemView.Current.ListOfMeatsView.Count() != 0)
+                {
+                    return View(OrderedItemView.Current);
+                }
+                else
+                {
+                    // TODO to integrate log in azure
+                    System.Diagnostics.Debug.WriteLine("ERROR in Order-AddItemStepXMeat - for ItemId " + OrderedItemView.Current.ItemId + " - No Meat are defined for this Item");
+                    OrderedItemView.Current.SelectedSauceId = null;
+                    return RedirectToAction("AddItemFinalStep");
+                };
+            }
+            else
+            {
+                return RedirectToAction("AddItemFinalStep");
+            }
+        }
+
+
+        [HttpPost]
+        [ActionName("AddItemStep4Meat")]
+        public ActionResult AddItemStep4Meat(int MeatId)
+        {
+            OrderedItemView.Current.SelectedMeatId = MeatId;
+            return RedirectToAction("AddItemFinalStep");
+        }
+
+        public async Task<ActionResult> AddItemFinalStep()
+        {
+            Order order = await DbManager.Orders.FirstOrDefaultAsync(r => r.Id == OrderedItemView.Current.OrderId);
+            Item item = await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == OrderedItemView.Current.ItemId);
+
+            if(order!= null && item != null)
+            {
+                //Search of equivalent item with same configuratin saved before. 
+                OrderedItem orderedItem = new OrderedItem
+                {
+                    CurrentOrder = order,
+                    Item = item,
+                    SelectedHotNotCold = OrderedItemView.Current.SelcedtHotNotCold,
+                    SelectedSalt = OrderedItemView.Current.SelectedSalt
+                };
+
+                if(OrderedItemView.Current.SelectedMeatId != null)
+                {
+                    orderedItem.SelectedMeat = (await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == OrderedItemView.Current.SelectedMeatId)).Name;
+                }
+                else
+                {
+                    orderedItem.SelectedMeat = "Pas de snack indiqué";
                 }
 
-                order.OrderedItems.Add(orderedItem);
-                await DbManager.SaveChangesAsync();
-                return RedirectToAction("Index", new { RestoId = order.Resto.Id });
-            }
+                if (OrderedItemView.Current.SelectedSauceId != null)
+                {
+                    orderedItem.SelectedSauce = (await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == OrderedItemView.Current.SelectedSauceId)).Name;
+                }
+                else
+                {
+                    orderedItem.SelectedMeat = "Pas de sauce indiquée";
+                }
 
+
+
+                int? foundOrderedItemId = null;
+                foreach(var itemOrder in order.OrderedItems)
+                {
+                    if (orderedItem.Compare(itemOrder))
+                    {
+                        foundOrderedItemId = itemOrder.Id;
+                    }
+                }
+
+                if(foundOrderedItemId != null)
+                {
+                    // In case of already existing orderedItem then only update quanties. 
+                    OrderedItem orderedItemUpdate = order.OrderedItems.FirstOrDefault(r => r.Id == foundOrderedItemId);
+                    orderedItemUpdate.Quantity++;
+                }else
+                {
+                    order.OrderedItems.Add(orderedItem);
+                }
+                await DbManager.SaveChangesAsync();
+                return RedirectToAction("Index", new { RestoId = order.Resto.Id});
+            }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
+
+
 
         public async Task<ActionResult> ViewOngoinOrder(int OrderId)
         {

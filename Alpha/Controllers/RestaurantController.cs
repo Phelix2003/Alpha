@@ -16,7 +16,9 @@ namespace Alpha.Controllers
     [Authorize(Roles = "Admin")]
     public class RestaurantController : Controller
     {
+
         
+
         private ApplicationDbContext _dbManager;
         public ApplicationDbContext DbManager
         {

@@ -1,0 +1,15 @@
+﻿@model Alpha.Models.ViewModels.OrderedItemView
+
+@{
+    ViewBag.Title = "AddItemStep2HotCold";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Votre @Model.ItemName ?</h2>
+
+@using (Html.BeginForm("AddItemStep2HotCold", "Order", FormMethod.Post, new { @class = "center-block", role = "form" }))
+{
+    <button type="submit" name="Button" value="Hot" class="btn btn-primary btn-lg">Chaud</button>
+    <button type="submit" name="Button" value="Cold" class="btn btn-secondary btn-lg">Froid</button>
+}
+
