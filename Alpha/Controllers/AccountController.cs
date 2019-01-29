@@ -404,11 +404,20 @@ namespace Alpha.Controllers
             return View(model);
         }
 
+        
+        public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
+        }
+
+
         //
         // POST: /Account/LogOff
         [HttpPost]
+        [ActionName("LogOff")]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        public ActionResult LogOffPost()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");

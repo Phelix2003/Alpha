@@ -156,11 +156,16 @@ namespace Alpha.Controllers
                             TypeOfFood = itemViewModel.SelectedTypeOfFood,
                             AvailableSizes = new List<SizedMeal>(),
                             HasSize = itemViewModel.HasSize,
-                            CanBeHotNotCold = itemViewModel.CanBeHotNotCold
-                            
+                            CanBeHotNotCold = itemViewModel.CanBeHotNotCold,
+                            CanHaveSauce = itemViewModel.CanHaveSauce,
+                            CanHaveMeat = itemViewModel.CanHaveMeat
                         };
 
-
+                        if(item.TypeOfFood == TypeOfFood.Frites)
+                        {
+                            item.CanBeSalt = true;
+                        }
+                        
                         // Check for input validation
                         decimal UnitPrice;
                         NumberStyles style = NumberStyles.AllowLeadingWhite |

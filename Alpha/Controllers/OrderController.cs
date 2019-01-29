@@ -49,7 +49,7 @@ namespace Alpha.Controllers
 
 
         // GET: Order
-        // Start of Ordered Item creation STEP by STEP
+
         public async Task<ActionResult> Index(int RestoId)
         {
             Resto resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == RestoId);
@@ -153,6 +153,7 @@ namespace Alpha.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
+        // Start of Ordered Item creation STEP by STEP
         public async Task<ActionResult> AddItemToOrder (int ItemId, int OrderId)
         {
             Order order = await DbManager.Orders.FirstOrDefaultAsync(m => m.Id == OrderId);
@@ -386,14 +387,16 @@ namespace Alpha.Controllers
             foreach (var item in order.Resto.Menu.ItemList.Where(r => r.DeletedOn == null))
             {
                 ItemView itemView = new ItemView(item);
-
                 // TODO This part need to be optimized; 
                 List<OrderedItem> orderedItems = new List<OrderedItem>();
-                foreach(var element in order.OrderedItems)
+                if(order.OrderedItems != null)
                 {
-                    if (item.ItemId == element.ItemId)
+                    foreach (var element in order.OrderedItems)
                     {
-                        orderedItems.Add(element);
+                        if (item.ItemId == element.ItemId)
+                        {
+                            orderedItems.Add(element);
+                        }
                     }
                 }
                 itemView.Quantity = orderedItems.Select(i => i.Quantity).Sum();
@@ -401,8 +404,5 @@ namespace Alpha.Controllers
             }
             return itemsView;
         }
-
-
-
     }
 }
