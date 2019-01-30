@@ -6,10 +6,10 @@
 
 <h3>Vous avez une commande en cours au restaurant @Model.Resto.Name. Voulez-vous l'effacer?</h3>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("DeleteExestingOrder", "Order", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-
+    @Html.HiddenFor(m => m.Id)
     <div class="form-actions no-color">
         <input type="submit" value="Abandoner cette commande" class="btn btn-default" /> |
         @Html.ActionLink("Retour à la commande", "Index")

@@ -70,19 +70,18 @@ namespace Alpha.Models.ViewModels
         public int OrderId { get; set; }
         public TypeOfFood TypeOfFood { get; set; }
 
-        public MealSize SelectedMealSize { get; set; }
         public bool CanSelectSalt { get; set; }
         public bool SelectedSalt { get; set; }
         public bool CanSelectHotCold { get; set; }
         public bool SelcedtHotNotCold { get; set; }
         public bool CanSelectSize { get; set; }
-        public int? SelectedSize { get; set; }
-        public IEnumerable<MealSize> ListOfSizesView { get; set; }
+        public int? SelectedSizeId { get; set; }
+        public List<SizedMeal> ListOfSizesView { get; set; }
         public bool CanSelectMeat { get; set; }
         public int? SelectedMeatId { get; set; }
-        public IEnumerable<Item> ListOfMeatsView {get; set;}
+        public List<Item> ListOfMeatsView {get; set;}
         public bool CanSlectSauce { get; set; }
         public int? SelectedSauceId { get; set; }
-        public IEnumerable<Item> ListofSauceView { get; set; }
+        public List<Item> ListofSauceView { get; set; }
     }
 }

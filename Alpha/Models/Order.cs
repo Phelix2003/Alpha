@@ -31,7 +31,7 @@ namespace Alpha.Models
 
         public bool Compare(OrderedItem ToCompare)
         {
-            if (ItemId == ToCompare.ItemId &&
+            if (Item.ItemId == ToCompare.ItemId &&
                 SelectedSauce == ToCompare.SelectedSauce &&
                 SelectedSalt == ToCompare.SelectedSalt &&
                 SelectedMeat == ToCompare.SelectedMeat &&
@@ -57,7 +57,7 @@ namespace Alpha.Models
         public virtual Order CurrentOrder { get; set; }
 
         public int Quantity { get; set; }
-        public MealSize SelectedSize { get; set; }
+        public MealSize? SelectedSize { get; set; }
         public bool SelectedSalt { get; set; }
         public bool SelectedHotNotCold { get; set; }
         public string SelectedMeat { get; set; }

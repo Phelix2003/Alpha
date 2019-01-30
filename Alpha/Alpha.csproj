@@ -325,7 +325,9 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\Info.cshtml" />
-    <Content Include="Secret_AppSettings.config" />
+    <Content Include="Secret_AppSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Secret_ConnectionStrings.config" />
     <Content Include="Views\UsersAdmin\Index.cshtml" />
     <Content Include="Views\Restaurant\Index.cshtml" />
@@ -350,6 +352,7 @@
     <Content Include="Views\Order\AddItemStep2HotCold.cshtml" />
     <Content Include="Views\Order\AddItemStep3Sauce.cshtml" />
     <Content Include="Views\Order\AddItemStep4Meat.cshtml" />
+    <Content Include="Views\Order\AddItemStep1aSize.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,14 @@
+﻿@model Alpha.Models.ViewModels.OrderedItemView
+
+@{
+    ViewBag.Title = "AddItemStep1aSize";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Quelle taille voulez vous pour votre @Model.ItemName ?</h2>
+
+@using (Html.BeginForm("AddItemStep1aSize", "Order", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.DropDownList("SizeId", new SelectList(Model.ListOfSizesView, "Id", "MealSize"))
+    <input type="submit" class="btn btn-default" value="Ok" />
+}
