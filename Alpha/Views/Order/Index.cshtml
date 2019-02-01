@@ -6,7 +6,9 @@
 
 
 <div class="jumbotron">
-    <h1>Votre commande au @Model.Resto_Name</h1>
+    <h1>Votre commande au @Model.Resto_Name</h1>@if (Model.ListOfProposedItems.Sum(r => r.Quantity) != 0) {<p class="text-right">Votyre commande (@Model.ListOfProposedItems.Sum(r => r.Quantity))</p>}
+
+
 
     TODO Ajouter Image resto ICI
 
@@ -16,13 +18,16 @@
     <div class="container">
         @foreach (var item in Model.ListOfProposedItems)
         {
-        <div class="row">
-            <div class="col-sm">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="Card image cap">
-                    <div class="card-body">
-                        <h2 class="card-title">@item.Name.ToString()</h2> <h4>@if (item.Quantity != 0)
-                        {<text>(</text> @item.Quantity <text>)</text>} </h4>
+            <div class="row">
+                <div class="col-sm">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="Card image cap">
+                        <div class="card-body">
+                            <h4 class="card-title">@item.Name.ToString()@if (item.UnitPrice != 0){<text> - </text>@item.UnitPrice.ToString()<text>€</text>}</h4> 
+                            <p>
+                                @if (item.Quantity != 0)
+                                {<text>(</text> @item.Quantity <text>)</text>}
+                        </p>
                         <p class="card-text">@item.Description.ToString()</p>
                         <a href="@Url.Action("AddItemToOrder", "Order", new { ItemId = item.ItemId, OrderId = Model.OrderId })" class="btn btn-primary">Ajouter</a>
                     </div>
@@ -30,7 +35,7 @@
             </div>
 
         </div>
-        }
+    }
     </div>
 </div>
 

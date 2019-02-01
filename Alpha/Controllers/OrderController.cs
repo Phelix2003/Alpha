@@ -174,7 +174,7 @@ namespace Alpha.Controllers
                 OrderedItemView.Current.ListOfMeatsView = menu.ItemList.Where(r => r.TypeOfFood == TypeOfFood.Snack).Where(r => r.DeletedOn == null).ToList();
                 OrderedItemView.Current.CanSlectSauce = item.CanHaveSauce;
                 OrderedItemView.Current.ListofSauceView = menu.ItemList.Where(r => r.TypeOfFood == TypeOfFood.Sauce).Where(r => r.DeletedOn == null).ToList();
-                OrderedItemView.Current.ListofSauceView.Add(new Item { Name = "Pas de Sauce", ItemId = 0 });
+                OrderedItemView.Current.ListofSauceView.Add(new Item { Name = "Pas de Sauce", ItemId = 0, Description="" });
                 OrderedItemView.Current.CanSelectSize = item.HasSize;
                 OrderedItemView.Current.ListOfSizesView = item.AvailableSizes.ToList();
                 OrderedItemView.Current.SelectedSizeId = null;
@@ -213,12 +213,13 @@ namespace Alpha.Controllers
 
         [HttpPost]
         [ActionName("AddItemStep1aSize")]
-        public ActionResult AddItemStep1aSize(int SizeId)
+        public ActionResult AddItemStep1aSize(int Button)
         {
-            OrderedItemView.Current.SelectedSizeId = SizeId;
+            OrderedItemView.Current.SelectedSizeId = Button;
             return RedirectToAction("AddItemStep1Salt");
         }
 
+        // ---- STEP 1 ---- Review Salt
         public ActionResult AddItemStep1Salt()
         {
             if (OrderedItemView.Current.CanSelectSalt)
@@ -231,7 +232,7 @@ namespace Alpha.Controllers
             }
         }
 
-        // ---- STEP 1 ---- Review Salt
+
         [HttpPost]
         [ActionName("AddItemStep1Salt")]
         public ActionResult AddItemStep1SaltPost(string Button)
@@ -302,9 +303,9 @@ namespace Alpha.Controllers
 
         [HttpPost]
         [ActionName("AddItemStep3Sauce")]
-        public ActionResult AddItemStep3Sauce(int SauceId)
+        public ActionResult AddItemStep3Sauce(int Button)
         {
-            OrderedItemView.Current.SelectedSauceId = SauceId;            
+            OrderedItemView.Current.SelectedSauceId = Button;            
             return RedirectToAction("AddItemStep4Meat");
         }
 
@@ -334,9 +335,9 @@ namespace Alpha.Controllers
 
         [HttpPost]
         [ActionName("AddItemStep4Meat")]
-        public ActionResult AddItemStep4Meat(int MeatId)
+        public ActionResult AddItemStep4Meat(int Button)
         {
-            OrderedItemView.Current.SelectedMeatId = MeatId;
+            OrderedItemView.Current.SelectedMeatId = Button;
             return RedirectToAction("AddItemFinalStep");
         }
 

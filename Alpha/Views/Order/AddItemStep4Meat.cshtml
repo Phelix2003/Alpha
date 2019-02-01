@@ -9,7 +9,24 @@
 
 @using (Html.BeginForm("AddItemStep4Meat", "Order", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
-    @Html.DropDownList("MeatId", new SelectList(Model.ListOfMeatsView, "ItemId", "Name"))
-    <input type="submit" class="btn btn-default" value="Ok" />
+    <table>
+        <tr>
+            @foreach (var item in Model.ListOfMeatsView)
+            {
+            <td>
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="Card image cap">
+                    <div class="card-body">
+                        <h2 class="card-title">@item.Name.ToString()</h2>
+                        <p class="card-text">@item.UnitPrice.ToString()€</p>
+                        <button type="submit" name="Button" value="@item.ItemId" class="btn btn-primary btn-lg">Choisir</button>
+                    </div>
+                </div>
+
+
+            </td>
+            }
+        </tr>
+    </table>
 }
 

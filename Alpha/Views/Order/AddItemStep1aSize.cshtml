@@ -7,8 +7,17 @@
 
 <h2>Quelle taille voulez vous pour votre @Model.ItemName ?</h2>
 
-@using (Html.BeginForm("AddItemStep1aSize", "Order", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("AddItemStep1aSize", "Order", FormMethod.Post, new { @class = "center-block", role = "form" }))
 {
-    @Html.DropDownList("SizeId", new SelectList(Model.ListOfSizesView, "Id", "MealSize"))
-    <input type="submit" class="btn btn-default" value="Ok" />
+<table>
+    <tr>
+        @foreach (var item in Model.ListOfSizesView)
+        {
+        <td>
+            <button type="submit" name="Button" value="@item.Id" class="btn btn-primary btn-lg">@item.MealSize.ToString()</button>
+            <p>@item.Price.ToString()€</p>
+        </td>
+        }
+    </tr>
+</table>
 }
