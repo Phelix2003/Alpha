@@ -118,6 +118,27 @@ namespace Alpha.Models
     [Table("RestoOpenTimePeriodes")]
     public class OpenTimePeriode
     {
+        List<TimeSpan> ListOfOrderSlot()
+        {
+            List<TimeSpan> TimeSpanList = new List<TimeSpan>();
+            if (NbAuthorizedOrderPerHour > 0)
+            {
+                TimeSpan deltaTime = new TimeSpan((CloseTime - OpenTime).Ticks / NbAuthorizedOrderPerHour);
+                TimeSpan lastTimeSpan = OpenTime;
+                TimeSpanList.Add(OpenTime);
+                do
+                {
+                    lastTimeSpan = lastTimeSpan + deltaTime;
+                    TimeSpanList.Add(lastTimeSpan);
+                } while (lastTimeSpan <= CloseTime);
+                return TimeSpanList;
+            }
+            else
+            {
+                return null;
+            }   
+        }
+
         public int OpenTimePeriodeId { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public TimeSpan OpenTime { get; set; }
