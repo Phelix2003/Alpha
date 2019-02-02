@@ -193,7 +193,7 @@ namespace Alpha.Models
         public DbSet<Resto> Restos { set; get; }
         public DbSet<Menu> Menus { set; get; }
         public DbSet<Item> Items { set; get; }  
-        public DbSet<SlotTime> SlotTimes { set; get; }
+        public DbSet<OpenTimePeriode> OpenTimePeriodes { set; get; }
         public DbSet<Order> Orders { set; get; }
         public DbSet<OrderedItem> OrderedItems { get; set; }     
 

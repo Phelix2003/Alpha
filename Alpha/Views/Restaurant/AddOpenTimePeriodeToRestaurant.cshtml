@@ -1,15 +1,15 @@
-﻿@model Alpha.Models.AddSlotTimeToRestaurantView
+﻿@model Alpha.Models.AddOpenTimePeriodeToRestaurantView
 
 @{
-    ViewBag.Title = "AddSlotTimeToRestaurant";
+    ViewBag.Title = "AddOpenTimePeriodeToRestaurant";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @*TODO to update in modal view https://www.codeproject.com/Tips/826002/Bootstrap-Modal-Dialog-Loading-Content-from-MVC-Pa*@
 <h2> Ajouter une heure d'ouverture au restaurant @Model.RestoName pour le @Model.Day.ToString() </h2>
-@Html.ValidationMessageFor(m => m.SlotTimeList)
+@Html.ValidationMessageFor(m => m.OpenTimePeriodeList)
 
-@using (Html.BeginForm("AddSlotTimeToRestaurant", "Restaurant", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("AddOpenTimePeriodeToRestaurant", "Restaurant", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.HiddenFor(m => m.RestoId)
     @Html.HiddenFor(m => m.Day)
@@ -29,11 +29,11 @@
         </tr>
         <tr>
             <td>
-                @Html.DropDownListFor(m => m.OpenTimeId, new SelectList(Model.SlotTimeList.timeSpanViews, "Id", "TimeSpanText"))
+                @Html.DropDownListFor(m => m.OpenTimeId, new SelectList(Model.OpenTimePeriodeList.timeSpanViews, "Id", "TimeSpanText"))
                 @Html.ValidationMessageFor(m => m.OpenTimeId)
             </td>
             <td>
-                @Html.DropDownListFor(m => m.CloseTimeId, new SelectList(Model.SlotTimeList.timeSpanViews, "Id", "TimeSpanText"))
+                @Html.DropDownListFor(m => m.CloseTimeId, new SelectList(Model.OpenTimePeriodeList.timeSpanViews, "Id", "TimeSpanText"))
                 @Html.ValidationMessageFor(m => m.CloseTimeId)
             </td>
             <td>

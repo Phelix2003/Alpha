@@ -17,10 +17,7 @@ namespace Alpha.Models
         public string Address { get; set; }   //TODO Ajouter adresse détaillées 
         public byte[] Image { get; set; } // TODO ajouter dans l
 
-        public virtual ICollection<SlotTime> OpeningTimes {get; set;}
-
-
-
+        public virtual ICollection<OpenTimePeriode> OpeningTimes {get; set;}
 
         public virtual ICollection<ApplicationUser> Administrators { get; set; }
         public virtual ICollection<ApplicationUser> Chefs { get; set; }
@@ -118,10 +115,10 @@ namespace Alpha.Models
         XXL = 4
     }
 
-        [Table("RestoSlotTimes")]
-    public class SlotTime
+    [Table("RestoOpenTimePeriodes")]
+    public class OpenTimePeriode
     {
-        public int SlotTimeId { get; set; }
+        public int OpenTimePeriodeId { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public TimeSpan OpenTime { get; set; }
         public TimeSpan CloseTime { get; set; }

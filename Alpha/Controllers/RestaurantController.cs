@@ -146,40 +146,40 @@ namespace Alpha.Controllers
             return View(editResto);
         }
 
-        public async Task<ActionResult> AddSlotTimeToRestaurant(int RestoId, DayOfWeek dayOfWeek)
+        public async Task<ActionResult> AddOpenTimePeriodeToRestaurant(int RestoId, DayOfWeek dayOfWeek)
         {
             // TODO https://www.codeproject.com/Tips/826002/Bootstrap-Modal-Dialog-Loading-Content-from-MVC-Pa
             var resto = await DbManager.Restos.FirstAsync(r => r.Id == RestoId);
             if (resto != null)
             {
-                return View(new AddSlotTimeToRestaurantView() {RestoId = RestoId, RestoName = resto.Name, Day = dayOfWeek});
+                return View(new AddOpenTimePeriodeToRestaurantView() {RestoId = RestoId, RestoName = resto.Name, Day = dayOfWeek});
             }
 
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddSlotTimeToRestaurant(AddSlotTimeToRestaurantView model)
+        public async Task<ActionResult> AddOpenTimePeriodeToRestaurant(AddOpenTimePeriodeToRestaurantView model)
         {
             var resto = await DbManager.Restos.FirstAsync(r => r.Id == model.RestoId);
             if(resto != null)
             {
                 if(model.OpenTimeId < model.CloseTimeId)
                 {
-                    SlotTime slotTime = new SlotTime()
+                    OpenTimePeriode openTimePeriode = new OpenTimePeriode()
                     {
                         DayOfWeek = model.Day,
-                        OpenTime = model.SlotTimeList.timeSpanViews.FirstOrDefault(m => m.Id == model.OpenTimeId).TimeSpan,
-                        CloseTime = model.SlotTimeList.timeSpanViews.FirstOrDefault(m => m.Id == model.CloseTimeId).TimeSpan,
+                        OpenTime = model.OpenTimePeriodeList.timeSpanViews.FirstOrDefault(m => m.Id == model.OpenTimeId).TimeSpan,
+                        CloseTime = model.OpenTimePeriodeList.timeSpanViews.FirstOrDefault(m => m.Id == model.CloseTimeId).TimeSpan,
                         NbAuthorizedOrderPerHour = model.NbrOrdersPerHour
                     };
-                    resto.OpeningTimes.Add(slotTime);
+                    resto.OpeningTimes.Add(openTimePeriode);
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("edit", new { id = model.RestoId });
                 }
                 else
                 {
-                    ModelState.AddModelError("SlotTimeList", "L'heure de fermeture doit être après l'heure d'ouverture");
+                    ModelState.AddModelError("OpenTimePeriodeList", "L'heure de fermeture doit être après l'heure d'ouverture");
                     return View(model);
                 }               
             }
@@ -187,16 +187,16 @@ namespace Alpha.Controllers
         }
 
         
-        public async Task<ActionResult> RemoveSlotTimeToRestaurant(int RestoId, int SlotId)
+        public async Task<ActionResult> RemoveOpenTimePeriodeToRestaurant(int RestoId, int SlotId)
         {
             var resto = await DbManager.Restos.FirstAsync(r => r.Id == RestoId);
             if (resto != null)
             {
-                SlotTime slotTime = resto.OpeningTimes.FirstOrDefault(m => m.SlotTimeId == SlotId);
+                OpenTimePeriode openTimePeriode = resto.OpeningTimes.FirstOrDefault(m => m.OpenTimePeriodeId == SlotId);
 
-                if(slotTime != null)
+                if(openTimePeriode != null)
                 {
-                    DbManager.SlotTimes.Remove(slotTime);
+                    DbManager.OpenTimePeriodes.Remove(openTimePeriode);
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("edit", new { id = RestoId });
                 }
