@@ -84,8 +84,6 @@ namespace Alpha.Models
         {
             // CONFIGURATION OF THE RELATIONS 
 
-
-
             // RESTO -- CHEFs / ADMINS 
             //Relations of Restaurants with Admin and Chefs 
             // Many to mnay relation without Cascade delete 
@@ -157,6 +155,22 @@ namespace Alpha.Models
                 .HasRequired<Item>(s => s.Item)
                 .WithMany(g => g.OrderedItemList)
                 .HasForeignKey<int>(s => s.ItemId);
+
+            // ORDEREDITEMS -- ITEMS - As option Sauce
+            // ONE to Many
+
+            modelBuilder.Entity<OrderedItem>()
+                .HasOptional<Item>(s => s.SelectedSauce)
+                .WithMany(g => g.OrderedItemSauceList)
+                .HasForeignKey<int?>(s => s.SelectedSauceId);
+
+            // ORDEREDITEMS -- ITEMS - As optian Meat
+            // ONE to Many
+
+            modelBuilder.Entity<OrderedItem>()
+                .HasOptional<Item>(s => s.SelectedMeat)
+                .WithMany(g => g.OrderedItemMeatList)
+                .HasForeignKey<int?>(s => s.SelectedMeatId);
 
             // Item -- SizedMeal
             // ONE to Many

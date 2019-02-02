@@ -322,7 +322,7 @@ namespace Alpha.Controllers
                 {
                     // TODO to integrate log in azure
                     System.Diagnostics.Debug.WriteLine("ERROR in Order-AddItemStepXMeat - for ItemId " + OrderedItemView.Current.ItemId + " - No Meat are defined for this Item");
-                    OrderedItemView.Current.SelectedSauceId = null;
+                    OrderedItemView.Current.SelectedMeatId = null;
                     return RedirectToAction("AddItemFinalStep");
                 };
             }
@@ -360,20 +360,20 @@ namespace Alpha.Controllers
 
                 if(OrderedItemView.Current.SelectedMeatId != null)
                 {
-                    orderedItem.SelectedMeat = (await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == OrderedItemView.Current.SelectedMeatId)).Name;
+                    orderedItem.SelectedMeat = await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == OrderedItemView.Current.SelectedMeatId);
                 }
                 else
                 {
-                    orderedItem.SelectedMeat = "Pas de snack indiqué";
+                    orderedItem.SelectedMeat = null;
                 }
 
                 if (OrderedItemView.Current.SelectedSauceId != 0 && OrderedItemView.Current.SelectedSauceId != null)
                 {
-                    orderedItem.SelectedSauce = (await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == OrderedItemView.Current.SelectedSauceId)).Name;
+                    orderedItem.SelectedSauce = await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == OrderedItemView.Current.SelectedSauceId);
                 }
                 else
                 {
-                    orderedItem.SelectedSauce = "Pas de sauce indiquée";
+                    orderedItem.SelectedSauce = null;
                 }
 
                 if (OrderedItemView.Current.SelectedSizeId != null)

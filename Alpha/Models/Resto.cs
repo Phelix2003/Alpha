@@ -80,7 +80,10 @@ namespace Alpha.Models
 
         public virtual Menu Menu { get; set; }
 
+        // Relation with OrderedItems
         public virtual ICollection<OrderedItem> OrderedItemList { get; set; }
+        public virtual ICollection<OrderedItem> OrderedItemSauceList { get; set; }
+        public virtual ICollection<OrderedItem> OrderedItemMeatList { get; set; }
     }
 
 

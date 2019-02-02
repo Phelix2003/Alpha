@@ -45,10 +45,40 @@ namespace Alpha.Models
             }
         }
 
+        public decimal? ConfiguredPrice()
+        {
+            decimal? Price = null;
+
+            if(Item != null)
+            {
+                if(Item.HasSize)
+                {
+                    // Select the price for the configured size
+                    Price = Item.AvailableSizes.FirstOrDefault(r => r.MealSize == SelectedSize).Price;
+                }
+                else
+                {
+                    Price = Item.UnitPrice;
+                }
+                if (SelectedSauce != null && Item.TypeOfFood != TypeOfFood.Meal && Item.TypeOfFood != TypeOfFood.Menu)
+                {
+                    //note for "Meal" and "Menu" the price au sauce is embbedded in the initial price. Should not be added here
+                    Price = Price + SelectedSauce.UnitPrice;
+                }
+
+                if (SelectedMeat != null)
+                {
+                    Price = Price + SelectedMeat.UnitPrice;
+                }
+
+            }
+            return Price;
+        }
+
 
         public int Id { get; set; }
 
-        //Link to the Item
+        //Link to the Item (Main Item)
         public virtual int ItemId { get; set; }
         public virtual Item Item { get; set; }
 
@@ -56,12 +86,19 @@ namespace Alpha.Models
         public virtual int CurrentOrderId { get; set; }
         public virtual Order CurrentOrder { get; set; }
 
+        // Configuration of the Item 
         public int Quantity { get; set; }
         public MealSize? SelectedSize { get; set; }
         public bool SelectedSalt { get; set; }
         public bool SelectedHotNotCold { get; set; }
-        public string SelectedMeat { get; set; }
-        public string SelectedSauce { get; set; }
-        public string SelectedCustom { get; set; }
+
+        // The relation with meat and sauce is kept in order to adda analytics functions later. 
+        //link to Item (Additional / optional Item)
+        public virtual int? SelectedMeatId { get; set; }
+        public virtual Item SelectedMeat { get; set; }
+
+        //link to Item (Additional / optional Item
+        public virtual int? SelectedSauceId { get; set; }
+        public virtual Item SelectedSauce { get; set; }
     }
 }
