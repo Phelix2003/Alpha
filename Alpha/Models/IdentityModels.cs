@@ -68,8 +68,8 @@ namespace Alpha.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-           : base("LocalConnection", throwIfV1Schema: false)
-//            : base("AzureConnection", throwIfV1Schema: false)            
+//           : base("LocalConnection", throwIfV1Schema: false)
+            : base("AzureConnection", throwIfV1Schema: false)            
         {
             // Set the class to call for initiating the DB
             Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
@@ -138,6 +138,21 @@ namespace Alpha.Models
             // Cascade delete enable (automatic)
 
 
+            // RESTO - ORDESLOTS
+            // ONE to MANY
+
+            modelBuilder.Entity<OrderSlot>() 
+                .HasRequired<Resto>(s => s.Resto) 
+                .WithMany(g => g.OrderIntakeSlots) 
+                .HasForeignKey<int>(s => s.RestoId);
+
+            // ORDESLOTS - ORDER
+            // ONE to ONE
+
+            modelBuilder.Entity<Order>()
+                        .HasOptional(s => s.OrderSlot)
+                        .WithOptionalDependent(a => a.Order)
+                        .WillCascadeOnDelete(false);
 
             // ORDER -- ORDEREDITEMS 
             // Relations of Order to ORderedItems

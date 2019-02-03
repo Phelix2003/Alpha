@@ -232,6 +232,7 @@
     <Compile Include="Models\Resto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utility\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -328,7 +329,9 @@
     <Content Include="Secret_AppSettings.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Secret_ConnectionStrings.config" />
+    <Content Include="Secret_ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\UsersAdmin\Index.cshtml" />
     <Content Include="Views\Restaurant\Index.cshtml" />
     <Content Include="Views\Restaurant\Create.cshtml" />
@@ -353,6 +356,7 @@
     <Content Include="Views\Order\AddItemStep3Sauce.cshtml" />
     <Content Include="Views\Order\AddItemStep4Meat.cshtml" />
     <Content Include="Views\Order\AddItemStep1aSize.cshtml" />
+    <Content Include="Views\Order\PickASlotTimeStep0.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

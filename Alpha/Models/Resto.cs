@@ -22,9 +22,28 @@ namespace Alpha.Models
         public virtual ICollection<ApplicationUser> Administrators { get; set; }
         public virtual ICollection<ApplicationUser> Chefs { get; set; }
 
-        public virtual ICollection<Order> OrderIntake { get; set; }
+        public virtual ICollection<OrderSlot> OrderIntakeSlots { get; set; }
 
         public virtual Menu Menu {get; set;}
+    }
+
+    [Table("RestosOrderSlots")]
+    public class OrderSlot
+    {
+        public int OrderSlotId { get; set; }
+
+        public DateTime OrderSlotTime { get; set; }
+
+        // To group the slot by openning time
+        public int SlotGroup { get; set; }
+
+        // Restaurant associated to this slot time
+        public int RestoId { get; set; }
+        public Resto Resto { get; set; }
+
+        // Order associated to this slot time
+        public int? OrderId { get; set; }
+        public Order Order { get; set; }
     }
 
     [Table("Menu")]
@@ -118,12 +137,12 @@ namespace Alpha.Models
     [Table("RestoOpenTimePeriodes")]
     public class OpenTimePeriode
     {
-        List<TimeSpan> ListOfOrderSlot()
+        public List<TimeSpan> GetListOfOrderSlots()
         {
             List<TimeSpan> TimeSpanList = new List<TimeSpan>();
             if (NbAuthorizedOrderPerHour > 0)
             {
-                TimeSpan deltaTime = new TimeSpan((CloseTime - OpenTime).Ticks / NbAuthorizedOrderPerHour);
+                TimeSpan deltaTime = new TimeSpan(TimeSpan.FromMinutes(60).Ticks / NbAuthorizedOrderPerHour);
                 TimeSpan lastTimeSpan = OpenTime;
                 TimeSpanList.Add(OpenTime);
                 do

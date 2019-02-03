@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Alpha.Utility;
 
 namespace Alpha.Models.ViewModels
 {
@@ -83,5 +84,60 @@ namespace Alpha.Models.ViewModels
         public bool CanSlectSauce { get; set; }
         public int? SelectedSauceId { get; set; }
         public List<Item> ListofSauceView { get; set; }
+    }
+
+    public class PickASlotTimeView
+    {
+        public PickASlotTimeView()
+        {
+            ListOfPossibleTimes = new List<PossibleTime>();
+        }
+
+        /*
+        public PickASlotTimeView(TimeSpan StartTime, TimeSpan StopTime)
+        {
+            //Creates a list of Times per 15 minutes steps. Starting from StartTime up to StopTime.
+            for (TimeSpan i=StartTime; i < StopTime; i = i + TimeSpan.FromMinutes(15))
+            {
+                ListOfPossibleTimes.Add(new PossibleTime { Available = false, Id = i.Ticks.ToString(), TimeFrom = i });
+            }
+        }*/
+
+        public void Add(OrderSlot SlotToAdd)
+        {
+            // The view should display the available slot times by step of 15 minutes. The slots should be grouped that way. 
+            DateTime roundedTime = RoundDown(SlotToAdd.OrderSlotTime, TimeSpan.FromMinutes(15));
+            if(ListOfPossibleTimes.FirstOrDefault(r => r.TimeFrom == roundedTime) == null)
+            {
+                ListOfPossibleTimes.Add(new PossibleTime
+                {
+                    TimeFrom = roundedTime,
+                    TimeTo = roundedTime.AddMinutes(15),
+                    Available = true,
+                    Id = roundedTime.Ticks.ToString(),
+                    SlotGroup = SlotToAdd.SlotGroup});
+            }            
+        }
+        // Round dt to the nearest d velue DOWN
+        private DateTime RoundDown(DateTime dt, TimeSpan d)
+        {
+            return new DateTime((dt.Ticks) / d.Ticks * d.Ticks, dt.Kind);
+        }
+
+        public List<PossibleTime> ListOfPossibleTimes { get; set; }
+        public int OrderId { get; set; }
+    }
+
+    public class PossibleTime
+    {
+        public string Id { get; set; }
+
+        public int SlotGroup { get; set; }
+
+        public DateTime TimeFrom { get; set; }
+        public string TimeFromText()    {   return TimeFrom.ToString("T");  }
+        public DateTime TimeTo { get; set; }
+        public string TimeToText() { return TimeTo.ToString("T"); }
+        public bool Available { get; set; }
     }
 }

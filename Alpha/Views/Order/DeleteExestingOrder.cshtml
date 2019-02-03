@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>Vous avez une commande en cours au restaurant @Model.Resto.Name. Voulez-vous l'effacer?</h3>
+<h3>Vous avez une commande en cours dans un autre restaurant. Voulez-vous l'effacer?</h3>
 
 @using (Html.BeginForm("DeleteExestingOrder", "Order", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {

@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
 using System.Threading.Tasks;
 
+
 namespace Alpha.Controllers
 {
 
@@ -72,18 +73,17 @@ namespace Alpha.Controllers
                     {
                         IsOrderCompleted = false,
                         OrderOpenTime = DateTime.Now,
-                        OrderOwner = user,
-                        Resto = resto
+                        OrderOwner = user
                     };
                     DbManager.Orders.Add(order);
                     await DbManager.SaveChangesAsync();
 
-                    ICollection<ItemView> itemsView = CreateItemsViewFromOrder(order);
+                    ICollection<ItemView> itemsView = await CreateItemsViewFromOrderAndRestoId(order, RestoId);
                     return View(new OrderViewModels {
                         ListOfProposedItems = itemsView,
-                        RestoId = order.Resto.Id,
-                        Resto_Description = order.Resto.Description,
-                        Resto_Name = order.Resto.Name,
+                        RestoId = RestoId,
+                        Resto_Description = resto.Description,
+                        Resto_Name = resto.Name,
                         OrderId = order.Id
 
                     });
@@ -98,24 +98,24 @@ namespace Alpha.Controllers
                     }
                     else
                     {
-                        // This user has started an order previously but did add anithing in it.
+                        // This user has started an order previously but did not add anything in it.
                         // in case of an order has been created but not startd (no article in the list) then the order is recreated with a fresh new one;
-                        if (order.OrderedItems.Count == 0 ||  order.OrderedItems == null)
+                        if (order.OrderSlot == null)
                         {
                             order.IsOrderCompleted = false;
                             order.OrderOpenTime = DateTime.Now;
                             order.OrderOwner = user;
-                            order.Resto = resto;
+                            
 
                             await DbManager.SaveChangesAsync();
-                            ICollection<ItemView> itemsView = CreateItemsViewFromOrder(order);
+                            ICollection<ItemView> itemsView = await CreateItemsViewFromOrderAndRestoId(order, RestoId);
 
                             return View(new OrderViewModels
                             {
                                 ListOfProposedItems = itemsView,
-                                RestoId = order.Resto.Id,
-                                Resto_Description = order.Resto.Description,
-                                Resto_Name = order.Resto.Name,
+                                RestoId = resto.Id,
+                                Resto_Description = resto.Description,
+                                Resto_Name = resto.Name,
                                 OrderId = order.Id
 
                             });
@@ -124,15 +124,15 @@ namespace Alpha.Controllers
                         {
                             // This user has started an order. Items are already in the basket. 
                             // If the restaurant is the same of the order ... Continue progressing in the order
-                            if (order.Resto.Id == RestoId)
+                            if (order.OrderSlot.RestoId == RestoId)
                             {
-                                ICollection<ItemView> itemsView = CreateItemsViewFromOrder(order);
+                                ICollection<ItemView> itemsView = await CreateItemsViewFromOrderAndRestoId(order, RestoId);
                                 return View(new OrderViewModels
                                 {
                                     ListOfProposedItems =itemsView,
-                                    RestoId = order.Resto.Id,
-                                    Resto_Description = order.Resto.Description,
-                                    Resto_Name = order.Resto.Name,
+                                    RestoId = RestoId,
+                                    Resto_Description = resto.Description,
+                                    Resto_Name = resto.Name,
                                     OrderId = order.Id
 
                                 });
@@ -156,10 +156,9 @@ namespace Alpha.Controllers
             Order order = await DbManager.Orders.FirstOrDefaultAsync(m => m.Id == OrderId);
             Item item = await DbManager.Items.FirstOrDefaultAsync(m => m.ItemId == ItemId);
 
-
-
             if (order != null && item != null)
-            {                
+            {       
+                
                 int MenuId = item.Menu.MenuId;
                 Menu menu = await DbManager.Menus.FirstOrDefaultAsync(m => m.MenuId == MenuId);
                 OrderedItemView.Current.CanSelectHotCold = item.CanBeHotNotCold;
@@ -180,11 +179,63 @@ namespace Alpha.Controllers
                 OrderedItemView.Current.SelectedSizeId = null;
                 OrderedItemView.Current.SelectedSauceId = null;
                 OrderedItemView.Current.SelectedMeatId = null;
-                
-                //= new OrderedItemView
+
+                if (order.OrderSlot == null)
+                {
+                    // No Slottime has been selected yet to this restaurant. 
+                    // Or slot time has been released because of timout. Need to find new slot time.
+                    return RedirectToAction("PickASlotTimeStep0", new { RestoId = item.Menu.resto.Id});
+                }
+
+
                 return RedirectToAction("AddItemStep1aSize");
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+        public async Task<ActionResult> PickASlotTimeStep0(int RestoId)
+        {
+            // Check and creates the list of available slottimes
+            // TODO: Current strategy is to create this list on request. See for optimization to schedule this list creation one time a day (off ressources-
+            await CreateOrderSlotListForDay(RestoId, DateTime.Today);
+            Resto resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == RestoId);
+
+            // Collect the available slot times. 
+            List<OrderSlot> availableOrderSlots = new List<OrderSlot>();
+            availableOrderSlots = resto.OrderIntakeSlots.Where(r => r.OrderSlotTime != null).ToList();
+
+            PickASlotTimeView pickSlotTimeView = new PickASlotTimeView();
+            foreach(var item in resto.OrderIntakeSlots.Where(r => r.OrderSlotTime.CompareTo(DateTime.Now) > 0))
+            {
+                pickSlotTimeView.Add(item);
+            }
+            return View(pickSlotTimeView);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PickASlotTime(string button)
+        {
+            DateTime selectedTime = new DateTime(long.Parse(button));
+            Order order = await DbManager.Orders.FirstOrDefaultAsync(r => r.Id == OrderedItemView.Current.OrderId);
+            Item item = await DbManager.Items.FirstOrDefaultAsync(r => r.ItemId == OrderedItemView.Current.ItemId);
+            
+            if (selectedTime != null && order != null && item != null)
+            {
+                // Analyse the comming free slots for the first one in the seleted time range (15 min). 
+                order.OrderSlot = item.Menu.resto.OrderIntakeSlots
+                    .Where(r => r.OrderSlotTime.CompareTo(selectedTime) >= 0)
+                    .Where(r => r.OrderSlotTime.CompareTo(DateTime.Now) > 0)
+                    .Where(r => r.OrderSlotTime.CompareTo(selectedTime.AddMinutes(15)) <= 0)
+                    .FirstOrDefault(r => r.Order == null); // Select only free slots           
+                await DbManager.SaveChangesAsync();
+                return RedirectToAction("AddItemToOrder", new { ItemId = item.ItemId, OrderId = order.Id}); // Now a slot time should be associated to that order. 
+                //In cas no slot could be associated because of concurent access  OrderSlot = null then process start again to find a new one. 
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
         }
 
         // ---- STEP 1a ---- Review Size
@@ -408,7 +459,7 @@ namespace Alpha.Controllers
                     order.OrderedItems.Add(orderedItem);
                 }
                 await DbManager.SaveChangesAsync();
-                return RedirectToAction("Index", new { RestoId = order.Resto.Id});
+                return RedirectToAction("Index", new { RestoId = item.Menu.resto.Id});
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
@@ -446,32 +497,83 @@ namespace Alpha.Controllers
 
         }
 
-        public ICollection<ItemView> CreateItemsViewFromOrder(Order order)
+        // Create the list of Items view for this restaurant and associated to this order (if the order has been started) 
+        public async Task<ICollection<ItemView>> CreateItemsViewFromOrderAndRestoId(Order order,int RestoId)
         {
+           
             ICollection<ItemView> itemsView = new List<ItemView>();
-            if(order.Resto.Menu != null && order.Resto.Menu.ItemList != null)
+
+            // Check if this order has already a slot associated
+            if(order.OrderSlot !=null)
             {
-                foreach (var item in order.Resto.Menu.ItemList.Where(r => r.DeletedOn == null))
+                // Create the list of items in this restaurant and associate the number of items listed in the Order
+                if (order.OrderSlot.Resto.Menu != null && order.OrderSlot.Resto.Menu.ItemList != null) // Check if items are existing - otherwise the list stay blank
                 {
-                    ItemView itemView = new ItemView(item);
-                    // TODO This part need to be optimized; 
-                    // Check in the list of items with 
-                    List<OrderedItem> orderedItems = new List<OrderedItem>();
-                    if (order.OrderedItems != null)
+                    foreach (var item in order.OrderSlot.Resto.Menu.ItemList.Where(r => r.DeletedOn == null))
                     {
-                        foreach (var element in order.OrderedItems)
+                        ItemView itemView = new ItemView(item);
+                        // TODO This part need to be optimized; 
+                        // Check in the list of items with 
+                        List<OrderedItem> orderedItems = new List<OrderedItem>();
+                        if (order.OrderedItems != null)
                         {
-                            if (item.ItemId == element.ItemId)
+                            foreach (var element in order.OrderedItems)
                             {
-                                orderedItems.Add(element);
+                                if (item.ItemId == element.ItemId)
+                                {
+                                    orderedItems.Add(element);
+                                }
                             }
                         }
+                        itemView.Quantity = orderedItems.Select(i => i.Quantity).Sum();
+                        itemsView.Add(itemView);
                     }
-                    itemView.Quantity = orderedItems.Select(i => i.Quantity).Sum();
-                    itemsView.Add(itemView);
                 }
             }
+            else
+            {
+                // The order is not started yet. Then create list of items for the restaurant with no qty
+                Resto resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == RestoId);
+                if (resto.Menu != null && resto.Menu.ItemList != null)  // Check if items are existing - otherwise the list stay blank
+                {
+                    foreach (var item in resto.Menu.ItemList.Where(r => r.DeletedOn == null))
+                    {
+                        ItemView itemView = new ItemView(item);
+                        itemsView.Add(itemView);
+                    }
+                }
+
+            }
             return itemsView;
+        }
+
+        public async Task CreateOrderSlotListForDay(int RestoId, DateTime Date)
+        {
+            // Retrieve the resto to create the slots.
+            Resto resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == RestoId);
+
+            if(resto != null)
+            {
+                if(resto.OrderIntakeSlots.FirstOrDefault(r => r.OrderSlotTime.Date == Date.Date) == null) // Check if slots time for that day has already been created 
+                {
+                    int i = 1;
+                    foreach (var times in resto.OpeningTimes.Where(r => r.DayOfWeek == Date.DayOfWeek))
+                    {
+                        i = i++;                        
+                        List<TimeSpan> orderSlotList = times.GetListOfOrderSlots();
+                        foreach (var slotToConvert in orderSlotList)
+                        {
+                            DateTime slotInDateTime = new DateTime(Date.Year, Date.Month, Date.Day, slotToConvert.Hours, slotToConvert.Minutes, slotToConvert.Seconds);
+                            resto.OrderIntakeSlots.Add(new OrderSlot { Resto = resto , OrderSlotTime = slotInDateTime, SlotGroup = i});
+                        }
+                    }
+                    await DbManager.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                throw new Exception("CreateOrderSlotListForDay -- No resto found with RestoId!");
+            }
         }
     }
 }

@@ -18,7 +18,8 @@ namespace Alpha.Models
         public bool IsInPRogress { get; set; }
 
         public virtual ApplicationUser OrderOwner { get; set; }
-        public virtual Resto Resto { get; set; }
+
+        public virtual OrderSlot OrderSlot { get; set; }
 
         //A vérifier si dans une collection on peut ajouter plusieurs fois le même élément... 
         public virtual ICollection<OrderedItem> OrderedItems { get; set; }

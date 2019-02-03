@@ -149,9 +149,7 @@ namespace Alpha.Models
 
         public List<SelectUserRestoViewModel> User { get; set; }
 
-        public bool chefOrNotAdmin { get; set; }
-
-       
+        public bool chefOrNotAdmin { get; set; }       
     }
 
     public class SelectUserRestoViewModel
@@ -160,6 +158,5 @@ namespace Alpha.Models
         public string Id { get; set; } 
         public string UserName { get; set; }
         public string Email { get; set; }
-
     }
 }
