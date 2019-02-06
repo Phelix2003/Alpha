@@ -134,8 +134,8 @@ namespace Alpha.Models
         XXL = 4
     }
 
-    [Table("RestoOpenTimePeriodes")]
-    public class OpenTimePeriode
+    [Table("RestoOpenTimePeriods")]
+    public class OpenTimePeriod
     {
         public List<TimeSpan> GetListOfOrderSlots()
         {
@@ -158,7 +158,7 @@ namespace Alpha.Models
             }   
         }
 
-        public int OpenTimePeriodeId { get; set; }
+        public int OpenTimePeriodId { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public TimeSpan OpenTime { get; set; }
         public TimeSpan CloseTime { get; set; }

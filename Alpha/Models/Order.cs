@@ -15,7 +15,7 @@ namespace Alpha.Models
         public DateTime OrderOpenTime { get; set; }
         public DateTime? OrderClosedTime { get; set; }
         public bool IsOrderCompleted { get; set; }
-        public bool IsInPRogress { get; set; }
+        public bool IsInProgress { get; set; }
 
         public virtual ApplicationUser OrderOwner { get; set; }
 
