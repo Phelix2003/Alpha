@@ -47,15 +47,15 @@ namespace Alpha.Models
         public ICollection<ApplicationUser> AdministratorsList { get; set; }
         public ICollection<ApplicationUser> ChefsList { get; set; }
 
-        public ICollection<OpenTimePeriode> OpeningTimes { get; set; }
+        public ICollection<OpenTimePeriod> OpeningTimes { get; set; }
     }
 
-    public class AddOpenTimePeriodeToRestaurantView
+    public class AddOpenTimePeriodToRestaurantView
     {
 
-        public AddOpenTimePeriodeToRestaurantView()
+        public AddOpenTimePeriodToRestaurantView()
         {
-            OpenTimePeriodeList = new OpenTimePeriodeList();
+            OpenTimePeriodList = new OpenTimePeriodList();
             NbrOrdersPerHoursList = new List<int>(new int[] { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 });            
         }
 
@@ -66,13 +66,13 @@ namespace Alpha.Models
         public string RestoName { get; set; }
         public DayOfWeek Day { get; set; }
 
-        public OpenTimePeriodeList OpenTimePeriodeList { get;}
+        public OpenTimePeriodList OpenTimePeriodList { get;}
 
         public List<int> NbrOrdersPerHoursList { get; set; }
         public int NbrOrdersPerHour{ get; set; }
     }
 
-        public class OpenTimePeriodeList
+        public class OpenTimePeriodList
     {
 
         public List<TimeSpanView> timeSpanViews = new List<TimeSpanView>

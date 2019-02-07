@@ -17,7 +17,7 @@ namespace Alpha.Models
         public string Address { get; set; }   //TODO Ajouter adresse détaillées 
         public byte[] Image { get; set; } // TODO ajouter dans l
 
-        public virtual ICollection<OpenTimePeriode> OpeningTimes {get; set;}
+        public virtual ICollection<OpenTimePeriod> OpeningTimes {get; set;}
 
         public virtual ICollection<ApplicationUser> Administrators { get; set; }
         public virtual ICollection<ApplicationUser> Chefs { get; set; }
