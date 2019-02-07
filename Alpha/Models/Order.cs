@@ -71,13 +71,66 @@ namespace Alpha.Models
                 {
                     Price = Price + SelectedMeat.UnitPrice;
                 }
-
+                Price = Price * Quantity;
             }
             return Price;
         }
 
+        public string Name()
+        {
+            string name = Item.Name;
+
+            if (Item.HasSize)
+            {
+                name = name + "(" + SelectedSize.ToString() + ")";
+            }
+
+            if (Item.CanHaveSauce)
+            {                
+                if(SelectedSauce != null)
+                {
+                    name = name + ", " + SelectedSauce.Name.ToString();
+                }else
+                {
+                    name = name + ", sans sauce";
+                }
+            }
+
+            if (Item.CanBeSalt)
+            {
+                if(SelectedSalt)
+                {
+                    name = name + ", avec sel";
+                }
+                else
+                {
+                    name = name + ", sans sel";
+                }
+            }
+
+            if(Item.CanBeHotNotCold)
+            {
+                if (SelectedHotNotCold)
+                {
+                    name = name + ", chaud";
+                }
+                else
+                {
+                    name = name + ", froid";
+                }
+            }
+
+            if (Item.CanHaveMeat)
+            {
+                name = name + ", " + SelectedMeat.Name.ToString();
+            }
+
+            return name;
+        }
 
         public int Id { get; set; }
+
+
 
         //Link to the Item (Main Item)
         public virtual int ItemId { get; set; }

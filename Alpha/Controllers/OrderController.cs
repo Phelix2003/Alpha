@@ -464,6 +464,58 @@ namespace Alpha.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
+        public async Task<ActionResult> FinalizeOrder (int OrderId)
+        {
+            Order order = await DbManager.Orders.FirstOrDefaultAsync(r => r.Id == OrderId);
+
+            if(order != null)
+            {
+                FinalaizeOrderView finalizeOrderView = new FinalaizeOrderView
+                {
+                    OrderId = OrderId,
+                    RestoId = order.OrderSlot.RestoId,
+                    TotalOrderPrice = order.OrderedItems.Sum(r => r.ConfiguredPrice()).ToString(),
+                    OrderedItems = new List<OrderedItemView>()
+                };
+
+                foreach (var item in order.OrderedItems)
+                {
+                    finalizeOrderView.OrderedItems.Add(new OrderedItemView
+                    {
+                        ConfiguredName = item.Name(),
+                        PriceString = item.ConfiguredPrice().ToString(),
+                        QuantityString = item.Quantity.ToString(),
+                        TypeOfFood = item.Item.TypeOfFood,
+                        ItemId = item.Id
+                    });
+                }
+                return View(finalizeOrderView);
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+        }
+
+        public async Task<ActionResult> DeleteOneOrderedItem(int OrderedItemId)
+        {
+            OrderedItem orderedItem = await DbManager.OrderedItems.FirstOrDefaultAsync(r => r.Id == OrderedItemId);
+            if(orderedItem != null)
+            {
+                int OrderId = orderedItem.CurrentOrder.Id;
+                if(orderedItem.Quantity > 1)
+                {
+                    orderedItem.Quantity--;
+                }
+                else
+                {
+                    DbManager.OrderedItems.Remove(orderedItem);
+                }
+                await DbManager.SaveChangesAsync();
+                return RedirectToAction("FinalizeOrder", new { OrderId = OrderId });
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+        
+
 
         public async Task<ActionResult> ViewOngoinOrder(int OrderId)
         {

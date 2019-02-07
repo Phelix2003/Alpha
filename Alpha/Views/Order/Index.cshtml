@@ -6,12 +6,15 @@
 
 
 <div class="jumbotron">
-    <h1>Votre commande au @Model.Resto_Name</h1>@if (Model.ListOfProposedItems.Sum(r => r.Quantity) != 0) {<p class="text-right">Votyre commande (@Model.ListOfProposedItems.Sum(r => r.Quantity))</p>}
-
-
+    <h1>Ajouter des articles à votre commande au @Model.Resto_Name</h1>
 
     TODO Ajouter Image resto ICI
 
+    @if (Model.ListOfProposedItems.Sum(r => r.Quantity) != 0)
+    {
+        <hr />
+        <a href="@Url.Action("FinalizeOrder", "Order", new {OrderId = Model.OrderId })" class="btn btn-primary">Visualiser votre commande (@Model.ListOfProposedItems.Sum(r => r.Quantity))</a>
+    }
     <hr />
     <h2> Menu </h2>
     @{int col = 0;}
@@ -23,19 +26,22 @@
                     <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="@Url.Action("RenderItemPhoto", "Menu", new { ItemId = item.ItemId })" alt="Card image cap">
                         <div class="card-body">
-                            <h4 class="card-title">@item.Name.ToString()@if (item.UnitPrice != 0){<text> - </text>@item.UnitPrice.ToString()<text>€</text>}</h4> 
+                            <h4 class="card-title">
+                                @item.Name.ToString()@if (item.UnitPrice != 0)
+                                {<text> - </text>@item.UnitPrice.ToString()<text>€</text>}
+                            </h4>
                             <p>
                                 @if (item.Quantity != 0)
                                 {<text>(</text> @item.Quantity <text>)</text>}
-                        </p>
-                        <p class="card-text">@item.Description.ToString()</p>
-                        <a href="@Url.Action("AddItemToOrder", "Order", new { ItemId = item.ItemId, OrderId = Model.OrderId })" class="btn btn-primary">Ajouter</a>
+                            </p>
+                            <p class="card-text">@item.Description.ToString()</p>
+                            <a href="@Url.Action("AddItemToOrder", "Order", new { ItemId = item.ItemId, OrderId = Model.OrderId })" class="btn btn-primary">Ajouter</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-    }
+            </div>
+        }
     </div>
 </div>
 

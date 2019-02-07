@@ -347,7 +347,7 @@
     <Content Include="Views\Menu\EditItem.cshtml" />
     <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="Views\Menu\CreateMenu.cshtml" />
-    <Content Include="Views\Restaurant\AddOpenTimePeriodeToRestaurant.cshtml" />
+    <Content Include="Views\Restaurant\AddOpenTimePeriodToRestaurant.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\DeleteExestingOrder.cshtml" />
     <Content Include="Views\Menu\EditorTemplates\SelectedSizedMealViewModel.cshtml" />
@@ -357,6 +357,7 @@
     <Content Include="Views\Order\AddItemStep4Meat.cshtml" />
     <Content Include="Views\Order\AddItemStep1aSize.cshtml" />
     <Content Include="Views\Order\PickASlotTimeStep0.cshtml" />
+    <Content Include="Views\Order\FinalizeOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

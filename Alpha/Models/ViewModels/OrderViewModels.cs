@@ -84,6 +84,20 @@ namespace Alpha.Models.ViewModels
         public bool CanSlectSauce { get; set; }
         public int? SelectedSauceId { get; set; }
         public List<Item> ListofSauceView { get; set; }
+
+        public string ConfiguredName { get; set; }
+        public string PriceString { get; set; }
+        public string QuantityString { get; set; }
+    }
+
+    public class FinalaizeOrderView
+    {
+        public int OrderId { get; set; }
+        public int RestoId { get; set; }
+
+        public List<OrderedItemView> OrderedItems { get; set; }
+        public string TotalOrderPrice { get; set; }
+
     }
 
     public class PickASlotTimeView
