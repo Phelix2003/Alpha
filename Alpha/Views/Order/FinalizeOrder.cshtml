@@ -126,5 +126,5 @@
     </tr>
 </table>
 
-<a href="@Url.Action("ValidateOrder", "Order", new {OrderId = Model.OrderId })" class="btn btn-primary"> Valider votre commande</a>
+<a href="@Url.Action("ValidateAndPayOrderBySaferPay", "Payment", new {OrderId = Model.OrderId })" class="btn btn-primary"> Valider et payez votre commande</a>
 

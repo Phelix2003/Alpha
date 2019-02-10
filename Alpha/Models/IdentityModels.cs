@@ -60,9 +60,9 @@ namespace Alpha.Models
         public virtual ICollection<Resto> Resto_Admin { get; set; }
         public virtual ICollection<Resto> Resto_Chefs { get; set; }
 
-        public virtual Order PlacedOrder {
-
-            get; set; }
+        public virtual Order PlacedOrder {get; set; }
+        
+        public virtual SavedPaymentMethod SavedPaymentMethod { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -194,6 +194,22 @@ namespace Alpha.Models
                 .HasRequired<Item>(s => s.Item)
                 .WithMany(g => g.AvailableSizes)
                 .HasForeignKey<int>(s => s.ItemId);
+
+            // SavedPaymentMethod - User
+            // ONE to ONE
+
+            modelBuilder.Entity<SavedPaymentMethod>()
+                .HasRequired(s => s.User)
+                .WithOptional(s => s.SavedPaymentMethod)
+                .WillCascadeOnDelete(true);
+
+            // SavedPaymentMethod - User
+            // ONE to ONE
+
+            modelBuilder.Entity<Payment>()
+                .HasRequired(s => s.Order)
+                .WithOptional(s => s.Payment)
+                .WillCascadeOnDelete(true);
         }
 
 
@@ -210,8 +226,9 @@ namespace Alpha.Models
         public DbSet<Item> Items { set; get; }  
         public DbSet<OpenTimePeriod> OpenTimePeriods { set; get; }
         public DbSet<Order> Orders { set; get; }
-        public DbSet<OrderedItem> OrderedItems { get; set; }     
-
+        public DbSet<OrderedItem> OrderedItems { get; set; }   
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<SavedPaymentMethod> SavedPaymentMethods { get; set; }
     }
 
     // Roles definition based on the application
