@@ -94,7 +94,7 @@ namespace Alpha.Controllers
                     {
                         // This user has already an ongoing order
                         // Redirect on the edition of this order
-                        return RedirectToAction("ViewOngoinOrder", new { id = order.Id });
+                        return RedirectToAction("ViewOngoinOrder", new { OrderId = order.Id });
                     }
                     else
                     {
@@ -492,7 +492,6 @@ namespace Alpha.Controllers
                 return View(finalizeOrderView);
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
         }
 
         public async Task<ActionResult> DeleteOneOrderedItem(int OrderedItemId)
@@ -519,7 +518,33 @@ namespace Alpha.Controllers
 
         public async Task<ActionResult> ViewOngoinOrder(int OrderId)
         {
-            return View();
+            Order order = await DbManager.Orders.FirstOrDefaultAsync(m => m.Id == OrderId);
+            if(order != null)
+            {
+                FinalaizeOrderView finalizeOrderView = new FinalaizeOrderView
+                {
+                    OrderId = OrderId,
+                    RestoId = order.OrderSlot.RestoId,
+                    TotalOrderPrice = order.OrderedItems.Sum(r => r.ConfiguredPrice()).ToString(),
+                    OrderedItems = new List<OrderedItemView>(),
+                    DeleveryTime = order.OrderSlot.OrderSlotTime.TimeOfDay.ToString()
+                };
+
+                foreach (var item in order.OrderedItems)
+                {
+                    finalizeOrderView.OrderedItems.Add(new OrderedItemView
+                    {
+                        ConfiguredName = item.Name(),
+                        PriceString = item.ConfiguredPrice().ToString(),
+                        QuantityString = item.Quantity.ToString(),
+                        TypeOfFood = item.Item.TypeOfFood,
+                        ItemId = item.Id
+                    });
+                }
+                return View(finalizeOrderView);
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
         }
 
         public async Task<ActionResult> DeleteExestingOrder (int OrderId)
@@ -541,12 +566,20 @@ namespace Alpha.Controllers
             Order order = await DbManager.Orders.FirstOrDefaultAsync(m => m.Id == orderIn.Id);
             if (order != null)
             {
-                DbManager.Orders.Remove(order);
-                await DbManager.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                if (order.IsInProgress)
+                {
+                    return View("Error");
+                }
+                else
+                {
+                    DbManager.Orders.Remove(order);
+                    await DbManager.SaveChangesAsync();
+
+                    // TODO ajouter vue de confirmation
+                    return RedirectToAction("Index", "Home");
+                }
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
         }
 
         // Create the list of Items view for this restaurant and associated to this order (if the order has been started) 

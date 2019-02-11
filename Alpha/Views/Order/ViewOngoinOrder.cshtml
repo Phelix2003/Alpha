@@ -1,0 +1,131 @@
+﻿@model Alpha.Models.ViewModels.FinalaizeOrderView
+
+@{
+    ViewBag.Title = "ViewOngoinOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Votre commande en cours</h2>
+
+Votre commande devrait être prête à @Model.DeleveryTime .
+Votre commande
+<hr />
+
+<table class="table">
+    <tr>
+        <th>
+            Article
+        </th>
+        <th>
+            Quantité
+        </th>
+
+        <th>
+            Prix
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.OrderedItems.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Frites))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfiguredName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceString) €
+            </td>
+            <td></td>
+        </tr>
+    }
+    @foreach (var item in Model.OrderedItems.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Sauce))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfiguredName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceString) €
+            </td>
+            <td></td>
+        </tr>
+    }
+    @foreach (var item in Model.OrderedItems.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Snack))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfiguredName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceString) €
+            </td>
+            <td></td>
+        </tr>
+    }
+    @foreach (var item in Model.OrderedItems.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Meal))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfiguredName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceString) €
+            </td>
+            <td></td>
+        </tr>
+    }
+    @foreach (var item in Model.OrderedItems.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Menu))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfiguredName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceString) €
+            </td>
+            <td></td>
+        </tr>
+    }
+    @foreach (var item in Model.OrderedItems.Where(r => r.TypeOfFood == Alpha.Models.TypeOfFood.Boisson))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfiguredName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceString) €
+            </td>
+            <td></td>
+        </tr>
+    }
+
+    <tr></tr>
+    <tr></tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>@Model.TotalOrderPrice €</td>
+    </tr>
+</table>
+
+<a href="@Url.Action("DeleteExestingOrder", "Order", new {OrderId = Model.OrderId })" class="btn btn-primary">Annuler votre commande</a>
+
+

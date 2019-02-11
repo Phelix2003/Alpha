@@ -97,6 +97,8 @@ namespace Alpha.Models.ViewModels
 
         public List<OrderedItemView> OrderedItems { get; set; }
         public string TotalOrderPrice { get; set; }
+        public string DeleveryTime { get; set; }
+        public string OrderStatus { get; set; }
 
     }
 

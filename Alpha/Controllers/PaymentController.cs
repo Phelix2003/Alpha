@@ -164,7 +164,6 @@ namespace Alpha.Controllers
         public async Task<ActionResult> SaferPaySuccess(int OrderId)
         {
             Order order = await DbManager.Orders.FirstOrDefaultAsync(r => r.Id == OrderId);
-
             if(order != null)
             {
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(SaferPayGetGateWayURL(GateWayURL.PaymentPageAssert));
@@ -215,17 +214,16 @@ namespace Alpha.Controllers
                     {
                         order.IsOrderCompleted = true;
                         order.Payment.PaymentStatus = PaymentStatus.Approved;
+                        ViewBag.OrderId = OrderId;
                         await DbManager.SaveChangesAsync();
                         return View();
                     }
 
                     if(response.Transaction.Status == "PENDING")
                     {
-
-
+                        //TODO to anlyze when this situatin can occures and take correct actions
+                        return View("Error");
                     }
-
-                    // Continue the process through SaferPay payment pages
                     return View("Error");
                 }
                 catch (WebException we)
@@ -250,8 +248,15 @@ namespace Alpha.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
+        public ActionResult SaferPayAbort(int OrderId)
+        {
+            return RedirectToAction("FinalizeOrder", "order", new { OrderId = OrderId }); 
+        }
 
-
+        public ActionResult SaferPayFail(int OrderId)
+        {
+            return RedirectToAction("FinalizeOrder", "order", new { OrderId = OrderId });
+        }
 
         private string SaferPayGetGateWayURL(GateWayURL Context)
         {
@@ -262,7 +267,6 @@ namespace Alpha.Controllers
                     return ConfigurationManager.AppSettings["SaferPayGatewayBaseURL"] + "/Payment/v1/PaymentPage/Initialize";
                 case GateWayURL.PaymentPageAssert:
                     return ConfigurationManager.AppSettings["SaferPayGatewayBaseURL"] + "/Payment/v1/PaymentPage/Assert";
-                    break;
                 default:
                     return null;
             }

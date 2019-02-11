@@ -360,10 +360,11 @@
     <Content Include="Views\Order\AddItemStep1aSize.cshtml" />
     <Content Include="Views\Order\PickASlotTimeStep0.cshtml" />
     <Content Include="Views\Order\FinalizeOrder.cshtml" />
+    <Content Include="Views\Payment\SaferPaySuccess.cshtml" />
+    <Content Include="Views\Order\ViewOngoinOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Payment\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
