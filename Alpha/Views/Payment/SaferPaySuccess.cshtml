@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "SaferPaySuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Votre payement a été reçu. Votre commande va bientôt démarrer</h2>
+
+@Html.ActionLink("Visualiser votre commande", "ViewOngoinOrder", "Order", new { OrderId = ViewBag.OrderId})
+

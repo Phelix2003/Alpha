@@ -12,7 +12,7 @@
     @Html.HiddenFor(m => m.Id)
     <div class="form-actions no-color">
         <input type="submit" value="Abandoner cette commande" class="btn btn-default" /> |
-        @Html.ActionLink("Retour à la commande", "Index")
+        @Html.ActionLink("Retour à la commande", "Index", new { OrderId = Model.Id})
     </div>
 }
 
