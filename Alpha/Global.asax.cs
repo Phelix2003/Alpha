@@ -14,11 +14,17 @@ namespace Alpha
     {
         protected void Application_Start()
         {
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            // WebAPI
+            //WebApiConfig.Register(GlobalConfiguration.Configuration);
+
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+
         }
     }
 }

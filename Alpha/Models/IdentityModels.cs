@@ -229,6 +229,8 @@ namespace Alpha.Models
         public DbSet<OrderedItem> OrderedItems { get; set; }   
         public DbSet<Payment> Payments { get; set; }
         public DbSet<SavedPaymentMethod> SavedPaymentMethods { get; set; }
+
+        //public System.Data.Entity.DbSet<Alpha.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 
     // Roles definition based on the application
