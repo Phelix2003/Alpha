@@ -68,8 +68,8 @@ namespace Alpha.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-           : base("LocalConnection", throwIfV1Schema: false)
-//            : base("AzureConnection", throwIfV1Schema: false)            
+//           : base("LocalConnection", throwIfV1Schema: false)
+            : base("AzureConnection", throwIfV1Schema: false)            
         {
             // Set the class to call for initiating the DB
             Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
@@ -229,6 +229,8 @@ namespace Alpha.Models
         public DbSet<OrderedItem> OrderedItems { get; set; }   
         public DbSet<Payment> Payments { get; set; }
         public DbSet<SavedPaymentMethod> SavedPaymentMethods { get; set; }
+
+        //public System.Data.Entity.DbSet<Alpha.Models.ApplicationUser> ApplicationUsers { get; set; }
 
         //public System.Data.Entity.DbSet<Alpha.Models.ApplicationUser> ApplicationUsers { get; set; }
     }

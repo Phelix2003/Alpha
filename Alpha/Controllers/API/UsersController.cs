@@ -10,19 +10,27 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Alpha.Models;
 
-namespace Alpha.Controllers
+
+namespace Alpha.Controllers.API
 {
-    public class ApplicationUsersController : ApiController
+    [APIAhthorize]
+    public class UsersController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/ApplicationUsers
-        public IQueryable<ApplicationUser> GetApplicationUsers()
+        //// GET: api/Users
+        //public IQueryable<ApplicationUser> GetApplicationUsers()
+        //{
+        //    return db.Users;
+        //}
+
+        // GET: api/Users
+        public int GetApplicationUsers()
         {
-            return db.Users;
+            return  3;
         }
 
-        // GET: api/ApplicationUsers/5
+        // GET: api/Users/5
         [ResponseType(typeof(ApplicationUser))]
         public IHttpActionResult GetApplicationUser(string id)
         {
@@ -35,7 +43,7 @@ namespace Alpha.Controllers
             return Ok(applicationUser);
         }
 
-        // PUT: api/ApplicationUsers/5
+        // PUT: api/Users/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutApplicationUser(string id, ApplicationUser applicationUser)
         {
@@ -70,8 +78,7 @@ namespace Alpha.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/ApplicationUsers
-        /*
+        // POST: api/Users
         [ResponseType(typeof(ApplicationUser))]
         public IHttpActionResult PostApplicationUser(ApplicationUser applicationUser)
         {
@@ -99,9 +106,9 @@ namespace Alpha.Controllers
             }
 
             return CreatedAtRoute("DefaultApi", new { id = applicationUser.Id }, applicationUser);
-        }*/
+        }
 
-        // DELETE: api/ApplicationUsers/5
+        // DELETE: api/Users/5
         [ResponseType(typeof(ApplicationUser))]
         public IHttpActionResult DeleteApplicationUser(string id)
         {

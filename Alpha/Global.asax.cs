@@ -15,12 +15,9 @@ namespace Alpha
         protected void Application_Start()
         {
 
-            GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            // WebAPI
-            //WebApiConfig.Register(GlobalConfiguration.Configuration);
-
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
