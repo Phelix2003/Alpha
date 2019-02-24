@@ -341,6 +341,7 @@ namespace Alpha.Controllers
             return returnImage;
         }
 
+        [AllowAnonymous]
         public async Task<ActionResult> RenderItemPhoto(int ItemId)
         {
             Item item = await DbManager.Items.FindAsync(ItemId);

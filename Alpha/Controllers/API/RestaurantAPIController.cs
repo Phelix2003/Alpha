@@ -28,15 +28,45 @@ namespace Alpha.Controllers.API
                 return NotFound();
             }
 
-            return Ok(new RestoAPIModel {
-            ResponseHeader = new ResponseHeaderAPIModel { SpecVersion = ConfigurationManager.AppSettings["CurrentAPIVersion"]}, 
-            Address = resto.Address,
-            Description = resto.Description,
-            Id = resto.Id,
-            Image = resto.Image,
-            Name = resto.Name,
-            PhoneNumber = resto.PhoneNumber,
-            } );
+            RestoAPIModel restoAPI = new RestoAPIModel
+            {
+                ResponseHeader = new ResponseHeaderAPIModel { SpecVersion = ConfigurationManager.AppSettings["CurrentAPIVersion"] },
+                Address = resto.Address,
+                Description = resto.Description,
+                Id = resto.Id,
+                Image = resto.Image,
+                Name = resto.Name,
+                PhoneNumber = resto.PhoneNumber,
+                Menu = new MenuAPIModel
+                {
+                    MenuId = resto.Menu.MenuId,
+                    Name = resto.Menu.Name,
+                    ItemList = new List<ItemAPIModel>()
+                }
+            };
+            foreach(var item in resto.Menu.ItemList)
+            {
+                if(item.DeletedOn == null)
+                {
+                    restoAPI.Menu.ItemList.Add(new ItemAPIModel
+                    {
+                        Name = item.Name,
+                        Brand = item.Brand,
+                        Image = item.Image,
+                        UnitPrice = item.UnitPrice,
+                        Description = item.Description,
+                        HasSize = item.HasSize,
+                        ItemId = item.ItemId,
+                        CanBeHotNotCold = item.CanBeHotNotCold,
+                        CanBeSalt = item.CanBeSalt,
+                        CanHaveMeat = item.CanHaveMeat,
+                        CanHaveSauce = item.CanHaveSauce,
+                        TypeOfFood = item.TypeOfFood
+                    });
+
+                }
+            }            
+            return Ok(restoAPI);
         }
 
     }
