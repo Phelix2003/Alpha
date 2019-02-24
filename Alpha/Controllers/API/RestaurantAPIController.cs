@@ -14,6 +14,7 @@ using System.Configuration;
 
 namespace Alpha.Controllers.API
 {
+    [Authorize]
     public class RestaurantAPIController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();

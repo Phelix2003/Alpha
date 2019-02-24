@@ -7,11 +7,29 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using Alpha.Models;
+using Microsoft.Owin.Security.OAuth;
+using Alpha.Helpers.OAuth2;
+
 
 namespace Alpha
 {
     public partial class Startup
     {
+        #region Public /Protected Properties.  
+
+        /// <summary>  
+        /// OAUTH options property.  
+        /// </summary>  
+        public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
+
+        /// <summary>  
+        /// Public client ID property.  
+        /// </summary>  
+        public static string PublicClientId { get; private set; }
+
+        #endregion
+
+
         // Pour plus d'informations sur la configuration de l'authentification, visitez https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
@@ -39,6 +57,22 @@ namespace Alpha
                 }
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+
+            // Configure the application for OAuth based flow  
+            PublicClientId = "self";
+            OAuthOptions = new OAuthAuthorizationServerOptions
+            {
+                TokenEndpointPath = new PathString("/Token"),
+                Provider = new AppOAuthProvider(PublicClientId),
+                AuthorizeEndpointPath = new PathString("/Account/ExternalLogin"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromHours(4),
+                AllowInsecureHttp = true //Don't do this in production ONLY FOR DEVELOPING: ALLOW INSECURE HTTP!  
+            };
+
+            // Enable the application to use bearer tokens to authenticate users  
+            app.UseOAuthBearerTokens(OAuthOptions);
+
+
 
             // Permet à l'application de stocker temporairement les informations utilisateur lors de la vérification du second facteur dans le processus d'authentification à 2 facteurs.
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));
