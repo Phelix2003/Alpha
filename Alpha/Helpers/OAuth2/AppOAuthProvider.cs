@@ -8,22 +8,33 @@
 
 namespace Alpha.Helpers.OAuth2
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
     using Microsoft.Owin.Security.OAuth;
     using Alpha.Models;
     using System;
+    using System.Net.Http;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using System.Web;
+    using Alpha.Controllers;
+    using System.Web.Http.Owin;
+    using Microsoft.AspNet.Identity.EntityFramework;
+
+
+
 
     /// <summary>  
     /// Application OAUTH Provider class.  
     /// </summary>  
     public class AppOAuthProvider : OAuthAuthorizationServerProvider
     {
+
         #region Private Properties  
 
         /// <summary>  
@@ -72,15 +83,19 @@ namespace Alpha.Helpers.OAuth2
             // Initialization.  
             string usernameVal = context.UserName;
             string passwordVal = context.Password;
-            var user = this.databaseManager.Users.FirstOrDefault(s => s.Email == usernameVal);
+            var signInManager = context.OwinContext.Get<ApplicationSignInManager>();
 
-            // Verification.  
-            if (user == null || user.PasswordHash != passwordVal)
+            var user = this.databaseManager.Users.FirstOrDefault(s => s.Email == usernameVal);
+            IAuthenticationManager manager = context.OwinContext.Authentication;
+
+            // Login // Password verifications 
+            var result = await signInManager.PasswordSignInAsync(usernameVal, passwordVal, false, false);
+            if (result != SignInStatus.Success)
             {
                 // Settings.  
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
 
-                // Retuen info.  
+                // Return info.  
                 return;
             }
 

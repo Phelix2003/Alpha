@@ -245,6 +245,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\OAuth2\AppOAuthProvider.cs" />
+    <Compile Include="Helpers\OAuth2\AuthRepository.cs" />
     <Compile Include="Models\APIModels\CommunicationAPIModel.cs" />
     <Compile Include="Models\APIModels\RestoAPIModel.cs" />
     <Compile Include="Models\Order.cs" />

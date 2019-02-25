@@ -68,6 +68,7 @@ namespace Alpha
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(4),
                 AllowInsecureHttp = true //Don't do this in production ONLY FOR DEVELOPING: ALLOW INSECURE HTTP!  
             };
+            
 
             // Enable the application to use bearer tokens to authenticate users  
             app.UseOAuthBearerTokens(OAuthOptions);

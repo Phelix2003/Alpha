@@ -519,6 +519,18 @@ namespace Alpha.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<SignInStatus> VerifyCredentials(string Login, string Password)
+        {
+            //Check the user have validated his email adress to get log in.
+            var user = await UserManager.FindByNameAsync(Login);
+
+            return await SignInManager.PasswordSignInAsync(Login, Password, false, shouldLockout: false);
+        }
+
         #endregion
     }
 }
