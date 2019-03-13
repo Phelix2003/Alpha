@@ -12,7 +12,7 @@ namespace Alpha.Models
 
     }
 
-    public class CreateViewModel
+    public class CreateRestoViewModel
     {
         [Required(ErrorMessage = "Enter a valide restaurant name")]
         [Display(Name = "Restaurant Name")]
@@ -25,7 +25,13 @@ namespace Alpha.Models
         [Display(Name = "Restaurant Address")]
         public string Address { get; set; }
 
+        [Display(Name = "Description commerciale du restaurant")]
+        public string Description { get; set; }
+
         public string UserId { get; set; }
+
+        [Display(Name = "Photo du restaurant")]
+        public HttpPostedFileBase Image { get; set; }
     }
 
     public class EditRestoViewModel
@@ -37,8 +43,14 @@ namespace Alpha.Models
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
+        [Display(Name = "Description commerciale du restaurant")]
+        public string Description { get; set; }
+
         [Display(Name = "Restaurant Address")]
         public string Address { get; set; }
+
+        [Display(Name = "Photo du restaurant")]
+        public HttpPostedFileBase Image { get; set; }
 
 
         public Menu menu {get; set; }

@@ -6,10 +6,14 @@ using Alpha.Models.APIModels;
 
 namespace Alpha.Models.APIModels
 {
-    public class RestoAPIModel
+    public class ListRestoAPIModel
     {
         public ResponseHeaderAPIModel ResponseHeader { get; set; }
+        public List<RestoAPIModel> Restos { get; set; }
+    }
 
+    public class RestoAPIModel
+    {
         public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
@@ -50,9 +54,10 @@ namespace Alpha.Models.APIModels
         public byte[] Image { get; set; }
     }
 
+    public class OrderSlotAPIModel
+    {
+        public int OrderSlotId { get; set; }
 
-
-
-
-
+        public DateTime OrderSlotTime { get; set; }
+    }
 }

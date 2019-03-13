@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
 using System.Configuration;
 using Newtonsoft.Json;
+using Alpha.Helpers.Images;
 
 namespace Alpha.Controllers
 {
@@ -65,12 +66,18 @@ namespace Alpha.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(CreateViewModel createViewModel)
+        public async Task<ActionResult> Create(CreateRestoViewModel createViewModel)
         {
             if(ModelState.IsValid)
             {
+                if(createViewModel.Image == null)
+                {
+                    ViewBag.Message = "Introduisez une image";
+                    return View();
+                }
+
                 ApplicationUser user = await UserManager.FindByIdAsync(createViewModel.UserId);              
-                Resto resto = await CreateRestaurant(createViewModel.Name, createViewModel.PhoneNumber, user, null, createViewModel.Address);
+                Resto resto = await CreateRestaurant(createViewModel.Name, createViewModel.PhoneNumber, user, null, createViewModel.Address, createViewModel.Image, createViewModel.Description);
                 return RedirectToAction("Index");
             }
             else
@@ -106,14 +113,16 @@ namespace Alpha.Controllers
                 Address = resto.Address,
                 menu = resto.Menu,
                 OpeningTimes = resto.OpeningTimes,
-                
+                Description = resto.Description                
             });
         }
 
         //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,PhoneNumber,Address,SelectedSlotTimeId_1_Start,SelectedSlotTimeId_2_Start,SelectedSlotTimeId_1_Stop,SelectedSlotTimeId_2_Stop")] EditRestoViewModel editResto)
+        //public async Task<ActionResult> Edit([Bind(Include = "Id,Name, Description,PhoneNumber,Address,SelectedSlotTimeId_1_Start,SelectedSlotTimeId_2_Start,SelectedSlotTimeId_1_Stop,SelectedSlotTimeId_2_Stop")] EditRestoViewModel editResto)
+        public async Task<ActionResult> Edit(EditRestoViewModel editResto)
+
         {
             var resto = await DbManager.Restos.FirstAsync(r => r.Id == editResto.Id);
             if (resto == null)
@@ -123,20 +132,20 @@ namespace Alpha.Controllers
 
             if (ModelState.IsValid)
             {
-
                 Resto ModifiedResto = await DbManager.Restos.FindAsync(editResto.Id);
-
                 if (ModifiedResto != null)
                 {
                     ModifiedResto.Name = editResto.Name;
                     ModifiedResto.PhoneNumber = editResto.PhoneNumber;
                     ModifiedResto.Address = editResto.Address;
-
+                    ModifiedResto.Description = editResto.Description;
+                    if (editResto.Image != null)
+                    {
+                        ModifiedResto.Image = new ImageHelper().ProcessFileToImage(editResto.Image);
+                    }
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("Index");
-                }
-                
-
+                }               
             }
 
             ModelState.AddModelError("", "Something failed.");
@@ -328,16 +337,17 @@ namespace Alpha.Controllers
 
 
 
-            public async Task<Resto> CreateRestaurant(string name, string telephone, ApplicationUser Admin, ApplicationUser Chef, string Address)
+        public async Task<Resto> CreateRestaurant(string name, string telephone, ApplicationUser Admin, ApplicationUser Chef, string Address, HttpPostedFileBase Image, string Description)
         {
-
             Resto resto = new Resto
             {
                 Name = name,
                 PhoneNumber = telephone,
                 Chefs = new List<ApplicationUser>(),
                 Administrators = new List<ApplicationUser>(),
-                Address = Address               
+                Address = Address,
+                Image = new ImageHelper().ProcessFileToImage(Image),
+                Description = Description
             };
 
             if(Admin != null)
@@ -354,6 +364,22 @@ namespace Alpha.Controllers
         {
             return await DbManager.Restos.ToListAsync();
         }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> RenderRestoPhoto(int RestoId)
+        {
+            Resto resto = await DbManager.Restos.FindAsync(RestoId);
+            if( resto!= null)
+            {
+                if(resto.Image != null)
+                {
+                    byte[] photo = resto.Image;
+                    return File(photo, "image/jpeg");
+                }
+            }
+            return null;
+        }
+
 
         /*
         /// <summary>  

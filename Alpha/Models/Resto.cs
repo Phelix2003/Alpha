@@ -15,7 +15,7 @@ namespace Alpha.Models
         public string PhoneNumber { get; set; }
         public string Description { get; set; } // TODO ajouter l'édition du champ dans les vues 
         public string Address { get; set; }   //TODO Ajouter adresse détaillées 
-        public byte[] Image { get; set; } // TODO ajouter dans l
+        public byte[] Image { get; set; } 
 
         public virtual ICollection<OpenTimePeriod> OpeningTimes {get; set;}
 

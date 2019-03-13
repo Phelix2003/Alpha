@@ -15,6 +15,7 @@ using Alpha.Models;
 using System.Globalization;
 using System.Net;
 using System.Data.Entity;
+using Alpha.Helpers.Images;
 
 
 namespace Alpha.Controllers
@@ -152,7 +153,7 @@ namespace Alpha.Controllers
                             IsAvailable = itemViewModel.IsAvailable,
                             Name = itemViewModel.Name,
                             Description = itemViewModel.Description ?? "",
-                            Image = ProcessFileToImage(itemViewModel.Image),
+                            Image = new ImageHelper().ProcessFileToImage(itemViewModel.Image),
                             TypeOfFood = itemViewModel.SelectedTypeOfFood,
                             AvailableSizes = new List<SizedMeal>(),
                             HasSize = itemViewModel.HasSize,
@@ -298,7 +299,7 @@ namespace Alpha.Controllers
 
                 if (itemViewModel.Image != null)
                 {
-                    item.Image = ProcessFileToImage(itemViewModel.Image);
+                    item.Image = new ImageHelper().ProcessFileToImage(itemViewModel.Image);
                     if (item.Image == null)
                     {
                         ViewBag.Message = "Error while uploading the file";
@@ -327,78 +328,21 @@ namespace Alpha.Controllers
         }
 
 
-        private byte[] imageToByteArray(Image imageIn)
-        {
-            MemoryStream ms = new MemoryStream();
-            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-            return ms.ToArray();
-        }
-
-        private Image byteArrayToImage(byte[] byteArrayIn)
-        {
-            MemoryStream ms = new MemoryStream(byteArrayIn);
-            Image returnImage = Image.FromStream(ms);
-            return returnImage;
-        }
 
         [AllowAnonymous]
         public async Task<ActionResult> RenderItemPhoto(int ItemId)
         {
+            
             Item item = await DbManager.Items.FindAsync(ItemId);
-            byte[] photo = item.Image;
-            return File(photo, "image/jpeg");
-        }
-
-        private byte[] ProcessFileToImage(HttpPostedFileBase dataIn)
-        {
-            try
+            if(item != null)
             {
-                const double FinalImageSize = 150; // in pixels
-
-                int newWidth;
-                int newHeight;
-
-                using (Image image = Image.FromStream(dataIn.InputStream, true, true))
+                if(item.Image != null)
                 {
-                    // Rescaling image size to be done here,  before saving it in the DB. See https://stackoverflow.com/questions/1171696/how-do-you-convert-a-httppostedfilebase-to-an-image
-                    //https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
-
-                    //var destRect = new Rectangle(0, 0, newWidth, newHeight);
-                    if (image.Height < image.Width) // Image scaling while conserving the ratio. 
-                    {
-                        newWidth = (int)FinalImageSize;
-                        newHeight = (int)((double)image.Height * (double)FinalImageSize / (double)image.Width);
-                    }
-                    else
-                    {
-                        newHeight = (int)FinalImageSize;
-                        newWidth = (int)((double)image.Width * (double)FinalImageSize / (double)image.Height);
-                    }
-
-                    var destImage = new Bitmap(newWidth, newHeight);
-                    destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-                    using (Graphics g = Graphics.FromImage(destImage))
-                    {
-
-                        g.SmoothingMode = SmoothingMode.HighQuality;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        g.CompositingQuality = CompositingQuality.HighQuality;
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        using (var wrapMode = new ImageAttributes())
-                        {
-                            wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                            g.DrawImage(image, new Rectangle(0, 0, newWidth, newHeight), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                        }
-                        return imageToByteArray(destImage);
-                    }
+                    byte[] photo = item.Image;
+                    return File(photo, "image/jpeg");
                 }
             }
-            catch
-            {
-                return null;
-            }
-
+            return null;
         }
     }
 }

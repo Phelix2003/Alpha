@@ -30,6 +30,7 @@
     {
     <tr>
         <td>
+            <img src="@Url.Action("RenderRestoPhoto", "Restaurant", new { RestoId = item.Id })" alt="No picture" />
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
