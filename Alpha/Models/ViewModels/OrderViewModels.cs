@@ -106,7 +106,7 @@ namespace Alpha.Models.ViewModels
     {
         public PickASlotTimeView()
         {
-            ListOfPossibleTimes = new List<PossibleTime>();
+            ListOfPossibleTimes = new List<PossibleTimeView>();
         }
 
         /*
@@ -125,7 +125,7 @@ namespace Alpha.Models.ViewModels
             DateTime roundedTime = RoundDown(SlotToAdd.OrderSlotTime, TimeSpan.FromMinutes(15));
             if(ListOfPossibleTimes.FirstOrDefault(r => r.TimeFrom == roundedTime) == null)
             {
-                ListOfPossibleTimes.Add(new PossibleTime
+                ListOfPossibleTimes.Add(new PossibleTimeView
                 {
                     TimeFrom = roundedTime,
                     TimeTo = roundedTime.AddMinutes(15),
@@ -140,15 +140,15 @@ namespace Alpha.Models.ViewModels
             return new DateTime((dt.Ticks) / d.Ticks * d.Ticks, dt.Kind);
         }
 
-        public List<PossibleTime> ListOfPossibleTimes { get; set; }
+        public List<PossibleTimeView> ListOfPossibleTimes { get; set; }
         public int OrderId { get; set; }
     }
 
-    public class PossibleTime
+    public class PossibleTimeView
     {
         public string Id { get; set; }
 
-        public int SlotGroup { get; set; }
+        public MealTime SlotGroup { get; set; }
 
         public DateTime TimeFrom { get; set; }
         public string TimeFromText()    {   return TimeFrom.ToString("T");  }

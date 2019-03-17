@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using Alpha.Helpers.Common;
 
 
 namespace Alpha.Controllers
@@ -197,7 +198,7 @@ namespace Alpha.Controllers
         {
             // Check and creates the list of available slottimes
             // TODO: Current strategy is to create this list on request. See for optimization to schedule this list creation one time a day (off ressources-
-            await CreateOrderSlotListForDay(RestoId, DateTime.Today);
+            await new OrderHelper().CreateOrderSlotListForDay(RestoId, DateTime.Today, DbManager);
             Resto resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == RestoId);
 
             // Collect the available slot times. 
@@ -630,35 +631,6 @@ namespace Alpha.Controllers
 
             }
             return itemsView;
-        }
-
-        public async Task CreateOrderSlotListForDay(int RestoId, DateTime Date)
-        {
-            // Retrieve the resto to create the slots.
-            Resto resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == RestoId);
-
-            if(resto != null)
-            {
-                if(resto.OrderIntakeSlots.FirstOrDefault(r => r.OrderSlotTime.Date == Date.Date) == null) // Check if slots time for that day has already been created 
-                {
-                    int i = 1;
-                    foreach (var times in resto.OpeningTimes.Where(r => r.DayOfWeek == Date.DayOfWeek))
-                    {
-                        i = i++;                        
-                        List<TimeSpan> orderSlotList = times.GetListOfOrderSlots();
-                        foreach (var slotToConvert in orderSlotList)
-                        {
-                            DateTime slotInDateTime = new DateTime(Date.Year, Date.Month, Date.Day, slotToConvert.Hours, slotToConvert.Minutes, slotToConvert.Seconds);
-                            resto.OrderIntakeSlots.Add(new OrderSlot { Resto = resto , OrderSlotTime = slotInDateTime, SlotGroup = i});
-                        }
-                    }
-                    await DbManager.SaveChangesAsync();
-                }
-            }
-            else
-            {
-                throw new Exception("CreateOrderSlotListForDay -- No resto found with RestoId!");
-            }
         }
     }
 }

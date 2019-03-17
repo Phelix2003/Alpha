@@ -58,8 +58,7 @@ namespace Alpha.Controllers.API
 
             // in case of no order open. Create a new one
             if (order == null)
-            {
-                
+            {                
                 order = new Order
                 {
                     IsOrderCompleted = false,

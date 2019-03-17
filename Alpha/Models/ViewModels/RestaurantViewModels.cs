@@ -78,6 +78,7 @@ namespace Alpha.Models
         public string RestoName { get; set; }
         public DayOfWeek Day { get; set; }
 
+
         public OpenTimePeriodList OpenTimePeriodList { get;}
 
         public List<int> NbrOrdersPerHoursList { get; set; }

@@ -9,23 +9,61 @@
 
 @using (Html.BeginForm("PickASlotTime", "Order", FormMethod.Post, new { @class = "center-block", role = "form" }))
 {
-    <table>
-        <tr>
-            @if (Model.ListOfPossibleTimes != null && Model.ListOfPossibleTimes.Count != 0)
-            {
-                foreach (var item in @Model.ListOfPossibleTimes)
-                {
-                    <td>
-                        <button type="submit" name="Button" value="@item.Id" class="btn btn-primary btn-lg">@item.TimeFromText() <br /> @item.TimeToText()</button>
-                    </td>
-                }
-            }
-            else
-            {
-                <h4>Désolé, il n'y plus de disponnibilité dans ce restaurant pour aujourd'hui...</h4>                    
-            }
-        </tr>
-    </table>
+
+    if (Model.ListOfPossibleTimes != null && Model.ListOfPossibleTimes.Count != 0)
+    {
+        if (Model.ListOfPossibleTimes.Count(m => m.SlotGroup == Alpha.Models.MealTime.Breakfast) != 0)
+        {
+            <h3> Déjeuner </h3>
+            <br />
+            <table>
+                <tr>
+                    @foreach (var item in Model.ListOfPossibleTimes.Where(m => m.SlotGroup == Alpha.Models.MealTime.Breakfast))
+                    {
+                        <td>
+                            <button type="submit" name="Button" value="@item.Id" class="btn btn-primary btn-lg">@item.TimeFromText() <br /> @item.TimeToText()</button>
+                        </td>
+                    }
+                </tr>
+            </table>
+        }
+        if (Model.ListOfPossibleTimes.Count(m => m.SlotGroup == Alpha.Models.MealTime.Lunch) != 0)
+        {
+            <h3> Diner </h3>
+            <br />
+            <table>
+                <tr>
+                    @foreach (var item in Model.ListOfPossibleTimes.Where(m => m.SlotGroup == Alpha.Models.MealTime.Lunch))
+                    {
+                        <td>
+                            <button type="submit" name="Button" value="@item.Id" class="btn btn-primary btn-lg">@item.TimeFromText() <br /> @item.TimeToText()</button>
+                        </td>
+                    }
+                </tr>
+            </table>
+        }
+        if (Model.ListOfPossibleTimes.Count(m => m.SlotGroup == Alpha.Models.MealTime.Diner) != 0)
+        {
+            <h3> Souper </h3>
+            <br />
+            <table>
+                <tr>
+                    @foreach (var item in Model.ListOfPossibleTimes.Where(m => m.SlotGroup == Alpha.Models.MealTime.Diner))
+                    {
+                        <td>
+                            <button type="submit" name="Button" value="@item.Id" class="btn btn-primary btn-lg">@item.TimeFromText() <br /> @item.TimeToText()</button>
+                        </td>
+                    }
+                </tr>
+            </table>
+        }
+
+
+    }
+    else
+    {
+        <h4> Désolé, il n'y plus de disponnibilité dans ce restaurant pour aujourd'hui...</h4>
+    }
 }
 
 

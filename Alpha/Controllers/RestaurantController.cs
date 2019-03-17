@@ -180,8 +180,9 @@ namespace Alpha.Controllers
                         DayOfWeek = model.Day,
                         OpenTime = model.OpenTimePeriodList.timeSpanViews.FirstOrDefault(m => m.Id == model.OpenTimeId).TimeSpan,
                         CloseTime = model.OpenTimePeriodList.timeSpanViews.FirstOrDefault(m => m.Id == model.CloseTimeId).TimeSpan,
-                        NbAuthorizedOrderPerHour = model.NbrOrdersPerHour
+                        NbAuthorizedOrderPerHour = model.NbrOrdersPerHour                   
                     };
+
                     resto.OpeningTimes.Add(openTimePeriod);
                     await DbManager.SaveChangesAsync();
                     return RedirectToAction("edit", new { id = model.RestoId });

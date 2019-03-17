@@ -12,7 +12,7 @@ namespace Alpha.Models.APIModels
         public bool IsOrderCompleted { get; set; }
         public bool IsInProgress { get; set; }
 
-        public OrderSlotAPIModel OrderSlot { get; set; }
+        public OrderSlotAPI OrderSlot { get; set; }
         //public virtual Payment Payment { get; set; }
 
         //A vérifier si dans une collection on peut ajouter plusieurs fois le même élément... 
@@ -21,7 +21,6 @@ namespace Alpha.Models.APIModels
 
     public class OrderedItemAPIModel
     {
-
         public int Id { get; set; }
 
         public int ItemId { get; set; }
@@ -35,6 +34,4 @@ namespace Alpha.Models.APIModels
 
         public int? SelectedSauceId { get; set; }
     }
-
-
 }

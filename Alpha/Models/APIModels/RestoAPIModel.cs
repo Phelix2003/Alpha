@@ -54,10 +54,15 @@ namespace Alpha.Models.APIModels
         public byte[] Image { get; set; }
     }
 
-    public class OrderSlotAPIModel
+
+    public class OrderSlotAPI
     {
         public int OrderSlotId { get; set; }
 
         public DateTime OrderSlotTime { get; set; }
+
+        // To group the slot by openning time
+        public MealTime SlotGroup { get; set; }
     }
+
 }

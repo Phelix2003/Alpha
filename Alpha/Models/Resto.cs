@@ -35,7 +35,7 @@ namespace Alpha.Models
         public DateTime OrderSlotTime { get; set; }
 
         // To group the slot by openning time
-        public int SlotGroup { get; set; }
+        public MealTime SlotGroup { get; set; }
 
         // Restaurant associated to this slot time
         public int RestoId { get; set; }
@@ -134,6 +134,14 @@ namespace Alpha.Models
         XXL = 4
     }
 
+    public enum MealTime
+    {
+        Breakfast = 0,
+        Lunch = 1,
+        Diner = 2        
+    }
+
+
     [Table("RestoOpenTimePeriods")]
     public class OpenTimePeriod
     {
@@ -163,6 +171,8 @@ namespace Alpha.Models
         public TimeSpan OpenTime { get; set; }
         public TimeSpan CloseTime { get; set; }
         public int NbAuthorizedOrderPerHour { get; set; }
+
+
 
 
         public int RestoId { get; set; }
