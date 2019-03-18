@@ -38,12 +38,12 @@ namespace Alpha.Models
         public MealTime SlotGroup { get; set; }
 
         // Restaurant associated to this slot time
-        public int RestoId { get; set; }
-        public Resto Resto { get; set; }
+        //public int RestoId { get; set; }
+        public virtual Resto Resto { get; set; }
 
         // Order associated to this slot time
-        public int? OrderId { get; set; }
-        public Order Order { get; set; }
+        //public int? OrderId { get; set; }
+        public virtual Order Order { get; set; }
     }
 
     [Table("Menu")]

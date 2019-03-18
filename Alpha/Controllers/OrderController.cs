@@ -125,7 +125,7 @@ namespace Alpha.Controllers
                         {
                             // This user has started an order. Items are already in the basket. 
                             // If the restaurant is the same of the order ... Continue progressing in the order
-                            if (order.OrderSlot.RestoId == RestoId)
+                            if (order.OrderSlot.Resto.Id == RestoId)
                             {
                                 ICollection<ItemView> itemsView = await CreateItemsViewFromOrderAndRestoId(order, RestoId);
                                 return View(new OrderViewModels
@@ -223,11 +223,19 @@ namespace Alpha.Controllers
             if (selectedTime != null && order != null && item != null)
             {
                 // Analyse the comming free slots for the first one in the seleted time range (15 min). 
-                order.OrderSlot = item.Menu.resto.OrderIntakeSlots
+                int slotId = item.Menu.resto.OrderIntakeSlots
                     .Where(r => r.OrderSlotTime.CompareTo(selectedTime) >= 0)
                     .Where(r => r.OrderSlotTime.CompareTo(DateTime.Now) > 0)
                     .Where(r => r.OrderSlotTime.CompareTo(selectedTime.AddMinutes(15)) <= 0)
-                    .FirstOrDefault(r => r.Order == null); // Select only free slots           
+                    .FirstOrDefault(r => r.Order == null).OrderSlotId;
+
+                /*order.OrderSlot = item.Menu.resto.OrderIntakeSlots
+                    .Where(r => r.OrderSlotTime.CompareTo(selectedTime) >= 0)
+                    .Where(r => r.OrderSlotTime.CompareTo(DateTime.Now) > 0)
+                    .Where(r => r.OrderSlotTime.CompareTo(selectedTime.AddMinutes(15)) <= 0)
+                    .FirstOrDefault(r => r.Order == null); // Select only free slots          */
+
+                order.OrderSlot = await DbManager.OrderSlots.FirstOrDefaultAsync(r => r.OrderSlotId == slotId);
                 await DbManager.SaveChangesAsync();
                 return RedirectToAction("AddItemToOrder", new { ItemId = item.ItemId, OrderId = order.Id}); // Now a slot time should be associated to that order. 
                 //In cas no slot could be associated because of concurent access  OrderSlot = null then process start again to find a new one. 
@@ -474,7 +482,7 @@ namespace Alpha.Controllers
                 FinalaizeOrderView finalizeOrderView = new FinalaizeOrderView
                 {
                     OrderId = OrderId,
-                    RestoId = order.OrderSlot.RestoId,
+                    RestoId = order.OrderSlot.Resto.Id,
                     TotalOrderPrice = order.OrderedItems.Sum(r => r.ConfiguredPrice()).ToString(),
                     OrderedItems = new List<OrderedItemView>()
                 };
@@ -525,7 +533,7 @@ namespace Alpha.Controllers
                 FinalaizeOrderView finalizeOrderView = new FinalaizeOrderView
                 {
                     OrderId = OrderId,
-                    RestoId = order.OrderSlot.RestoId,
+                    RestoId = order.OrderSlot.Order.Id,
                     TotalOrderPrice = order.OrderedItems.Sum(r => r.ConfiguredPrice()).ToString(),
                     OrderedItems = new List<OrderedItemView>(),
                     DeleveryTime = order.OrderSlot.OrderSlotTime.TimeOfDay.ToString()

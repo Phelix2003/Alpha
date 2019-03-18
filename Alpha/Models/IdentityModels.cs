@@ -118,7 +118,7 @@ namespace Alpha.Models
                         .WithRequired(ad => ad.resto)
                         .WillCascadeOnDelete(true);
 
-            // RESTO - MENU
+            // RESTO - SlotTime
             // Relatin One to Many
             modelBuilder.Entity<Resto>()
                 .HasMany(r => r.OpeningTimes)
@@ -141,10 +141,15 @@ namespace Alpha.Models
             // RESTO - ORDESLOTS
             // ONE to MANY
 
-            modelBuilder.Entity<OrderSlot>() 
+            modelBuilder.Entity<Resto>()
+                .HasMany<OrderSlot>(s => s.OrderIntakeSlots)
+                .WithRequired(g => g.Resto);
+                
+                /*
                 .HasRequired<Resto>(s => s.Resto) 
                 .WithMany(g => g.OrderIntakeSlots) 
                 .HasForeignKey<int>(s => s.RestoId);
+                */
 
             // ORDESLOTS - ORDER
             // ONE to ONE
@@ -214,8 +219,6 @@ namespace Alpha.Models
 
 
         public static ApplicationDbContext Create()
-
-
         {
             return new ApplicationDbContext();
         }
@@ -229,6 +232,7 @@ namespace Alpha.Models
         public DbSet<OrderedItem> OrderedItems { get; set; }   
         public DbSet<Payment> Payments { get; set; }
         public DbSet<SavedPaymentMethod> SavedPaymentMethods { get; set; }
+        public DbSet<OrderSlot> OrderSlots { get; set; }
 
         //public System.Data.Entity.DbSet<Alpha.Models.ApplicationUser> ApplicationUsers { get; set; }
 

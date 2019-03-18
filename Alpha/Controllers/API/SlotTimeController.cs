@@ -53,6 +53,7 @@ namespace Alpha.Controllers.API
         [ResponseType(typeof(List<OrderSlotAPI>))]
         public async Task<IHttpActionResult> Get(int id)
         {
+            OrderSlot orderSlot = await DbManager.OrderSlots.FirstOrDefaultAsync(o => o.OrderSlotId == 57);
             var userName = User.Identity.GetUserName();
             var user = await UserManager.FindByNameAsync(userName);
             
@@ -72,10 +73,13 @@ namespace Alpha.Controllers.API
 
             // Collect the available slot times. 
             List<OrderSlot> availableOrderSlots = new List<OrderSlot>();
+
             availableOrderSlots = resto.OrderIntakeSlots.Where(r => r.OrderSlotTime != null).ToList();
 
             List<OrderSlotAPI> slotTimeAPI = new List<OrderSlotAPI>();
-            foreach (var item in resto.OrderIntakeSlots.Where(r => r.OrderSlotTime.CompareTo(DateTime.Now) > 0))
+            foreach (var item in resto.OrderIntakeSlots
+                .Where(r => r.Order == null)                                // Check this slot time is free
+                .Where(r => r.OrderSlotTime.CompareTo(DateTime.Now) > 0))
             {
                 slotTimeAPI.Add(new OrderSlotAPI {
                 OrderSlotId = item.OrderSlotId,
@@ -86,32 +90,35 @@ namespace Alpha.Controllers.API
         }
 
         // PUT: api/SlotTime/5
-        /*
-        public async Task<IHttpActionResult> Post(int +id)
+        
+        public async Task<IHttpActionResult> Post(int id)
         {
             var userName = User.Identity.GetUserName();
             var user = await UserManager.FindByNameAsync(userName);
+            var orderSlot = await DbManager.OrderSlots.FirstOrDefaultAsync(r => r.OrderSlotId == id);
 
-            if (user == null)
-            {
-                return BadRequest();
-            }
+            if (user == null)            
+                return BadRequest("Unknown User");           
+            
+            if (user.PlacedOrder == null)
+                return BadRequest("And order should have been, created before associating a SlotTiem");
 
-            Order order = user.PlacedOrder;
+            //OrderSlot orderSlot = await DbManager.OrderSlots.FirstOrDefaultAsync(o => o.OrderSlotId == id);        
+            if (orderSlot == null)
+                return BadRequest("OrderSlot does not exist");
 
-            order.OrderSlot = item.Menu.resto.OrderIntakeSlots
-                .Where(r => r.OrderSlotTime.CompareTo(selectedTime) >= 0)
-                .Where(r => r.OrderSlotTime.CompareTo(DateTime.Now) > 0)
-                .Where(r => r.OrderSlotTime.CompareTo(selectedTime.AddMinutes(15)) <= 0)
-                .FirstOrDefault(r => r.Order == null); // Select only free slots           
+            if (orderSlot.Order != null)
+                return BadRequest("This order is already in use");
 
+            orderSlot.Order = await DbManager.Orders.FirstAsync(r => r.Id == user.PlacedOrder.Id); // Necessaire de rechercher le "order" à partir du contexte DbManager
+            
+            await DbManager.SaveChangesAsync();
 
-
-
-
-        }*/
+            return Ok();
+        }
 
         // DELETE: api/SlotTime/5
+        
         public void Delete(int id)
         {
         }

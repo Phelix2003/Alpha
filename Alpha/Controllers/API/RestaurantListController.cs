@@ -76,16 +76,11 @@ namespace Alpha.Controllers.API
                                 });
                             }
                         }
-
-
                     }
-
                 }
-
                 APIRestos.Restos.Add(restoAPIModel);
             }
             return Ok(APIRestos);
         }
-
     }
 }
