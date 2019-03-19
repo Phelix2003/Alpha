@@ -74,7 +74,8 @@ namespace Alpha.Controllers.API
             // Collect the available slot times. 
             List<OrderSlot> availableOrderSlots = new List<OrderSlot>();
 
-            availableOrderSlots = resto.OrderIntakeSlots.Where(r => r.OrderSlotTime != null).ToList();
+            availableOrderSlots = resto.OrderIntakeSlots
+                .Where(r => r.OrderSlotTime != null).ToList();
 
             List<OrderSlotAPI> slotTimeAPI = new List<OrderSlotAPI>();
             foreach (var item in resto.OrderIntakeSlots

@@ -69,11 +69,38 @@ namespace Alpha.Controllers.API
                 await DbManager.SaveChangesAsync();
             }
 
-            return new OrderAPIModel
+            OrderAPIModel orderAPI = new OrderAPIModel
             {
                 IsOrderCompleted = order.IsOrderCompleted,
-                Id = order.Id
-            }; 
+                Id = order.Id,
+            };
+            if(order.OrderSlot != null)
+            {
+                orderAPI.OrderSlot = new OrderSlotAPI
+                {
+                    OrderSlotId = order.OrderSlot.OrderSlotId,
+                    OrderSlotTime = order.OrderSlot.OrderSlotTime,
+                    SlotGroup = order.OrderSlot.SlotGroup
+                };
+            }
+            if(order.OrderedItems.Count() > 0)
+            {
+                foreach(var item in order.OrderedItems)
+                {
+                    orderAPI.OrderedItems.Add(new OrderedItemAPIModel
+                    {
+                        ItemId = item.Id,
+                        Quantity = item.Quantity,
+                        SelectedHotNotCold = item.SelectedHotNotCold,
+                        SelectedMeatId = item.SelectedMeatId,
+                        SelectedSalt = item.SelectedSalt,
+                        SelectedSauceId = item.SelectedSauceId,
+                        SelectedSize = item.SelectedSize
+                    });
+                }
+            }
+            return orderAPI;
+
         }
 
         // POST: api/CustomerOrder

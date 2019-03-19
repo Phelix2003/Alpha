@@ -32,6 +32,7 @@ namespace Alpha.Models
     {
         public int OrderSlotId { get; set; }
 
+        // TODO DateTime is no recommended for use on server. Tobe replaced by UTCDateTime
         public DateTime OrderSlotTime { get; set; }
 
         // To group the slot by openning time
