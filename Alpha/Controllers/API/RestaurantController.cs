@@ -52,7 +52,8 @@ namespace Alpha.Controllers.API
             }
         }
 
-
+        // Gives the detail of the restaurant ID.
+        // Return error if restaurant does not exist
         [ResponseType(typeof(ListRestoAPIModel))]
         public async Task<IHttpActionResult> Get(int id)
         {
@@ -69,58 +70,7 @@ namespace Alpha.Controllers.API
             {
                 return BadRequest("User Authentication failed");
             }
-
-            // Preparing the order context. 
-            if(user.PlacedOrder == null)
-            {
-                // No order is prepared yet for this user. 
-                // Initiate a new order 
-                Order order = new Order
-                {
-                    IsOrderCompleted = false,
-                    OrderOpenTime = DateTime.Now,
-                    OrderOwner = user
-                };
-                DbManager.Orders.Add(order);
-                await DbManager.SaveChangesAsync();
-            }
-            else
-            {
-                // On order is already existing with this customer 
-
-                // On order is already completed with this user... 
-                if (user.PlacedOrder.IsOrderCompleted)
-                {
-                    return BadRequest("An order is already completed for this user: OrderId :" + user.PlacedOrder.Id);
-                }
-                else
-                {
-                    // This user has started an order previously but did not add anything in it.
-                    // in case of an order has been created but not startd (no article in the list) then the order is recreated with a fresh new one;
-                    if(user.PlacedOrder.OrderSlot == null)
-                    {
-                        user.PlacedOrder.OrderOpenTime = DateTime.Now;
-                        await DbManager.SaveChangesAsync();
-
-                        //Continue 
-                    }
-                    else
-                    {                    
-                        // This user has started an order. Items are already in the basket.                         
-                        // If the restaurant is the same of the order ... Continue progressing in the order
-                        if(user.PlacedOrder.OrderSlot.Resto.Id == id)
-                        {
-                            // Continue
-                        }
-                        else
-                        {
-                            return BadRequest("An order has already been started in another restaurant: OrderId -" + user.PlacedOrder.Id);
-                        }
-                    }
-
-                }
-            }
-
+ 
             ListRestoAPIModel restoAPI = new ListRestoAPIModel
             {
                 ResponseHeader = new ResponseHeaderAPIModel { SpecVersion = ConfigurationManager.AppSettings["CurrentAPIVersion"] },

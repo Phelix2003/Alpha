@@ -57,6 +57,8 @@ namespace Alpha.Models.APIModels
 
     public class OrderSlotAPI
     {
+   
+
         public int OrderSlotId { get; set; }
 
         public DateTime OrderSlotTime { get; set; }

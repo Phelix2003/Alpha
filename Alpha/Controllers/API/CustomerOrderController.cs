@@ -47,7 +47,8 @@ namespace Alpha.Controllers.API
             }
         }
 
-
+        // Prodvide the order related to the authenticated user. 
+        // If no order is associated to this user. Creates a new one. 
         // GET: api/CustomerOrder
         public async Task<OrderAPIModel> Get()
         {
@@ -85,6 +86,7 @@ namespace Alpha.Controllers.API
             }
             if(order.OrderedItems.Count() > 0)
             {
+                orderAPI.OrderRestaurantId = order.OrderedItems.FirstOrDefault().Item.Menu.resto.Id;
                 foreach(var item in order.OrderedItems)
                 {
                     orderAPI.OrderedItems.Add(new OrderedItemAPIModel
@@ -95,7 +97,7 @@ namespace Alpha.Controllers.API
                         SelectedMeatId = item.SelectedMeatId,
                         SelectedSalt = item.SelectedSalt,
                         SelectedSauceId = item.SelectedSauceId,
-                        SelectedSize = item.SelectedSize
+                        SelectedSize = item.SelectedSize                        
                     });
                 }
             }

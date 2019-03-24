@@ -7,10 +7,15 @@ namespace Alpha.Models.APIModels
 {
     public class OrderAPIModel
     {
+        public OrderAPIModel()
+        {
+            OrderedItems = new List<OrderedItemAPIModel>();
+        }
         public int Id { get; set; }
 
         public bool IsOrderCompleted { get; set; }
         public bool IsInProgress { get; set; }
+        public int OrderRestaurantId { get; set; }
 
         public OrderSlotAPI OrderSlot { get; set; }
         //public virtual Payment Payment { get; set; }
