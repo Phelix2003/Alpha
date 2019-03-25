@@ -58,8 +58,10 @@ namespace Alpha.Controllers.API
         }
 
         // POST: api/AddItemToCustomerOrder
-        public async Task<IHttpActionResult> Post([FromBody]string value)
+        public async Task<IHttpActionResult> Post([FromBody] OrderedItemAPIModel orderedItemAPI)
         {
+            if (orderedItemAPI == null)
+                return BadRequest("The input format is not accepted");
             var userName = User.Identity.GetUserName();
             var user = await UserManager.FindByNameAsync(userName);
 
@@ -67,7 +69,7 @@ namespace Alpha.Controllers.API
             if (order == null)
                 return NotFound();
 
-            OrderedItemAPIModel orderedItemAPI = JsonConvert.DeserializeObject<OrderedItemAPIModel>(value);
+
 
             if (orderedItemAPI == null)
                 return BadRequest();
@@ -104,15 +106,15 @@ namespace Alpha.Controllers.API
                 {
                     orderedItem.SelectedSauce = null;
                 }
-                /* TODO size
-                if (orderedItemAPI.SelectedSize != null)
+                
+                if (orderedItemAPI.SelectedSize != null && item.AvailableSizes.Count > 0)
                 {
-                    orderedItem.SelectedSize = item.AvailableSizes.FirstOrDefault(r => r.Id == orderedItemAPI.SelectedSize).MealSize;
+                    orderedItem.SelectedSize = item.AvailableSizes.FirstOrDefault(r => r.MealSize == orderedItemAPI.SelectedSize).MealSize;
                 }
                 else
                 {
                     orderedItem.SelectedSize = null;
-                }*/
+                }
 
 
                 int? foundOrderedItemId = null;

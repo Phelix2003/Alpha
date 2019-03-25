@@ -45,7 +45,7 @@ namespace Alpha.Models.APIModels
 
         public TypeOfFood TypeOfFood { get; set; }
         public bool HasSize { get; set; }
-        //public virtual List<SizedMeal> AvailableSizes { get; set; }
+        public virtual List<SizedMeal> AvailableSizes { get; set; }
         public bool CanBeSalt { get; set; }
         public bool CanBeHotNotCold { get; set; }
         public bool CanHaveMeat { get; set; }

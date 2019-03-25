@@ -98,7 +98,7 @@ namespace Alpha.Controllers.API
             {
                 if(item.DeletedOn == null)
                 {
-                    restoAPI.Restos[0].Menu.ItemList.Add(new ItemAPIModel
+                    ItemAPIModel newItem = new ItemAPIModel
                     {
                         Name = item.Name,
                         Brand = item.Brand,
@@ -110,8 +110,19 @@ namespace Alpha.Controllers.API
                         CanBeSalt = item.CanBeSalt,
                         CanHaveMeat = item.CanHaveMeat,
                         CanHaveSauce = item.CanHaveSauce,
-                        TypeOfFood = item.TypeOfFood
-                    });
+                        TypeOfFood = item.TypeOfFood,
+                        AvailableSizes = new List<SizedMeal>()
+                    };
+                    foreach(var itemsize in item.AvailableSizes)
+                    {
+                        newItem.AvailableSizes.Add(new SizedMeal
+                        {
+                            MealSize = itemsize.MealSize,
+                            Id = itemsize.Id,
+                            Price = itemsize.Price
+                        });
+                    }
+                    restoAPI.Restos[0].Menu.ItemList.Add(newItem);
                 }
             }            
             return Ok(restoAPI);
