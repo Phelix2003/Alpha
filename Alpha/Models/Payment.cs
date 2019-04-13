@@ -42,6 +42,8 @@ namespace Alpha.Models
     }
 
 
+
+
     public class SaferPayInitializeRequest
     {
         public SaferPayRequestHeader RequestHeader { get; set; }
@@ -180,8 +182,62 @@ namespace Alpha.Models
         public decimal Score { get; set; }
     }
 
+    public class BlueSnapCreateVendor
+    {
+        public string email { get; set;}
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string phone { get; set; }
+        public string address { get; set; }
+        public string city { get; set; }
+        public string country { get; set; }
+        public string state { get; set; }
+        public string zip { get; set; }
+        public string defaultPayoutCurrency { get; set; }
 
+        public BlueSnapVendorPrincipal vendorPrincipal { get; set; }
+        public BlueSnapVendorAgreement vendorAgreement { get; set; }
+        public List<BlueSnapPayoutInfo> payoutInfo { get; set; }
+    }
 
+    public class BlueSnapVendorPrincipal
+    {
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string address { get; set; }
+        public string city { get; set; }
+        public string country { get; set; }
+        public string zip { get; set; }
+        public string dob { get; set; }
+        public string personalIdentificationNumber { get; set; }
+        public string driverLicenseNumber { get; set; }
+        public string email { get; set; }
+    }
+
+    public class BlueSnapVendorAgreement
+    {
+        public int commissionPercent { get; set; }
+    }
+
+    public class BlueSnapPayoutInfo
+    {
+        public string payoutType { get; set; }
+        public string baseCurrency { get; set; }
+        public string nameOnAccount { get; set; }
+        public string bankAccountType { get; set; }
+        public string bankAccountClass { get; set; }
+        public string bankName { get; set; }
+        public string bankId { get; set; }
+        public string iban { get; set; }
+        public string swiftBic { get; set; }
+        public string country { get; set; }
+        public string state { get; set; }
+        public string city { get; set; }
+        public string address { get; set; }
+        public string zip { get; set; }
+        //public string bankAccountId { get; set; }
+        public int minimalPayoutAmount { get; set; }
+    }
 
 
 

@@ -37,6 +37,7 @@
             @Html.DisplayFor(modelItem => item.PhoneNumber)
         </td>
         <td>
+            @Html.ActionLink("Create Payment account", "CreatePaymentAccount", new { id = item.Id }) |
             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { RestoId = item.Id })
         </td>

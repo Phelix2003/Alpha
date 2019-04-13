@@ -11,6 +11,10 @@ using System.Data.Entity;
 using System.Configuration;
 using Newtonsoft.Json;
 using Alpha.Helpers.Images;
+using System.Text;
+using Alpha.Helpers.Common;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Alpha.Controllers
 {
@@ -135,10 +139,46 @@ namespace Alpha.Controllers
                 Resto ModifiedResto = await DbManager.Restos.FindAsync(editResto.Id);
                 if (ModifiedResto != null)
                 {
+                    try
+                    {
+                        ModifiedResto.Owner_DateOfBirth = DateTime.Parse(editResto.PaymentInfo_dob);
+                    }
+                    catch (Exception e)
+                    {
+                        ModelState.AddModelError("", "Something failed.");
+                        editResto.AdministratorsList = resto.Administrators.ToList();
+                        editResto.menu = resto.Menu;
+                        editResto.ChefsList = resto.Chefs.ToList();
+                        return View(editResto);
+                    }
+
                     ModifiedResto.Name = editResto.Name;
                     ModifiedResto.PhoneNumber = editResto.PhoneNumber;
                     ModifiedResto.Address = editResto.Address;
+                    ModifiedResto.Shop_Email = editResto.PaymentInfo_Email;
                     ModifiedResto.Description = editResto.Description;
+                    ModifiedResto.Payment_BankAccountId = editResto.PaymentInfo_bankAccountId;
+                    ModifiedResto.Payment_BankAdress = editResto.PaymentInfo_bankAddress;
+                    ModifiedResto.Payment_BankCity = editResto.PaymentInfo_bankCity;
+                    ModifiedResto.Payment_BankId = "";
+                    ModifiedResto.Payment_BankName = editResto.PaymentInfo_bankName;
+                    ModifiedResto.Payment_BankZip = editResto.PaymentInfo_bankZip;
+                    ModifiedResto.Payment_IBAN = editResto.PaymentInfo_bankAccountId;
+                    ModifiedResto.Payment_NameOnAccount = editResto.PaymentInfo_lastName;
+                    ModifiedResto.Payment_SwiftBIC = "";
+                    ModifiedResto.Owner_Address = editResto.PaymentInfo_address;
+                    ModifiedResto.Owner_City = editResto.PaymentInfo_city;
+                    ModifiedResto.Payment_commissionPercent = int.Parse(editResto.PaymentInfo_commissionPercent);
+
+                    ModifiedResto.Owner_email = editResto.PaymentInfo_Email;
+                    ModifiedResto.Owner_FirstName = editResto.PaymentInfo_firstName;
+                    ModifiedResto.Owner_LastName = editResto.PaymentInfo_lastName;
+                    ModifiedResto.Owner_PassportNumber = editResto.PaymentInfo_driverLicenseNumber;
+                    ModifiedResto.Owner_PersonalIDNumber = editResto.PaymentInfo_personalIdentificationNumber;
+                    ModifiedResto.Owner_ZipCode = editResto.PaymentInfo_zip;
+                    ModifiedResto.Payment_SwiftBIC = editResto.PaymentInfo_bankswiftBic;
+                    ModifiedResto.Payment_minimalPayoutAmount = int.Parse(editResto.PaymentInfo_minimalPayoutAmount);
+
                     if (editResto.Image != null)
                     {
                         ModifiedResto.Image = new ImageHelper().ProcessFileToImage(editResto.Image);
@@ -348,7 +388,9 @@ namespace Alpha.Controllers
                 Administrators = new List<ApplicationUser>(),
                 Address = Address,
                 Image = new ImageHelper().ProcessFileToImage(Image),
-                Description = Description
+                Description = Description,
+                Owner_DateOfBirth = null
+
             };
 
             if(Admin != null)
@@ -380,6 +422,111 @@ namespace Alpha.Controllers
             }
             return null;
         }
+
+        // Verify the payment has been executed. 
+        public async Task<ActionResult> CreatePaymentAccount(int Id)
+        {
+            Resto resto = await DbManager.Restos.FirstOrDefaultAsync(r => r.Id == Id);
+
+            if (resto != null)
+            {
+                string Uri = ConfigurationManager.AppSettings["BlueSnapGatewayBaseURL"] + "/vendors";
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(Uri);
+                httpWebRequest.ContentType = "application/Json";
+                httpWebRequest.Method = "POST";
+
+                // Configure basic Authentication
+                string username = ConfigurationManager.AppSettings["BlueSnapUserName"];
+                string password = ConfigurationManager.AppSettings["BlueSnapPassword"];
+
+                string svcCredentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(username + ":" + password));
+
+                httpWebRequest.Headers.Add("Authorization", "Basic " + svcCredentials);
+
+
+                // Creates JSon for creating a new vendor
+                string json = new BlueSnapPayment().BlueSnapAddVendorJson(resto);
+
+                
+
+                if (ConfigurationManager.AppSettings["ConsolDebug"] == "on")
+                {
+                    System.Diagnostics.Debug.WriteLine("Payment request sent to SaferPay (JSon):");
+                    System.Diagnostics.Debug.WriteLine(json);
+                }
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    await streamWriter.WriteAsync(json);
+                    await streamWriter.FlushAsync();
+                    streamWriter.Close();
+                }
+
+                // Send request to SaferPay server
+                WebResponse httpWebResponse;
+                try
+                {
+                    httpWebResponse = await httpWebRequest.GetResponseAsync();
+                    string location = httpWebResponse.Headers["Location"]; // get the headers with the location ID in the request
+                    if(location != null)
+                    {
+                        // the ID of the vendor created is respecting the following format: https://sandbox.bluesnap.com/services/2/vendors/19575974
+                        // Collect the last num digits of the string; 
+                        var result = Regex.Match(location, @"\d+$").Value;
+                        if(result.Length < 6)
+                        {// Received ID sound not to be in a good format.
+                            System.Diagnostics.Debug.WriteLine("Payment - Vendor ID received is not in a good format");
+                            return RedirectToAction(
+                                "Notification",
+                                "Home",
+                                new
+                                {
+                                    Message = "Erreur lors de la création du compte de payement. Format d'ID retourné incorrecte",
+                                    Url = this.Url.Action("Index", "Restaurant", null)
+                                });
+
+                        }
+                        resto.Payment_BlueSnapPayoutVendorId = result;
+                        System.Diagnostics.Debug.WriteLine("Payment - Vendor created on ID " + result);
+                    }else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Payment - Vendor could not be created");
+                    }
+                    return RedirectToAction(
+                        "Notification",
+                        "Home",
+                        new
+                        {
+                            Message = "Le compte de payement du restaurant a été créé avec success",
+                            Url = this.Url.Action("Index", "Restaurant", null)
+                        });
+                }
+                catch (WebException we)
+                {
+                    // The rpayment request has been refused by SaferPay for technical reasons. 
+                    httpWebResponse = we.Response as HttpWebResponse;
+                    SaferPayErrorMessage errorMessage;
+                    using (var streamReader = new StreamReader(httpWebResponse.GetResponseStream()))
+                    {
+                        var result = await streamReader.ReadToEndAsync();
+                        errorMessage = JsonConvert.DeserializeObject<SaferPayErrorMessage>(result);
+                        if (ConfigurationManager.AppSettings["ConsolDebug"] == "on")
+                        {
+                            System.Diagnostics.Debug.WriteLine("Payment request response from SaferPay (JSon) - ERROR Message:");
+                            System.Diagnostics.Debug.WriteLine(errorMessage);
+                        }
+                    }
+                }
+            }
+            return RedirectToAction(
+                "Notification",
+                "Home",
+                new
+                {
+                    Message = "Erreur lors de la création du compte de payement. Erreur de communication vers le serveur hôte",
+                    Url = this.Url.Action("Index", "Restaurant", null)
+                });
+        }
+
 
 
         /*

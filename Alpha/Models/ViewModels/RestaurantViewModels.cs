@@ -39,15 +39,53 @@ namespace Alpha.Models
         public int Id { get; set; }
         [Display(Name = "Restaurant Name")]
         public string Name { get; set; }
-
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
+        [Display(Name = "Adresse du restaurant")]
+        public string Address { get; set; }
 
         [Display(Name = "Description commerciale du restaurant")]
         public string Description { get; set; }
 
-        [Display(Name = "Restaurant Address")]
-        public string Address { get; set; }
+        // Payment information
+        [Display(Name = "Adresse email professionnelle")]
+        public string PaymentInfo_Email { get; set; }
+        [Display(Name = "Prénom gérant")]
+        public string PaymentInfo_firstName { get; set; }
+        [Display(Name = "Nom gérant")]
+        public string PaymentInfo_lastName { get; set; }
+        [Display(Name = "Adresse restaurant")]
+        public string PaymentInfo_address { get; set; }
+        [Display(Name = "Ville restaurant")]
+        public string PaymentInfo_city { get; set; }
+        [Display(Name = "Code postal")]
+        public string PaymentInfo_zip { get; set; }
+        [Display(Name = "Date Naissance Gérant")]
+        public string PaymentInfo_dob { get; set; }
+        [Display(Name = "N° de registre National gérant")]
+        public string PaymentInfo_personalIdentificationNumber { get; set; }
+        [Display(Name = "N° de carte d'identité gérant")]
+        public string PaymentInfo_driverLicenseNumber { get; set; }
+
+        [Display(Name = "Charge de commission du restaurant")]
+        public string PaymentInfo_commissionPercent { get; set; }
+
+
+        [Display(Name = "Nom de la banque")]
+        public string PaymentInfo_bankName { get; set; }
+        [Display(Name = "N° de compte en banque IBAN")]
+        public string PaymentInfo_bankAccountId { get; set; }
+        [Display(Name = "Identifiant banque BIC")]
+        public string PaymentInfo_bankswiftBic { get; set; }
+        [Display(Name = "Adresse de la banque")]
+        public string PaymentInfo_bankAddress { get; set; }
+        [Display(Name = "Ville de la banque")]
+        public string PaymentInfo_bankCity { get; set; }
+        [Display(Name = "Code postal de la banque")]
+        public string PaymentInfo_bankZip { get; set; }
+        [Display(Name = "Montant minimum de payement")]
+        public string PaymentInfo_minimalPayoutAmount { get; set; }
+
 
         [Display(Name = "Photo du restaurant")]
         public HttpPostedFileBase Image { get; set; }

@@ -15,7 +15,41 @@ namespace Alpha.Models
         public string PhoneNumber { get; set; }
         public string Description { get; set; } // TODO ajouter l'édition du champ dans les vues 
         public string Address { get; set; }   //TODO Ajouter adresse détaillées 
-        public byte[] Image { get; set; } 
+        public string Address_Street { get; set; }
+        public string Address_City { get; set; }
+        public string Address_ZIPCode { get; set; }
+
+        public byte[] Image { get; set; }
+
+        public string Shop_VatId { get; set; }
+        public string Shop_Email { get; set; }
+        //public CountryCode CountryCode { gets; set; } // TODO for payement outside of Belgium 
+
+        public string Owner_FirstName { get; set; }
+        public string Owner_LastName { get; set; }
+        public string Owner_Address { get; set; }
+        public string Owner_City { get; set; }
+        public string Owner_ZipCode { get; set; }
+        public DateTime? Owner_DateOfBirth { get; set; }
+        public string Owner_PersonalIDNumber { get; set; }
+        public string Owner_PassportNumber { get; set; }
+        public string Owner_email { get; set; }
+
+        public string Payment_BlueSnapPayoutVendorId { get; set; }
+        public string Payment_BankName { get; set; }
+        public string Payment_BankAdress { get; set; }
+        public string Payment_BankCity { get; set; }
+        public string Payment_BankZip { get; set; }
+        public string Payment_NameOnAccount { get; set; }
+        public string Payment_BankId { get; set; }
+        public string Payment_BankAccountId { get; set; }
+        public string Payment_IBAN { get; set; }
+        public string Payment_SwiftBIC { get; set; }
+        public int Payment_commissionPercent { get; set; }
+        public int Payment_minimalPayoutAmount { get; set; }
+
+        public bool VendoreSuccesfulOnboarding { get; set; }
+        public bool RestaurantAvailable { get; set; }
 
         public virtual ICollection<OpenTimePeriod> OpeningTimes {get; set;}
 

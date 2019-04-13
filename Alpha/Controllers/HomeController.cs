@@ -77,5 +77,17 @@ namespace Alpha.Controllers
 
             return View();
         }
+
+        [Authorize]
+        public ActionResult Notification(string Message, string Url)
+        {
+
+            ViewBag.Message = Message;
+            ViewBag.UrlRedirect = Url; 
+
+            return View();
+        }
+
+
     }
 }

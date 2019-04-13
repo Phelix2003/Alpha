@@ -255,12 +255,7 @@
                     <td>@Html.ActionLink("Remove", "RemoveOpenTimePeriodToRestaurant", new { RestoId = Model.Id, SlotId = item.OpenTimePeriodId })</td>
                 </tr>
             }
-
-
         </table>
-
-
-
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -583,19 +578,139 @@
                                 </td>
                             </tr>
                         }
-
                     }
-
-
                 }
-
             }
         </table>
-
-
-
-
     </div>
+
+    if (User.IsInRole("Admin"))
+    {
+        <hr />
+        <h3>INformation de Payement</h3>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_Email, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_Email)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_firstName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_firstName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_firstName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_lastName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_lastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_lastName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_address, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_address)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_city, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_city, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_city)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_zip, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_zip, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_zip)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_dob, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_dob, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_dob)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_personalIdentificationNumber, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_personalIdentificationNumber, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_personalIdentificationNumber)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_driverLicenseNumber, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_driverLicenseNumber, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_driverLicenseNumber)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_commissionPercent, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_commissionPercent, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_commissionPercent)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_bankName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_bankName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_bankName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_bankAccountId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_bankAccountId, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_bankAccountId)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_bankswiftBic, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_bankswiftBic, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_bankswiftBic)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_bankAddress, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_bankAddress, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_bankAddress)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_bankCity, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_bankCity, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_bankCity)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_bankZip, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_bankZip, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_bankZip)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaymentInfo_minimalPayoutAmount, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PaymentInfo_minimalPayoutAmount, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentInfo_minimalPayoutAmount)
+            </div>
+        </div>
+    }
 }
 
 <div>

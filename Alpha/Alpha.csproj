@@ -248,6 +248,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Common\BlueSnapPayment.cs" />
     <Compile Include="Helpers\Common\OrderHelper.cs" />
     <Compile Include="Helpers\Images\ImageHelper.cs" />
     <Compile Include="Helpers\OAuth2\AppOAuthProvider.cs" />
@@ -394,6 +395,7 @@
     <Content Include="Views\Order\FinalizeOrder.cshtml" />
     <Content Include="Views\Payment\SaferPaySuccess.cshtml" />
     <Content Include="Views\Order\ViewOngoinOrder.cshtml" />
+    <Content Include="Views\Shared\Notification.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -438,6 +440,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties Content_4bootstrap-theme_1css_1map__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
